@@ -1,7 +1,7 @@
 Package: grass
 Type: Package
 Title: Genetic Regression Approximation through Summary Statistics
-Version: 1.0
+Version: 0.1
 Date: 2019-07-11
 Authors@R: person("Jack", "Wolf", email = "wolf5@stolaf.edu",
   role = c("aut", "cre"))
