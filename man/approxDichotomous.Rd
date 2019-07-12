@@ -4,7 +4,8 @@
 \alias{approxDichotomous}
 \title{Approximate coefficients for a dichotomous version of a continuous variable}
 \usage{
-approxDichotomous(slope, intercept, variance, maf, cutoff, n)
+approxDichotomous(slope, intercept, varY, varX, maf, cutoff, n,
+  inheritance)
 }
 \arguments{
 \item{slope}{Slope coefficient for the original continuous response as
@@ -13,7 +14,9 @@ a function of the genoptype}
 \item{intercept}{Intercept coefficient for the original continuous
 response as a function of the genoptype}
 
-\item{variance}{Variance of the original continuous response}
+\item{varY}{Variance of the original continuous response}
+
+\item{varX}{Variance of the genotype}
 
 \item{maf}{Minor allele frequency}
 

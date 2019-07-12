@@ -11,26 +11,22 @@
 #'   a function of the genoptype
 #' @param intercept Intercept coefficient for the original continuous
 #'   response as a function of the genoptype
-#' @param variance Variance of the original continuous response
+#' @param varY Variance of the original continuous response
+#' @param varX Variance of the genotype
 #' @param maf Minor allele frequency
 #' @param cutoff Cutoff point for dichotomization
 #' @param n Sample size
 
-approxDichotomous <- function(slope, intercept, variance, maf, cutoff, n, inheritance){
-	if(inheritance == 'dominant'){
-		varX <- maf * (1 - maf)
-	} else if(inheritance == 'additive'){
-		varX <- 2 * maf (1 - maf)
-	}
-
-	residVar <- slope * varX / (sqrt(varX)  * sqrt(variance))
-	
-	
-	out <- list()
-	
-	## Calculate slope and intercept ---------------------------------------------
-	predIntercept <- pnorm(q = cutoff, mean = intercept, sd = sqrt(residVar),
-	                       lower.tail = F)
+approxDichotomous <- function(slope, intercept, varY, varX, maf, cutoff,
+                              n, inheritance){
+  
+  residVar <- (1 - (slope * sqrt(varX) / sqrt(varY)) ^ 2) * varY
+  
+  out <- list()
+  
+  ## Calculate slope and intercept ---------------------------------------------
+  predIntercept <- pnorm(q = cutoff, mean = intercept, sd = sqrt(residVar),
+                         lower.tail = F)
   predSlope <- pnorm(q = cutoff, mean = intercept + slope,
                      sd = sqrt(residVar), lower.tail = F) - predIntercept
   
