@@ -16,11 +16,11 @@ approx_pca <- function(slopes, stdErrors, intercepts, varX, covPhenos, n){
   
   ## Question: prcomp() returns -1 * eigen(), assume that
   ## it gives us what we wants so I multiply by -1 for now...
-  pcaWeights <- -1 * eigen(covPhenos)$vectors
+  pcaWeights <- eigen(covPhenos)$vectors
   
   ## For each set of weights (ith principal component),
   ## carry out approx_addition()
-  out <- apply(pcaWeights, MARGIN = 1, FUN = function(x){
+  out <- apply(pcaWeights, MARGIN = 2, FUN = function(x){
     approx_addition(weights = x,
                     slopes = slopes, intercepts = intercepts,
                     stdErrors = stdErrors, varX = varX,
