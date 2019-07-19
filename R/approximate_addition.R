@@ -8,36 +8,28 @@
 #' @param weights vector of weights for each phenotype (defaults to 1)
 #' @param varX
 #' @param n Sample size
-#' @param covPhenos (Optional) Variance-covariance matrix of all phenotypes
+#' @param Variance-covariance matrix of all phenotypes
 #'
 #' @export
 #'
 
 approx_addition <- function(slopes, stdErrors, intercepts,
-                                 weights = 1, varX, n, covPhenos = NULL){
+                                 weights = 1, varX, n, covPhenos){
 
   out <- list()
 
   predSlope <- sum(slopes * weights)
   predIntercept <- sum(intercepts * weights)
   
-  out$predSlope <- predSlope
   out$predIntercept <- predIntercept
-  
-  ## Estimate covariance of phenotypes if not provided --------------
-  ## Or ... make separate function for before hand. Looks like it
-  ## assumes other information is known that would be annoying to
-  ## also use in here...
-  if (is.null(covPhenos)){
-    ## TO DO ========================================================
-  }
+  out$predSlope <- predSlope
   
   
   ## Current bug if default weights ... problem with == if weights is vector of
   ## length > 1
-  #if (weights == 1){
-  #  weights <- rep(1, length(slopes))
-  #}
+  if (length(weights) == 1 & weights == 1){
+    weights <- rep(1, length(slopes))
+  }
 
   ## calculate \sum_{q=1}^{m-1} \sum_{r = q+1}^m c_q c_r cov(y_q, y_r)
   ## (See eq. 10 in Gadaska 2019)
@@ -67,4 +59,71 @@ approx_addition <- function(slopes, stdErrors, intercepts,
   out$se <- se
   
   return(out)
+}
+
+#' Approx the sum of two variables based on summary statistics with covariates.
+#'
+#' @param coefs A matrix of coefficients. Each column represents intercept,
+#'  and slope coefficients for a linear regression of a phenotype as a function
+#'  of a genotype and other covariates.
+#' @param covariateMeans Vector of means of covariates
+#' @param covariateVars Variance-covariance matrix of all covariates
+#' @param weights Vector of weights for each phenotype (defaults to 1)
+#' @param respVars Variance-covariance matrix of all phenotypes
+#' @param respMeans Vector of means of all phenotypes
+#' @param n Sample size
+#'
+#'
+
+approx_addition.covars <-
+  function(coefs, covariateMeans, covariateVars, weights = 1,
+           respVars, respMeans, n){
+  
+  out <- list()
+  
+  if (length(weights) == 1 & weights == 1){
+    weights <- rep(1, length(slopes))
+  }
+
+  out$coefs <- apply(coefs, MARGIN = 1, FUN = function(rowi){
+    sum(rowi * weights)
+  })
+  
+  betas <- as.matrix(out$coefs, ncol = 1)
+
+
+  nResp <- ncol(coefs)
+  nCovars <- nrow(coefs)
+  
+  if (length(covariateMeans) != nCovars){
+    covariateMeans <- c(1, covariateMeans)
+  }
+  
+  
+  
+  varC <- cbind(rep(0, nCovars), rbind(rep(0, nCovars - 1), covariateVars))
+  
+  XtX <- matrix(NA, nrow = nrow(varC), ncol = ncol(varC))
+  for (i in 1:nrow(XtX)){
+    for (j in 1:nrow(XtX)){
+      XtX[i, j] <- varC[i, j] * (n - 1) + covariateMeans[i] * covariateMeans[j] * n
+    }
+  }
+  
+  respVars <- cov(mtcars[, c('cyl', 'disp')])
+  respMeans <- c(mean(mtcars$cyl), mean(mtcars$disp))
+  
+  YtY <- 0
+  for (i in 1:nResp){
+    for (j in 1:nResp){
+      YtY <- YtY + respVars[i, j] * (n - 1) + respMeans[i] * respMeans[j] * n
+    }
+  }
+  
+  varCoefs <- as.double((YtY - t(betas) %*% XtX %*% betas) / (n - nCovars))  * solve(XtX)
+  
+  out$seBeta <- sqrt(diag(varCoefs))
+  
+  return(out)
+  
 }
