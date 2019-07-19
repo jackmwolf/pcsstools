@@ -5,7 +5,7 @@
 \title{Approximate the sum of two variables based on summary statistics.}
 \usage{
 approx_addition(slopes, stdErrors, intercepts, weights = 1, varX, n,
-  covPhenos = NULL)
+  covPhenos)
 }
 \arguments{
 \item{slopes}{Vector of slopes of linear regressions of each
@@ -20,7 +20,7 @@ phenotype as a function of the genotype}
 
 \item{n}{Sample size}
 
-\item{covPhenos}{(Optional) Variance-covariance matrix of all phenotypes}
+\item{Variance-covariance}{matrix of all phenotypes}
 }
 \description{
 Approximate the sum of two variables based on summary statistics.

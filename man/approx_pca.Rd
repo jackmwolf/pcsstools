@@ -5,7 +5,8 @@
 \title{Approximate the relationship between a genotype and
 the principal components of a set of phenotypes.}
 \usage{
-approx_pca(slopes, stdErrors, intercepts, varX, covPhenos, n)
+approx_pca(slopes, stdErrors, intercepts, varX, covPhenos, n, scaled = T,
+  meanPhenos = NULL)
 }
 \arguments{
 \item{slopes}{Vector of slopes of linear regressions of each
@@ -18,9 +19,17 @@ phenotype as a function of the genotype}
 
 \item{varX}{Variance of X, the independent variable (genotype)}
 
-\item{covPhenos}{(Optional) Variance-covariance matrix of all phenotypes}
+\item{covPhenos}{variance-covariance matrix of all phenotypes}
 
 \item{n}{Sample size}
+
+\item{scaled}{Should summary statistics be converted to correspond to
+scaled response variables? (Or, are they already scaled?)}
+
+\item{meanPhenos}{Required for \code{centered = T}. Vector of means
+of each phenotype.}
+
+\item{centered}{Center response variables? (Or, already centered?)}
 }
 \description{
 Approximate the relationship between a genotype and
