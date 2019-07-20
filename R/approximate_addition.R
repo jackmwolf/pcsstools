@@ -31,31 +31,39 @@ approx_addition <- function(slopes, stdErrors, intercepts,
     weights <- rep(1, length(slopes))
   }
 
-  ## calculate \sum_{q=1}^{m-1} \sum_{r = q+1}^m c_q c_r cov(y_q, y_r)
-  ## (See eq. 10 in Gadaska 2019)
   m <- length(slopes)
-  covSum <- 0
-  for (q in 1 : (m - 1)){
-    #print(paste('q = ', q))
-    for (r in (q + 1) : m){
-    #print(paste('r =', r))
-      covSum <- covSum +
-        (weights[q] * weights[r] * covPhenos[q, r])
+  if (m == 2){
+    ## If only 2 phenotypes, use eqn 7 from Gadaska 2019
+    se <- sqrt(sum(weights ^ 2 * stdErrors ^ 2) + 2 * prod(weights) / (n - 2) *
+               (as.double(covPhenos) / varX - prod(slopes)))
+  } else {
+    ## If > 2 phenotypes ... 
+
+    ## calculate \sum_{q=1}^{m-1} \sum_{r = q+1}^m c_q c_r cov(y_q, y_r)
+    ## (See eq. 10 in Gadaska 2019)
+    covSum <- 0
+    for (q in 1 : (m - 1)){
+      print(paste('q = ', q))
+      for (r in (q + 1) : m){
+      print(paste('r =', r))
+        covSum <- covSum +
+          (weights[q] * weights[r] * covPhenos[q, r])
+      }
     }
-  }
-  
-  ## calculate \sum_{q=1}^{m-1} \sum_{r = q+1}^m c_q c_r beta_q beta_r
-  betaPairSum <- 0
-  for (q in 1 : (m - 1)){
-    for (r in (q + 1) : m){
-      betaPairSum <- betaPairSum +
-        (weights[q] * weights[r] * slopes[q] * slopes[r])
+    
+    ## calculate \sum_{q=1}^{m-1} \sum_{r = q+1}^m c_q c_r beta_q beta_r
+    betaPairSum <- 0
+    for (q in 1 : (m - 1)){
+      for (r in (q + 1) : m){
+        betaPairSum <- betaPairSum +
+          (weights[q] * weights[r] * slopes[q] * slopes[r])
+      }
     }
+    
+    se <- sqrt(sum(weights ^ 2 * stdErrors ^ 2) +
+      2 / (n - 2) * ((covSum / varX) - betaPairSum))
   }
-  
-  se <- sqrt(sum(weights ^ 2 * stdErrors ^ 2) +
-    2 / (n - 2) * ((covSum / varX) - betaPairSum))
-  
+
   out$se <- se
   
   return(out)
