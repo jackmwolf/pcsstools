@@ -8,7 +8,7 @@
 #' @param weights vector of weights for each phenotype (defaults to 1)
 #' @param varX
 #' @param n Sample size
-#' @param Variance-covariance matrix of all phenotypes
+#' @param covPhenos Variance-covariance matrix of all phenotypes
 #'
 #' @export
 #'
@@ -90,7 +90,7 @@ approx_addition.covars <-
   out <- list()
   
   if (length(weights) == 1 & weights == 1){
-    weights <- rep(1, length(slopes))
+    weights <- rep(1, ncol(coefs))
   }
 
   out$coefs <- apply(coefs, MARGIN = 1, FUN = function(rowi){
