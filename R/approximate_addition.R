@@ -118,8 +118,6 @@ approx_addition.covars <-
     }
   }
   
-  respVars <- cov(mtcars[, c('cyl', 'disp')])
-  respMeans <- c(mean(mtcars$cyl), mean(mtcars$disp))
   
   YtY <- 0
   for (i in 1:nResp){
