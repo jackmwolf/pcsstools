@@ -133,3 +133,63 @@ approx_addition.covars <-
   return(out)
   
 }
+
+
+#' Adjust for covariates from simple linear regressions.
+#'
+#' @param coefs A matrix of coefficients. Each column represents intercept,
+#'  and slope coefficient for a linear regression of a common phenotype as a 
+#'  function of a single covariates.
+#' @param covariateVars Variance-covariance matrix of all covariates
+#' @param respVar Variance of the phenotype
+#' @param respMean Mean of the phenotype
+#' @param n Sample size
+#'
+
+covar_adjust <- function(coefs, covariateVars, respMean, respVar, n){
+  out <- list()
+
+  nResp <- 1
+  nCovars <- ncol(coefs)
+  
+  # column means of design matrix
+  xMeans <- c(1, apply(coefs, MARGIN = 2, FUN = 
+                       function(x){(respMean - x[1]) / x[2]}
+                       )) 
+
+  # variance-covariance of design matrix
+  varC <- cbind(rep(0, nCovars + 1), rbind(rep(0, nCovars), covariateVars))
+  
+  XtX <- matrix(NA, nrow = nrow(varC), ncol = ncol(varC))
+  for (i in 1:nrow(XtX)){
+    for (j in 1:nrow(XtX)){
+      XtX[i, j] <- varC[i, j] * (n - 1) + xMeans[i] * xMeans[j] * n
+    }
+  }
+
+  XtY <- matrix(NA, nrow = nCovars + 1,  ncol = 1) 
+  XtY[1, 1] <- respMean * n
+  for (i in 2 : (nCovars + 1)){
+      XtY[i, 1] <- coefs[2, i - 1] * varC[i, i] * (n - 1) + xMeans[i] * respMean * n 
+  }
+
+  betas <- solve(XtX) %*% XtY
+  
+  out$coefs <- betas
+
+  YtY <- respVar * (n - 1) + respMean ^ 2 * n
+
+  #varCoefs <- as.double(YtY - t(betas) %*% XtY) * solve(XtX)
+  varCoefs <- as.double((YtY - t(betas) %*% XtX %*% betas) / (n - (nCovars + 1)))  * solve(XtX)
+  out$seBeta <- sqrt(diag(varCoefs))
+  # out$xMeans <- xMeans
+  # out$varC <- varC
+  # out$XtX <- XtX
+  # out$XtY <- XtY
+
+  return(out)
+
+
+
+}
+
