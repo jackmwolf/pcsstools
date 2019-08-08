@@ -56,13 +56,8 @@ lm_adjust <- function(coefs,
                 rbind(rep(0, nCovar - 1),
                       xCov))
   ## XtX := X'X
-  ## To do: re-write code to avoid loop and use matrix algebra
-  XtX <- matrix(NA, nrow = nrow(varX), ncol = ncol(varX))
-  for (i in 1:nrow(XtX)) {
-    for (j in 1:nrow(XtX)) {
-      XtX[i, j] <- varX[i, j] * (n - 1) + xMeans[i] * xMeans[j] * n
-    }
-  }
+  XtX <- (n - 1) * varX + 
+    n * ((t(xMeans * matrix(1, nrow = nCovar, ncol = nCovar))) * xMeans)
   
   ## XtY := X'y
   XtY <- matrix(NA, nrow = nCovar,  ncol = 1)
@@ -162,13 +157,9 @@ lm_combine <- function(coefs,
                 rbind(rep(0, nCovar - 1),
                       xCov))
   ## XtX := X'X
-  ## To do: re-write code to avoid loop and use matrix algebra
-  XtX <- matrix(NA, nrow = nrow(varX), ncol = ncol(varX))
-  for (i in 1:nrow(XtX)) {
-    for (j in 1:nrow(XtX)) {
-      XtX[i, j] <- varX[i, j] * (n - 1) + xMeans[i] * xMeans[j] * n
-    }
-  }
+  XtX <- (n - 1) * varX + 
+    n * ((t(xMeans * matrix(1, nrow = nCovar, ncol = nCovar))) * xMeans)
+  
   ## YtY := y'y
   ## To do: re-write code to avoid loop and use matrix algebra
   YtY <- 0
