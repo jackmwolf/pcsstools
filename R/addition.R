@@ -57,7 +57,7 @@ lm_adjust <- function(coefs,
                       xCov))
   ## XtX := X'X
   XtX <- (n - 1) * varX + 
-    n * ((t(xMeans * matrix(1, nrow = nCovar, ncol = nCovar))) * xMeans)
+    n * (xMeans %*% t(xMeans))
   
   ## XtY := X'y
   XtY <- matrix(NA, nrow = nCovar,  ncol = 1)
@@ -158,7 +158,7 @@ lm_combine <- function(coefs,
                       xCov))
   ## XtX := X'X
   XtX <- (n - 1) * varX + 
-    n * ((t(xMeans * matrix(1, nrow = nCovar, ncol = nCovar))) * xMeans)
+    n * (xMeans %*% t(xMeans))
   
   ## YtY := y'y
   ## To do: re-write code to avoid loop and use matrix algebra
