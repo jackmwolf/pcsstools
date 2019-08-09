@@ -161,13 +161,9 @@ lm_combine <- function(coefs,
     n * (xMeans %*% t(xMeans))
   
   ## YtY := y'y
-  ## To do: re-write code to avoid loop and use matrix algebra
-  YtY <- 0
-  for (i in 1 : nResp){
-    for (j in 1 : nResp){
-      YtY <- YtY + yCov[i, j] * (n - 1) + yMeans[i] * yMeans[j] * n
-    }
-  }
+  YtY <- sum(
+    (weights %*% t(weights)) * ((n - 1) * yCov + n * (yMeans %*% t(yMeans)))
+    )
   
   betas <- as.matrix(out$coefs, ncol = 1)
   varCoefs <- 
