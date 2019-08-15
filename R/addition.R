@@ -68,19 +68,23 @@ lm_adjust <- function(coefs,
       coefs[2, i - 1] * varX[i, i] * (n - 1) + xMeans[i] * yMean * n
   }
   
-  coefs <- solve(XtX) %*% XtY
+  est <- solve(XtX) %*% XtY
   
   YtY <- yVar * (n - 1) + yMean ^ 2 * n
   
   varCoefs <-
-    as.double((YtY - t(coefs) %*% XtX %*% coefs) / (n - nCovar)) * solve(XtX)
+    as.double((YtY - t(est) %*% XtX %*% est) / (n - nCovar)) * solve(XtX)
   
-  seCoefs <- sqrt(diag(varCoefs))
+  se <- sqrt(diag(varCoefs))
   
-  out <- list()
-  out$coefs <- coefs
-  out$seCoefs <- seCoefs
-  return(out)
+
+  tval <- est / se
+  rdf <- n - nCovar
+  
+  coefficients <- cbind(est, se, tval, 2 * pt(abs(tval), df = rdf, lower.tail = F))
+  colnames(coefficients) <- c("Estimate", "Std. Error", "t value", "Pr(>|t|)")
+  
+  return(coefficients)
 }
 
 #' Model a linear combination of phenotypes
@@ -126,7 +130,6 @@ lm_combine <- function(coefs,
                        yCov,
                        n,
                        weights = 1) {
-  out <- list()
   
   nResp <- ncol(coefs)
   nCovar <- nrow(coefs)
@@ -138,7 +141,7 @@ lm_combine <- function(coefs,
   }
   
   ## Calcualte model coefficients
-  out$coefs <- apply(
+  est <- apply(
     coefs,
     MARGIN = 1,
     FUN = function(rowi) {
@@ -165,11 +168,17 @@ lm_combine <- function(coefs,
     (weights %*% t(weights)) * ((n - 1) * yCov + n * (yMeans %*% t(yMeans)))
     )
   
-  betas <- as.matrix(out$coefs, ncol = 1)
+  betas <- as.matrix(est, ncol = 1)
   varCoefs <- 
     as.double((YtY - t(betas) %*% XtX %*% betas) / (n - nCovar))  * solve(XtX)
   
-  out$seCoefs <- sqrt(diag(varCoefs))
+  se <- sqrt(diag(varCoefs))
   
-  return(out)
+  tval <- est / se
+  rdf <- n - nCovar
+  
+  coefficients <- cbind(est, se, tval, 2 * pt(abs(tval), df = rdf, lower.tail = F))
+  colnames(coefficients) <- c("Estimate", "Std. Error", "t value", "Pr(>|t|)")
+  
+  return(coefficients)
 }
