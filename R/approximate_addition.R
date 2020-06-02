@@ -87,13 +87,15 @@ approx_addition.covars <-
   function(coefs, covariateMeans, covariateVars, weights = 1,
            respVars, respMeans, n){
   
+  tryCatch({
   out <- list()
-  
-  if (length(weights) == 1 & weights == 1){
-    weights <- rep(1, ncol(coefs))
-  }
 
   out$coefs <- apply(coefs, MARGIN = 1, FUN = function(rowi){
+                     if(length(rowi) != length(weights)){
+                     print('length rowi != weights')
+                     print(rowi)
+                     print(weights)
+                     }
     sum(rowi * weights)
   })
   
@@ -122,14 +124,15 @@ approx_addition.covars <-
   YtY <- 0
   for (i in 1:nResp){
     for (j in 1:nResp){
-      YtY <- YtY + respVars[i, j] * (n - 1) + respMeans[i] * respMeans[j] * n
+      YtY <- YtY + weights[i] * weights[j] *
+      (respVars[i, j] * (n - 1) + respMeans[i] * respMeans[j] * n)
     }
   }
   
   varCoefs <- as.double((YtY - t(betas) %*% XtX %*% betas) / (n - nCovars))  * solve(XtX)
   
   out$seBeta <- sqrt(diag(varCoefs))
-  
+  }, error = function(e){out <- list(NA, NA)})
   return(out)
   
 }
@@ -148,6 +151,7 @@ approx_addition.covars <-
 
 covar_adjust <- function(coefs, covariateVars, respMean, respVar, n){
   out <- list()
+  tryCatch({
 
   nResp <- 1
   nCovars <- ncol(coefs)
@@ -186,10 +190,58 @@ covar_adjust <- function(coefs, covariateVars, respMean, respVar, n){
   # out$varC <- varC
   # out$XtX <- XtX
   # out$XtY <- XtY
-
+  }, error = function(e){out <- list(NA, NA)})
+  
   return(out)
 
 
 
 }
 
+## revised function that takes xBar as an input instead as a workaround
+## to issues with incorrect xBar calculations from summary stats due
+## to missing data...
+## Note: xMeans := column means of design matrix.
+##      -> first element of xMeans should be '1' (mean of c(1, 1, ... ,1))
+covar_adjust2 <- function(coefs, covariateVars, respMean, respVar, n, xMeans){
+  out <- list()
+  tryCatch({
+
+  nResp <- 1
+  nCovars <- ncol(coefs)
+  
+  # variance-covariance of design matrix
+  varC <- cbind(rep(0, nCovars + 1), rbind(rep(0, nCovars), covariateVars))
+  
+  XtX <- matrix(NA, nrow = nrow(varC), ncol = ncol(varC))
+  for (i in 1:nrow(XtX)){
+    for (j in 1:nrow(XtX)){
+      XtX[i, j] <- varC[i, j] * (n - 1) + xMeans[i] * xMeans[j] * n
+    }
+  }
+
+  XtY <- matrix(NA, nrow = nCovars + 1,  ncol = 1) 
+  XtY[1, 1] <- respMean * n
+  for (i in 2 : (nCovars + 1)){
+      XtY[i, 1] <- coefs[2, i - 1] * varC[i, i] * (n - 1) + xMeans[i] * respMean * n 
+  }
+
+  betas <- solve(XtX) %*% XtY
+  
+  out$coefs <- betas
+
+  YtY <- respVar * (n - 1) + respMean ^ 2 * n
+
+  varCoefs <- as.double((YtY - t(betas) %*% XtX %*% betas) / (n - (nCovars + 1)))  * solve(XtX)
+  out$seBeta <- sqrt(diag(varCoefs))
+  # out$xMeans <- xMeans
+  # out$varC <- varC
+  # out$XtX <- XtX
+  # out$XtY <- XtY
+  }, error = function(e){out <- list(NA, NA)})
+  
+  return(out)
+
+
+
+}
