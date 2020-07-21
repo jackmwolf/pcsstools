@@ -4,8 +4,7 @@
 \alias{approxDichotomous}
 \title{Approximate coefficients for a dichotomous version of a continuous variable}
 \usage{
-approxDichotomous(slope, intercept, varY, varX, maf, cutoff, n,
-  inheritance)
+approxDichotomous(slope, intercept, varY, varX, maf, cutoff, n, inheritance)
 }
 \arguments{
 \item{slope}{Slope coefficient for the original continuous response as

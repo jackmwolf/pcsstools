@@ -4,8 +4,8 @@
 \alias{approxPhenoProd}
 \title{Approximate coefficients for a product of phenotypes}
 \usage{
-approxPhenoProd(slopes, intercepts, maf, inheritance = "dominant",
-  varCovar, yBar, n)
+approxPhenoProd(slopes, intercepts, maf, inheritance = "dominant", varCovar,
+  yBar, n)
 }
 \arguments{
 \item{slopes}{A vector of slope coeffients for each phenotype as a function

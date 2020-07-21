@@ -4,8 +4,7 @@
 \alias{getMultSE}
 \title{Approximate slope standard error for a product of phenotypes}
 \usage{
-getMultSE(slopes, intercepts, maf, varCovar, yBar, n, predBeta,
-  inheritance)
+getMultSE(slopes, intercepts, maf, varCovar, yBar, n, predBeta, inheritance)
 }
 \arguments{
 \item{slopes}{A vector of slope coeffients for each phenotype as a function

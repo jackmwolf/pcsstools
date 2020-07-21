@@ -20,7 +20,7 @@ phenotype as a function of the genotype}
 
 \item{n}{Sample size}
 
-\item{Variance-covariance}{matrix of all phenotypes}
+\item{covPhenos}{Variance-covariance matrix of all phenotypes}
 }
 \description{
 Approximate the sum of two variables based on summary statistics.
