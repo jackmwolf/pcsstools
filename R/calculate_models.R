@@ -30,9 +30,11 @@ calculate_lm <- function(means, covs, n, add_intercept = FALSE) {
     p <- p + 1
     covs <- rbind(0, cbind(0, covs))
     means <- c(1, means)
-    names(means)[1] <- "(Intercept)"
-    colnames(covs)[1] <- "(Intercept)"
-    rownames(covs)[1] <- "(Intercept)"
+    if (!is.null(dimnames(covs)) & !is.null(dimnames(covs))) {
+      names(means)[1] <- "(Intercept)"
+      colnames(covs)[1] <- "(Intercept)"
+      rownames(covs)[1] <- "(Intercept)" 
+    }
   }
   covX <- covs[-(p + 1), -(p + 1)]
   meanX <- means[-(p + 1)]
