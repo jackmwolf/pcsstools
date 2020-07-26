@@ -1,5 +1,3 @@
-
-
 #' Calculate a linear model
 #'
 #' \code{calculate_lm} describes the linear model of the last listed variable
@@ -13,6 +11,9 @@
 #'   \code{means}.
 #' @param n sample size
 #' @param add_intercept logical. If \code{TRUE} adds an intercept to the model.
+#' 
+#' @importFrom stats pt
+#' 
 #' @examples
 #' ex_data <- cont_data[c("g", "x", "y1")]
 #' means <- colMeans(ex_data)

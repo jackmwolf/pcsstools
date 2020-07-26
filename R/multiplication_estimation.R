@@ -1,9 +1,7 @@
-
 #' Approximate the covariance of a set of predictors and a product of responses
 #'
 #' \code{approx_mult_prod} recursively estimates the covariances and means of a
 #'   set of responses
-#'
 #'
 #' @param means a vector of predictor and response means with all response means
 #'   at the end of the vector.
@@ -15,6 +13,8 @@
 #' @param predictors,responses lists of objects of class \code{predictor} where
 #'   each entry corresponds to one predictor/response variable.
 #' @param verbose logical.
+#' 
+#' @importFrom stats median integrate cov2cor
 #'
 #' @examples
 #' # 3 Binary Phenotypes

@@ -1,10 +1,10 @@
-
 #' Create an object of class "predictor"
 #'
 #' @param f a function that gives the probability mass/distribution function of
 #'   a random variable.
 #' @param predictor_type a character describing the random variable. Either "discrete"
 #'   or "continuous".
+#' @param ... additional arguments
 #' @param lb,ub if \code{predictor_type == "continuous"} double giving the
 #'   lower/upper bound of the pdf \code{f}.
 #' @param support if \code{predictor_type == "discrete"} vector of the support of
@@ -41,6 +41,8 @@ validate_predictor <- function(x) {
 #'
 #' @param mean predictor mean (double).
 #' @param sd predictor standard deviation (double)
+#' 
+#' @importFrom stats dnorm
 #'
 #' @examples
 #' new_predictor_normal(mean = 10, sd = 1)
@@ -71,6 +73,8 @@ new_predictor_snp <- function(maf) {
 #' \code{new_predictor_binary} calls \code{new_predictor}
 #'
 #' @param p probability of success (predictor mean)
+#' 
+#' @importFrom stats dbinom
 #'
 #' @examples
 #' new_predictor_binary(p = 0.75)
