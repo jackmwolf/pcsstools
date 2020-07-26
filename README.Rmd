@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-grass (Genetic Regression Approximation through Summary Statistics) is an in-development R package to describe various regression models using only summary statistics.
+grass (Genetic Regression Approximation through Summary Statistics) is an in-development R package to describe various regression models using only genome-wide association study (GWAS) summary statistics.
 
 Currently, grass supports the linear modeling of complex phenotypes defined via functions of other phenotypes.
 Supported functions include:
@@ -27,6 +27,8 @@ Supported functions include:
 * logical combinations (E.g. $y_1\wedge y_2$ or $y_1\vee y_2$)
 
 ## Installation
+
+grass is not currently available on CRAN.
 
 You can install the in-development version of grass from [GitHub](https://github.com/) with:
 
@@ -40,7 +42,7 @@ devtools::install_github("jackmwolf/grass")
 ## References
 Following are the key references for the functions in this package
 
-* Wolf, J.M., Barnard, M. Xueting, X., Ryder, N., Westra, J., and Tintle, N. 
+* Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and Tintle, N. 
   (2020). Computationally efficient, exact, covariate-adjusted genetic principal
   component analysis by leveraging individual marker summary statistics from 
   large biobanks. *Pacific Symposium on Biocomputing*, 25, 719-730. 
