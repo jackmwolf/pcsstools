@@ -309,17 +309,6 @@ approx_prod_stats <- function(means, covs, n, response, predictors) {
 #' @param n Sample size
 #' @return A list of length 2 consisting of 2 functions that give the
 #'   estimated conditional mean and conditional variance of Y as a function of X
-#' @examples
-#' # Discrete / Binary
-#' n <- 500
-#' x <- rbinom(n = n, size = 2, prob = 0.2)
-#' y <- rbinom(n = n, size = 1, prob = invLogit(x))
-#' XY <- cbind(x, y)
-#' preds <- approx_conditional(colMeans(XY), cov(XY), "binary", n = n)
-#' preds$c_mu(0:2)
-#' sapply(0:2, function(x0) mean(y[x==x0]))
-#' preds$c_var(0:2)
-#' sapply(0:2, function(x0) var(y[x==x0]))
 #'
 approx_conditional <- function(means, covs, response, n) {
   # OLS coefficients for Y = a + bX
@@ -447,13 +436,6 @@ approx_cov_continuous <- function(c_prod_mean, predictor_mean, f, lb, ub) {
 }
 
 #' Calculate the mean of the product of X and Y
-#' @examples
-#' n <- 100
-#' x <- rnorm(n = n, mean = 0, sd = 1)
-#' y <- rnorm(n = n, mean = 2 - 0.01 * x, sd = 2)
-#' XY <- cbind(x, y)
-#' get_mean(colMeans(XY), cov(XY), n)
-#' mean(x * y)
 get_mean <- function(means, covs, n) {
   prod_mean <- means[1] * means[2] + covs[1, 2] * (n - 1) / n
   return(prod_mean)
