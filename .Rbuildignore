@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 ^data-raw$
 ^simulation$
+^pre_alpha$
+^README\.Rmd$
