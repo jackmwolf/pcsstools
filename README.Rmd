@@ -2,8 +2,36 @@
 output: github_document
 ---
 
-# grass 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
-## Overview
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+# grass
+
+<!-- badges: start -->
+<!-- badges: end -->
 
 grass (Genetic Regression Approximation through Summary Statistics) is an in-development R package to describe various regression models using only summary statistics.
+
+Currently, grass supports the linear modeling of complex phenotypes defined via functions of other phenotypes.
+Supported functions include:
+
+* linear combinations (E.g. $\phi_1y_1 + \phi_2y_2$)
+* products (E.g. $y_1\circ y_2$)
+* logical combinations (E.g. $y_1\wedge y_2$ or $y_1\vee y_2$)
+
+## Installation
+
+You can install the in-development version of grass from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("jackmwolf/grass")
+```
+## Example
