@@ -30,7 +30,7 @@
 #' responses <- lapply(means[3:length(means)], new_predictor_binary)
 #'
 #' approx_mult_prod(means, covs, n, response = "binary",
-#'   predictors = predictors, responses = responses, verbose = T)
+#'   predictors = predictors, responses = responses, verbose = TRUE)
 #' # Compare to
 #' w3 <- with(ex_data, y1 * y2 * y3)
 #' colMeans(cbind(ex_data[1:2], w3))
@@ -251,6 +251,7 @@ approx_response_cov_recursive <- function(ids, r_covs, r_means, n, responses,
 #' @param means Vector of means of predictors and the two phenotypes to be multiplied
 #' @param covs Covariance matrix of all predictors and the two phenotypes
 #' @param n Sample size
+#' @param response character. Either "binary" or "continuous".
 #' @param predictors a list of elements of class predictor
 #' @return A list with the predicted covariance matrix of all predictors and
 #'   the product and the means of all predictors and the product.
@@ -351,7 +352,8 @@ approx_conditional <- function(means, covs, response, n) {
 }
 
 #' Approximate the partial correlation of Y and Z given X
-#' @param covs Covariance matrix of X, Y, and Z
+#' @param covs Covariance matrix of X, Y, and Z.
+#' @param cors Correlation matrix of X, Y, and Z.
 #' @return Approximated partial correlation of the later two terms given the first
 get_pcor <- function(covs, cors = cov2cor(covs)) {
   if (isTRUE(all.equal(cors[1, 2], 1)) | isTRUE(all.equal(cors[1, 3], 1))) {
