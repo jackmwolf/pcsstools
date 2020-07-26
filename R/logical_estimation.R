@@ -35,9 +35,9 @@
 approx_and <- function(means, covs, n, predictors, add_intercept = TRUE, verbose = FALSE) {
   m <- length(means) - length(predictors)
   p <- length(means) - m
-  # response means/covariance matrix
-  r_means <- means[(p + 1) : (p + m)]
+
   # Generate responses' pmfs
+  r_means <- means[(p + 1) : (p + m)]
   responses <- lapply(r_means, new_predictor_binary)
 
   approx0 <- approx_mult_prod(means = means, covs = covs, n = n,
@@ -45,6 +45,65 @@ approx_and <- function(means, covs, n, predictors, add_intercept = TRUE, verbose
                               predictors = predictors, verbose = verbose)
   do.call(calculate_lm, c(approx0, n = n, add_intercept = TRUE))
 }
+
+#' Approximate a linear model for a series of logical OR statements
+#'
+#' \code{approx_or} approximates the linear model for a disjunction of m
+#'   phenotypes as a function of a set of predictors.
+#'
+#' @param means vector of predictor and response means with the last m
+#'   means being the means of m binary responses to combine in a
+#'   logical OR statement.
+#' @param covs a matrix of the covariance of all model predictors and the
+#'   responses with the order of rows/columns corresponding to the order of
+#'   \code{means}.
+#' @param n sample size.
+#' @param predictors list of objects of class \code{predictor} corresponding
+#'   to the order of the predictors in \code{means}.
+#' @param add_intercept logical. Should the linear model add an intercept term?
+#'
+#' @examples
+#' ex_data <- bin_data[c("g", "x", "y1", "y2")]
+#' head(ex_data)
+#' means <- colMeans(ex_data)
+#' covs <- cov(ex_data)
+#' n <- nrow(ex_data)
+#' predictors <- list(
+#'   new_predictor_snp(maf = mean(ex_data$g) / 2),
+#'   new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
+#' )
+#'
+#' approx_or(means = means, covs = covs, n = n, predictors = predictors,
+#'   add_intercept = TRUE)
+#' coef(summary(lm(y1 | y2 ~ 1 + g + x, data = ex_data)))
+approx_or <- function(means, covs, n, predictors, add_intercept = TRUE, verbose = FALSE) {
+  # Model "y1 or y2 or ..." via "not(not y1 and not y2 and ...)"
+  m <- length(means) - length(predictors)
+  p <- length(means) - m
+  
+  not_means <- c(means[1:p], 1 - means[(p + 1):(p + m)])
+  phi <- c(rep(1, p), rep(-1, m))
+  not_covs <- t(covs * phi) * phi
+  
+  # Generate responses' pmfs
+  r_means <- not_means[(p + 1) : (p + m)]
+  responses <- lapply(r_means, new_predictor_binary)
+  
+  approx_not_and <- approx_mult_prod(
+    means = not_means, covs = not_covs, n = n,
+    response = "binary", responses = responses,
+    predictors = predictors,
+    verbose = verbose
+  )
+  
+  tau <- c(rep(1, p), -1)
+  out_covs <- t(approx_not_and$covs * tau) * tau 
+  out_means <- approx_not_and$means * tau + c(rep(0, p), 1)
+  
+  calculate_lm(means = out_means, covs = out_covs, n = n, add_intercept = add_intercept)
+}
+
+# Below functions are defunct/outdated -----------------------------------------
 
 #' Approximate a linear model for a series of logical OR statements
 #'
@@ -94,14 +153,13 @@ approx_and <- function(means, covs, n, predictors, add_intercept = TRUE, verbose
 #' yor <- with(ex_data, (y1 | y2 | y3))
 #' coef(summary(lm(yor ~ 1 + g + x, data = ex_data)))
 #'
-#' @export
-approx_or <- function(means, covs, n, predictors, add_intercept = TRUE, verbose = FALSE) {
+approx_or_OLD <- function(means, covs, n, predictors, add_intercept = TRUE, verbose = FALSE) {
   m <- length(means) - length(predictors)
   if (m == 2) {
-    approx_or_2(means = means, covs=  covs, n = n, predictors = predictors,
+    approx_or_2_OLD(means = means, covs=  covs, n = n, predictors = predictors,
                 add_intercept = add_intercept, verbose = verbose)
   } else if (m == 3) {
-    approx_or_3(means = means, covs=  covs, n = n, predictors = predictors,
+    approx_or_3_OLD(means = means, covs=  covs, n = n, predictors = predictors,
                 add_intercept = add_intercept, verbose = verbose)
   } else {
     stop("approx_or currently only supports up to three responses.")
@@ -123,7 +181,7 @@ approx_or <- function(means, covs, n, predictors, add_intercept = TRUE, verbose 
 #'   to the order of the predictors in \code{means}.
 #' @param add_intercept logical. Should the linear model add an intercept term?
 #'
-approx_or_2 <- function(means, covs, n, predictors, verbose = FALSE, add_intercept = TRUE) {
+approx_or_2_OLD <- function(means, covs, n, predictors, verbose = FALSE, add_intercept = TRUE) {
   # Number of responses
   m <- length(means) - length(predictors)
   p <- length(means) - m
@@ -180,7 +238,7 @@ approx_or_2 <- function(means, covs, n, predictors, verbose = FALSE, add_interce
 #'   to the order of the predictors in \code{means}.
 #' @param add_intercept logical. Should the linear model add an intercept term?
 #'
-approx_or_3 <- function(means, covs, n, predictors, verbose = FALSE, add_intercept = TRUE) {
+approx_or_3_OLD <- function(means, covs, n, predictors, verbose = FALSE, add_intercept = TRUE) {
   # Number of responses
   m <- length(means) - length(predictors)
   p <- length(means) - m
