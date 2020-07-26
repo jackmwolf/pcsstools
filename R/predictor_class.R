@@ -9,6 +9,8 @@
 #'   lower/upper bound of the pdf \code{f}.
 #' @param support if \code{predictor_type == "discrete"} vector of the support of
 #'   the pmf for \code{f}.
+#'
+#' @return an object of class predictor.
 #' @examples
 #' new_predictor(f = function(x0) dnorm(x0, mean = 0, sd = 1),
 #'               predictor_type = "continuous", lb = -Inf, ub = Inf)
@@ -42,6 +44,8 @@ validate_predictor <- function(x) {
 #' @param mean predictor mean (double).
 #' @param sd predictor standard deviation (double)
 #' 
+#' @return an object of class predictor.
+#' 
 #' @importFrom stats dnorm
 #'
 #' @examples
@@ -58,6 +62,8 @@ new_predictor_normal <- function(mean, sd) {
 #' \code{new_predictor_snp} calls \code{new_predictor}
 #'
 #' @param maf minor allele frequency
+#' 
+#' @return an object of class predictor.
 #'
 #' @examples
 #' new_predictor_snp(maf = 0.3)
@@ -73,6 +79,8 @@ new_predictor_snp <- function(maf) {
 #' \code{new_predictor_binary} calls \code{new_predictor}
 #'
 #' @param p probability of success (predictor mean)
+#' 
+#' @return an object of class predictor.
 #' 
 #' @importFrom stats dbinom
 #'
