@@ -4,7 +4,7 @@
 #' \code{approx_and} approximates the linear model for the a conjunction
 #'   of m phenotypes as a function of a set of predictors.
 #'
-#'  @param means vector of predictor and response means with the last \code{m}
+#' @param means vector of predictor and response means with the last \code{m}
 #'   means being the means of \code{m} binary responses to combine in a
 #'   logical and statement.
 #' @param covs a matrix of the covariance of all model predictors and the
@@ -14,6 +14,7 @@
 #' @param predictors list of objects of class \code{predictor} corresponding
 #'   to the order of the predictors in \code{means}.
 #' @param add_intercept logical. Should the linear model add an intercept term?
+#' @param verbose should output be printed to console?
 #'
 #' @examples
 #' ex_data <- bin_data[c("g", "x", "y1", "y2")]
@@ -61,8 +62,10 @@ approx_and <- function(means, covs, n, predictors, add_intercept = TRUE, verbose
 #' @param predictors list of objects of class \code{predictor} corresponding
 #'   to the order of the predictors in \code{means}.
 #' @param add_intercept logical. Should the linear model add an intercept term?
+#' @param verbose should output be printed to console?
 #'
 #' @examples
+#' # 2 Phenotypes --------------------------------------------------------------
 #' ex_data <- bin_data[c("g", "x", "y1", "y2")]
 #' head(ex_data)
 #' means <- colMeans(ex_data)
@@ -76,6 +79,22 @@ approx_and <- function(means, covs, n, predictors, add_intercept = TRUE, verbose
 #' approx_or(means = means, covs = covs, n = n, predictors = predictors,
 #'   add_intercept = TRUE)
 #' coef(summary(lm(y1 | y2 ~ 1 + g + x, data = ex_data)))
+#' # 3 Phenotypes --------------------------------------------------------------
+#' ex_data <- bin_data[c("g", "x", "y3", "y4", "y5")]
+#' head(ex_data)
+#' means <- colMeans(ex_data)
+#' covs <- cov(ex_data)
+#' n <- nrow(ex_data)
+#' predictors <- list(
+#'   new_predictor_snp(maf = mean(ex_data$g) / 2),
+#'   new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
+#' )
+#'
+#' approx_or(means = means, covs = covs, n = n, predictors = predictors,
+#'   add_intercept = TRUE)
+#' coef(summary(lm(y3 | y4 | y5 ~ 1 + g + x, data = ex_data)))
+#' 
+#' @export
 approx_or <- function(means, covs, n, predictors, add_intercept = TRUE, verbose = FALSE) {
   # Model "y1 or y2 or ..." via "not(not y1 and not y2 and ...)"
   m <- length(means) - length(predictors)
@@ -120,6 +139,7 @@ approx_or <- function(means, covs, n, predictors, add_intercept = TRUE, verbose 
 #' @param predictors list of objects of class \code{predictor} corresponding
 #'   to the order of the predictors in \code{means}.
 #' @param add_intercept logical. Should the linear model add an intercept term?
+#' @param verbose should output be printed to console?
 #'
 #' @examples
 #' # 2 Responses ----------------------------------------------------
