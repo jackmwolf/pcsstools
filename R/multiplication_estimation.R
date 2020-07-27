@@ -431,7 +431,7 @@ approx_cov_discrete <- function(c_prod_mean, predictor_mean, f, support) {
 
 approx_cov_continuous <- function(c_prod_mean, predictor_mean, f, lb, ub) {
   g <- function(x0) f(x0) * (x0 - predictor_mean) * c_prod_mean(x0)
-  pred_cov <- integrate(g, lower = lb, upper = ub)$value
+  pred_cov <- integrate(g, lower = lb, upper = ub, stop.on.error = FALSE)$value
   return(pred_cov)
 }
 
