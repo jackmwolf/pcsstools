@@ -34,6 +34,7 @@
 #' # Compare results to...
 #' mod <- lm(y1 ~ 1 + g + x, data = ex_data)
 #' summary(mod)$coef
+#' summary(mod)$sigma^2
 #'
 #' @export
 calculate_lm <- function(means, covs, n, add_intercept = FALSE) {
@@ -55,15 +56,18 @@ calculate_lm <- function(means, covs, n, add_intercept = FALSE) {
   yty <- (n - 1) * covs[p + 1, p + 1] + n * means[p + 1]^2
 
   beta <- drop(solve(XtX) %*% Xty)
+  
+  sigma2 <- drop((yty - t(beta) %*% Xty) / (n - p))
 
-  var_beta <- diag(drop((yty - t(beta) %*% Xty) / (n - p)) * solve(XtX))
+  var_beta <- diag(sigma2 * solve(XtX))
   sd_beta <- sqrt(var_beta)
 
   t_stat <- beta / sd_beta
   p_val <- 2 * pt(abs(t_stat), df = n - p, lower.tail = F)
 
   return(list(beta = beta, sd_beta = sd_beta,
-              t_stat = t_stat, p_val = p_val))
+              t_stat = t_stat, p_val = p_val,
+              sigma2 = sigma2))
 }
 
 #' Calculate a linear model for a linear combination of responses
