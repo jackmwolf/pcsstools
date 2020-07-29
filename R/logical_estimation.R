@@ -33,7 +33,8 @@
 #' coef(summary(lm(y1_and_y2 ~ g + x + 1, data = ex_data)))
 #'
 #' @export
-approx_and <- function(means, covs, n, predictors, add_intercept = TRUE, verbose = FALSE) {
+approx_and <- function(means, covs, n, predictors, add_intercept = TRUE, 
+                       verbose = FALSE, response_assumption = "binary") {
   m <- length(means) - length(predictors)
   p <- length(means) - m
 
@@ -41,9 +42,10 @@ approx_and <- function(means, covs, n, predictors, add_intercept = TRUE, verbose
   r_means <- means[(p + 1) : (p + m)]
   responses <- lapply(r_means, new_predictor_binary)
 
-  approx0 <- approx_mult_prod(means = means, covs = covs, n = n,
-                              response = "binary", responses = responses,
-                              predictors = predictors, verbose = verbose)
+  approx0 <- approx_mult_prod(
+    means = means, covs = covs, n = n,
+    response = response_assumption, responses = responses,
+    predictors = predictors, verbose = verbose)
   do.call(calculate_lm, c(approx0, n = n, add_intercept = TRUE))
 }
 
@@ -95,7 +97,8 @@ approx_and <- function(means, covs, n, predictors, add_intercept = TRUE, verbose
 #' coef(summary(lm(y3 | y4 | y5 ~ 1 + g + x, data = ex_data)))
 #' 
 #' @export
-approx_or <- function(means, covs, n, predictors, add_intercept = TRUE, verbose = FALSE) {
+approx_or <- function(means, covs, n, predictors, add_intercept = TRUE, 
+                      verbose = FALSE, response_assumption = "binary") {
   # Model "y1 or y2 or ..." via "not(not y1 and not y2 and ...)"
   m <- length(means) - length(predictors)
   p <- length(means) - m
@@ -110,7 +113,7 @@ approx_or <- function(means, covs, n, predictors, add_intercept = TRUE, verbose 
   
   approx_not_and <- approx_mult_prod(
     means = not_means, covs = not_covs, n = n,
-    response = "binary", responses = responses,
+    response = response_assumption, responses = responses,
     predictors = predictors,
     verbose = verbose
   )
