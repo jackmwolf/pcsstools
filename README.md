@@ -44,7 +44,10 @@ Following are the key references for the functions in this package
     covariate-adjusted genetic principal component analysis by
     leveraging individual marker summary statistics from large biobanks.
     *Pacific Symposium on Biocomputing*, 25, 719-730.
+    <https://doi.org/10.1142/9789811215636_0063>.
+
 -   Gasdaska A., Friend D., Chen R., Westra J., Zawistowski M.,
     Lindsey W. and Tintle N. (2019) Leveraging summary statistics to
     make inferences about complex phenotypes in large biobanks. *Pacific
     Symposium on Biocomputing*, 24, 391-402.
+    <https://doi.org/10.1142/9789813279827_0036>.
