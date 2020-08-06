@@ -72,7 +72,7 @@ approx_mult_prod <- function(means, covs, n, response, predictors, responses, ve
       approx0 <-
         approx_prod_recursive(means = means0, covs = covs0, n = n,
                               response = response, predictors = predictors,
-                              responses = responses)
+                              responses = responses[order0])
     })
 
   # Take pairwise medians of estimates
