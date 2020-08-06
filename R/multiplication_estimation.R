@@ -1,7 +1,8 @@
 #' Approximate the covariance of a set of predictors and a product of responses
 #'
 #' \code{approx_mult_prod} recursively estimates the covariances and means of a
-#'   set of responses
+#'   set of responses. Estimates are approximated using all unique response
+#'   orderings and aggregated.
 #'
 #' @param means a vector of predictor and response means with all response means
 #'   at the end of the vector.
@@ -246,9 +247,11 @@ approx_response_cov_recursive <- function(ids, r_covs, r_means, n, responses,
 
 
 
-#' Approximate summary statistics for a product of phenotypes and a set of predictors
+#' Approximate summary statistics for a product of phenotypes and a set of 
+#'   predictors
 #'
-#' @param means Vector of means of predictors and the two phenotypes to be multiplied
+#' @param means Vector of means of predictors and the two phenotypes to be 
+#'   multiplied
 #' @param covs Covariance matrix of all predictors and the two phenotypes
 #' @param n Sample size
 #' @param response character. Either "binary" or "continuous".
