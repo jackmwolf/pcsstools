@@ -54,7 +54,6 @@ approx_mult_prod <- function(means, covs, n, response, predictors, responses, ve
       # Re-arrange order of means and covs to match order0
       means0 <- means[c(1:p, p + order0)]
       covs0  <- covs[c(1:p, p + order0), c(1:p, p + order0)]
-      predictors0 <- predictors[order0]
 
       # Print estimation order
       if (verbose & m > 2) {
