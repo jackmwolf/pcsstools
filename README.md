@@ -31,8 +31,10 @@ You can install the in-development version of grass from
     # install.packages("devtools")
     devtools::install_github("jackmwolf/grass")
 
-Example
--------
+Examples
+--------
+
+### Principal Component Analysis
 
 Let’s model the first principal component of
 *y*<sub>1</sub>, *y*<sub>2</sub> and *y*<sub>3</sub> using summary
@@ -99,6 +101,72 @@ Here’s the same model using individual patient data.
 The difference in test statistic estimates can be attributed to the
 non-uniqueness of optimal principal component vectors by multiplication
 by  − 1.
+
+### Logical Combination
+
+In this example we will approximate a linear model where our response is
+the logical disjunction: *y*<sub>1</sub> ∨ *y*<sub>1</sub>.
+
+    dat <- grass::bin_data[c("g", "x", "y1", "y2")]
+    head(dat)
+    #>   g          x y1 y2
+    #> 1 0 -0.9161478  1  0
+    #> 2 0  1.2496985  0  1
+    #> 3 1 -1.2708514  0  0
+    #> 4 2  0.0832760  0  1
+    #> 5 0  0.4686342  0  1
+    #> 6 2  0.4620154  0  1
+
+Once again we will organize our Pre-Computed Summary Statistics:
+
+    means <- colMeans(dat)
+    covs  <- cov(dat)
+    n     <- nrow(dat)
+
+We also need to describe the distributions of both of our predictors
+through objects of class `predictor`. (See `?new_predictor`)
+
+    predictors <- list(
+      g = new_predictor_snp(maf = means["g"] / 2),
+      x = new_predictor_normal(mean = means["x"], sd = sqrt(covs["x", "x"]))
+    )
+
+Here’s our approximation:
+
+    model_pcss <- approx_or(
+      means = means, covs = covs, n = n, predictors = predictors, add_intercept = TRUE
+    )
+
+    model_pcss
+    #> $beta
+    #> (Intercept)           g           x 
+    #>  0.66927326 -0.09103735  0.19003213 
+    #> 
+    #> $sd_beta
+    #> (Intercept)           g           x 
+    #>  0.01878447  0.02200364  0.01412366 
+    #> 
+    #> $t_stat
+    #> (Intercept)           g           x 
+    #>   35.629066   -4.137377   13.454881 
+    #> 
+    #> $p_val
+    #>   (Intercept)             g             x 
+    #> 5.487501e-180  3.809339e-05  4.832955e-38 
+    #> 
+    #> $sigma2
+    #> [1] 0.1972141
+
+And here’s the result you would get using IPD:
+
+    model_ipd <- lm(y1 | y2 ~ 1 + g + x, data = dat)
+    summary(model_ipd)$coef
+    #>                Estimate Std. Error   t value      Pr(>|t|)
+    #> (Intercept)  0.67337349 0.01887924 35.667413 3.007202e-180
+    #> g           -0.09862393 0.02211464 -4.459667  9.141119e-06
+    #> x            0.18289582 0.01419491 12.884609  3.007696e-35
+    summary(model_ipd)$sigma^2
+    #> [1] 0.1992089
 
 References
 ----------
