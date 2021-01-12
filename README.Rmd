@@ -38,6 +38,48 @@ devtools::install_github("jackmwolf/grass")
 ```
 ## Example
 
+Let's model the first principal component of $y_1, y_2$ and $y_3$ using summary statistics.
+
+```{r}
+library(grass)
+dat <- grass::cont_data[c("g", "x", "y1", "y2", "y3")]
+head(dat)
+```
+
+First, we need our assumed summary statistics. 
+
+```{r}
+means <- colMeans(dat)
+covs  <- cov(dat)
+n     <- nrow(dat)
+```
+
+In addition, we need our weights, the first principal component vector of the responses' covariance matrix.
+
+```{r}
+SigmaY <- covs[c("y1", "y2", "y3"), c("y1", "y2", "y3")]
+phi <- eigen(SigmaY)$vectors[, 1]
+```
+
+Then, we can calculate the linear model by using `calculate_lm_combo`
+
+```{r}
+model_pcss <- calculate_lm_combo(
+  means = means, covs = covs, n = n, phi = phi, add_intercept = TRUE
+  )
+model_pcss
+```
+
+Here's the same model using individual patient data. 
+
+```{r}
+pc_1 <- prcomp(x = dat[c("y1", "y2", "y3")])$x[, "PC1"]
+mod_ipd <- lm(pc_1 ~ 1 + g + x, data = dat)
+summary(mod_ipd)$coef
+```
+
+The difference in test statistic estimates can be attributed to the non-uniqueness of optimal principal component vectors by multiplication by $-1$.
+
 
 ## References
 Following are the key references for the functions in this package
