@@ -9,7 +9,8 @@ grass
 
 grass (Genetic Regression Approximation through Summary Statistics) is
 an in-development R package to describe various regression models using
-only genome-wide association study (GWAS) summary statistics.
+only pre-computed summary statistics (PCSS) from genome-wide association
+studies (GWASs).
 
 Currently, grass supports the linear modeling of complex phenotypes
 defined via functions of other phenotypes. Supported functions include:
@@ -34,13 +35,21 @@ You can install the in-development version of grass from
 Examples
 --------
 
-### Principal Component Analysis
-
-Let’s model the first principal component of
-*y*<sub>1</sub>, *y*<sub>2</sub> and *y*<sub>3</sub> using summary
-statistics.
+We will walk through two examples using grass to model combinations of
+phenotypes using PCSS and then compare our results to those found using
+individual-level patient data (IPD).
 
     library(grass)
+
+### Principal Component Analysis
+
+Let’s model the first principal component score of three phenotypes
+using PCSS.
+
+First, we’ll load in some data. We have a SNP’s minor allele counts
+(`g`), a continuous covariate (`x`), and three continuous phenotypes
+(`y1`, `y2`, and `y3`).
+
     dat <- grass::cont_data[c("g", "x", "y1", "y2", "y3")]
     head(dat)
     #>   g           x        y1         y2         y3
@@ -58,12 +67,12 @@ First, we need our assumed summary statistics.
     n     <- nrow(dat)
 
 In addition, we need our weights, the first principal component vector
-of the responses’ covariance matrix.
+of the phenotype covariance matrix.
 
     SigmaY <- covs[c("y1", "y2", "y3"), c("y1", "y2", "y3")]
     phi <- eigen(SigmaY)$vectors[, 1]
 
-Then, we can calculate the linear model by using `calculate_lm_combo`
+Then, we can calculate the linear model by using `calculate_lm_combo`.
 
     model_pcss <- calculate_lm_combo(
       means = means, covs = covs, n = n, phi = phi, add_intercept = TRUE
@@ -91,21 +100,28 @@ Then, we can calculate the linear model by using `calculate_lm_combo`
 Here’s the same model using individual patient data.
 
     pc_1 <- prcomp(x = dat[c("y1", "y2", "y3")])$x[, "PC1"]
+
     mod_ipd <- lm(pc_1 ~ 1 + g + x, data = dat)
     summary(mod_ipd)$coef
     #>               Estimate Std. Error   t value      Pr(>|t|)
     #> (Intercept)  0.3300109 0.06925072  4.765452  2.164147e-06
     #> g           -0.5705010 0.07806084 -7.308415  5.535041e-13
     #> x            1.9434042 0.04899036 39.669117 2.836904e-207
+    summary(mod_ipd)$sigma^2
+    #> [1] 2.490841
 
-The difference in test statistic estimates can be attributed to the
-non-uniqueness of optimal principal component vectors by multiplication
-by  − 1.
+In this case, our coefficient estimates for `g` and `x` are off by a
+factor of -1; this is because we picked the opposite vector of principal
+component weights to `prcomp`. This distinction in sign is arbitrary
+(see the note in `?prcomp`).
 
 ### Logical Combination
 
 In this example we will approximate a linear model where our response is
-the logical disjunction: *y*<sub>1</sub> ∨ *y*<sub>1</sub>.
+the logical combination “*y*<sub>1</sub> or *y*<sub>1</sub>”
+(*y*<sub>1</sub> ∨ *y*<sub>2</sub>).
+
+First we need data with binary phenotypes.
 
     dat <- grass::bin_data[c("g", "x", "y1", "y2")]
     head(dat)
@@ -117,26 +133,29 @@ the logical disjunction: *y*<sub>1</sub> ∨ *y*<sub>1</sub>.
     #> 5 0  0.4686342  0  1
     #> 6 2  0.4620154  0  1
 
-Once again we will organize our Pre-Computed Summary Statistics:
+Once again we will organize our PCSS.
 
     means <- colMeans(dat)
     covs  <- cov(dat)
     n     <- nrow(dat)
 
 We also need to describe the distributions of both of our predictors
-through objects of class `predictor`. (See `?new_predictor`)
+through objects of class `predictor`. (See `?new_predictor`.) grass has
+shortcut functions to create `predictor` objects for common types of
+variables, which we will use to create a list of `predictor`s.
 
     predictors <- list(
       g = new_predictor_snp(maf = means["g"] / 2),
       x = new_predictor_normal(mean = means["x"], sd = sqrt(covs["x", "x"]))
     )
+    class(predictors[[1]])
+    #> [1] "predictor"
 
-Here’s our approximation:
+Then we can approximate the linear model using `approx_or`.
 
     model_pcss <- approx_or(
       means = means, covs = covs, n = n, predictors = predictors, add_intercept = TRUE
     )
-
     model_pcss
     #> $beta
     #> (Intercept)           g           x 
