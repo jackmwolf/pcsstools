@@ -141,6 +141,11 @@ summary(model_ipd)$coef
 summary(model_ipd)$sigma^2
 ```
 
+## Goals
+
+* Incorporate support for function notation (E.g. `y1 * y2 ~ 1 + g + x`)
+
+* Print model output in a more similar format to `summary.lm`
 
 ## References
 Following are the key references for the functions in this package

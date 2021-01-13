@@ -187,6 +187,14 @@ And here’s the result you would get using IPD:
     summary(model_ipd)$sigma^2
     #> [1] 0.1992089
 
+Goals
+-----
+
+-   Incorporate support for function notation (E.g.
+    `y1 * y2 ~ 1 + g + x`)
+
+-   Print model output in a more similar format to `summary.lm`
+
 References
 ----------
 
