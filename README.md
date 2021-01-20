@@ -79,7 +79,7 @@ elements are the phenotypes of interest.
     covs  <- cov(dat)
     n     <- nrow(dat)
 
-In addition, we need our weights. These are the the first principal
+In addition, need our weights. These are the the first principal
 component vector of the phenotype covariance matrix, and they are in the
 same order as the final elements of `means` and `covs`.
 
@@ -193,7 +193,7 @@ Then we can approximate the linear model using `approx_or`.
     #> $sigma2
     #> [1] 0.1972141
 
-And here’s the result you would get using IPD:
+And here’s the result we would get using IPD:
 
     model_ipd <- lm(y1 | y2 ~ 1 + g + x, data = dat)
     summary(model_ipd)$coef

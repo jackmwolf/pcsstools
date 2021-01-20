@@ -71,7 +71,7 @@ covs  <- cov(dat)
 n     <- nrow(dat)
 ```
 
-In addition, we need our weights. 
+In addition,  need our weights. 
 These are the the first principal component vector of the phenotype covariance matrix, and they are in the same order as the final elements of `means` and `covs`.
 
 ```{r}
@@ -142,7 +142,7 @@ model_pcss <- approx_or(
 model_pcss
 ```
 
-And here's the result you would get using IPD:
+And here's the result we would get using IPD:
 
 ```{r}
 model_ipd <- lm(y1 | y2 ~ 1 + g + x, data = dat)
