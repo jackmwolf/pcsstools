@@ -7,18 +7,29 @@ grass
 <!-- badges: start -->
 <!-- badges: end -->
 
-grass (Genetic Regression Approximation through Summary Statistics) is
+`grass` (Genetic Regression Approximation through Summary Statistics) is
 an in-development R package to describe various regression models using
 only pre-computed summary statistics (PCSS) from genome-wide association
-studies (GWASs).
+studies (GWASs) and PCSS repositories such as
+[GeneAtlas](http://geneatlas.roslin.ed.ac.uk/). This eliminates the
+logistic, privacy, and access concerns that accompany the use of
+individual patient-level data (IPD).
 
-Currently, grass supports the linear modeling of complex phenotypes
+The following figure highlights the information typically needed to
+perform regression analysis on a set of *m* phenotypes with *p*
+covariates when IPD is available, and the PCSS that are commonly needed
+to approximate this same model in `grass`.
+
+![Data needed for analysis using IPD compared to that when using
+PCSS](./man/figures/IPDvsPCSS.png)
+
+Currently, `grass` supports the linear modeling of complex phenotypes
 defined via functions of other phenotypes. Supported functions include:
 
--   linear combinations (E.g.
-    *ϕ*<sub>1</sub>*y*<sub>1</sub> + *ϕ*<sub>2</sub>*y*<sub>2</sub>)
--   products (E.g. *y*<sub>1</sub> ∘ *y*<sub>2</sub>)
--   logical combinations (E.g. *y*<sub>1</sub> ∧ *y*<sub>2</sub> or
+-   linear combinations
+    (e.g. *ϕ*<sub>1</sub>*y*<sub>1</sub> + *ϕ*<sub>2</sub>*y*<sub>2</sub>)
+-   products (e.g. *y*<sub>1</sub> ∘ *y*<sub>2</sub>)
+-   logical combinations (e.g. *y*<sub>1</sub> ∧ *y*<sub>2</sub> or
     *y*<sub>1</sub> ∨ *y*<sub>2</sub>)
 
 Installation
@@ -37,7 +48,7 @@ Examples
 
 We will walk through two examples using grass to model combinations of
 phenotypes using PCSS and then compare our results to those found using
-individual-level patient data (IPD).
+IPD.
 
     library(grass)
 
@@ -60,14 +71,17 @@ First, we’ll load in some data. We have a SNP’s minor allele counts
     #> 5 1  0.22346186  1.431919 -1.9866995  0.5214276
     #> 6 0  0.55236041 -2.282309 -0.2572408 -0.9526495
 
-First, we need our assumed summary statistics.
+First, we need our assumed summary statistics. We are careful so that
+the order of `means` and `covs` are the same, and that their last
+elements are the phenotypes of interest.
 
     means <- colMeans(dat)
     covs  <- cov(dat)
     n     <- nrow(dat)
 
-In addition, we need our weights, the first principal component vector
-of the phenotype covariance matrix.
+In addition, we need our weights. These are the the first principal
+component vector of the phenotype covariance matrix, and they are in the
+same order as the final elements of `means` and `covs`.
 
     SigmaY <- covs[c("y1", "y2", "y3"), c("y1", "y2", "y3")]
     phi <- eigen(SigmaY)$vectors[, 1]
@@ -133,7 +147,8 @@ First we need data with binary phenotypes.
     #> 5 0  0.4686342  0  1
     #> 6 2  0.4620154  0  1
 
-Once again we will organize our PCSS.
+Once again we will organize our PCSS such that `means` and `covs` have
+the same order with the phenotypes at the end.
 
     means <- colMeans(dat)
     covs  <- cov(dat)
@@ -142,7 +157,9 @@ Once again we will organize our PCSS.
 We also need to describe the distributions of both of our predictors
 through objects of class `predictor`. (See `?new_predictor`.) grass has
 shortcut functions to create `predictor` objects for common types of
-variables, which we will use to create a list of `predictor`s.
+variables, which we will use to create a list of `predictor`s. (Note
+that the order `predictors` matches the order of the predictors in
+`means` and `covs`.)
 
     predictors <- list(
       g = new_predictor_snp(maf = means["g"] / 2),
@@ -187,11 +204,12 @@ And here’s the result you would get using IPD:
     summary(model_ipd)$sigma^2
     #> [1] 0.1992089
 
-Goals
------
+Future Work
+-----------
 
 -   Incorporate support for function notation (E.g.
-    `y1 * y2 ~ 1 + g + x`)
+    `y1 * y2 ~ 1 + g + x`) instead of depending on the order of input
+    PCSS
 
 -   Print model output in a more similar format to `summary.lm`
 
