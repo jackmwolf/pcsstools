@@ -28,6 +28,8 @@ last are to be multiplied}
 \item{responses}{List of lists with elements of class predictor}
 
 \item{response}{Character, Either "binary" or "continuous"}
+
+\item{verbose}{logical}
 }
 \value{
 A vector with the approximated covariance, and approximated mean and
@@ -36,18 +38,4 @@ A vector with the approximated covariance, and approximated mean and
 \description{
 Approximate the covariance of one response with an arbitrary product of
 responses.
-}
-\examples{
-Y <- bin_data[c("y1", "y2", "y3")]
-r_means <- colMeans(Y)
-r_covs <- cov(Y)
-n <- nrow(Y)
-responses <- lapply(r_means, new_predictor_binary)
-approx_response_cov_recursive(ids = c(3, 2, 1), r_covs, r_means, n, responses, response = "binary", verbose = T)
-w2 <- with(Y, y1 * y2)
-cov(Y$y3, w2)
-mean(w2)
-var(w2)
-
-
 }
