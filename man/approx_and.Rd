@@ -4,9 +4,21 @@
 \alias{approx_and}
 \title{Approximate a linear model for a series of logical AND statements}
 \usage{
-approx_and(means, covs, n, predictors, add_intercept = TRUE, verbose = FALSE)
+approx_and(
+  means,
+  covs,
+  n,
+  predictors,
+  add_intercept = TRUE,
+  verbose = FALSE,
+  response_assumption = "binary"
+)
 }
 \arguments{
+\item{means}{vector of predictor and response means with the last \code{m}
+means being the means of \code{m} binary responses to combine in a
+logical and statement.}
+
 \item{covs}{a matrix of the covariance of all model predictors and the
 responses with the order of rows/columns corresponding to the order of
 \code{means}.}
@@ -17,15 +29,16 @@ responses with the order of rows/columns corresponding to the order of
 to the order of the predictors in \code{means}.}
 
 \item{add_intercept}{logical. Should the linear model add an intercept term?}
+
+\item{verbose}{should output be printed to console?}
+
+\item{response_assumption}{character. Either \code{"binary"} or 
+\code{"continuous"}. If \code{"binary"}, specific calculations will be done
+to estimate product means and variances.}
 }
 \description{
 \code{approx_and} approximates the linear model for the a conjunction
   of m phenotypes as a function of a set of predictors.
-}
-\details{
-@param means vector of predictor and response means with the last \code{m}
-  means being the means of \code{m} binary responses to combine in a
-  logical and statement.
 }
 \examples{
 ex_data <- bin_data[c("g", "x", "y1", "y2")]

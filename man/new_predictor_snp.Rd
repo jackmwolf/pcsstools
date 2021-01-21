@@ -9,6 +9,9 @@ new_predictor_snp(maf)
 \arguments{
 \item{maf}{minor allele frequency}
 }
+\value{
+an object of class predictor.
+}
 \description{
 \code{new_predictor_snp} calls \code{new_predictor}
 }

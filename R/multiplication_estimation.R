@@ -170,7 +170,10 @@ approx_prod_recursive <- function(means, covs, n, response, predictors, response
 #' r_covs <- cov(Y)
 #' n <- nrow(Y)
 #' responses <- lapply(r_means, new_predictor_binary)
-#' approx_response_cov_recursive(ids = c(3, 2, 1), r_covs, r_means, n, responses, response = "binary", verbose = T)
+#' approx_response_cov_recursive(
+#'   ids = c(3, 2, 1), r_covs, r_means, n, responses, 
+#'   response = "binary", verbose = T
+#' )
 #' w2 <- with(Y, y1 * y2)
 #' cov(Y$y3, w2)
 #' mean(w2)
@@ -356,16 +359,7 @@ get_pcor <- function(covs, cors = cov2cor(covs)) {
   return(rho)
 }
 
-#' Approximate the covariance of X and Y*Z as well as the mean and variance of Y * Z
-#'
-#' @examples
-#' ex_data <- bin_data[c("g", "y4", "y5")]
-#' approx_cov(colMeans(ex_data), cov(ex_data), predictor_type = "discrete",
-#'            response = "binary", n = nrow(ex_data),
-#'            f = function(x0) dbinom(x0, size = 2, prob = mean(ex_data$g) / 2),
-#'            support = 0:2)
-#' with(ex_data, cov(g, y4 * y5))
-#'
+# Approximate the covariance of X and Y*Z as well as the mean and variance of Y * Z
 approx_cov <- function(means, covs, predictor_type, response, n, f, ...) {
   # MEAN ##
   pred_mean <- get_mean(means = means[2:3], covs = covs[2:3, 2:3], n = n)
@@ -437,7 +431,7 @@ approx_cov_continuous <- function(c_prod_mean, predictor_mean, f, lb, ub) {
   return(pred_cov)
 }
 
-#' Calculate the mean of the product of X and Y
+# Calculate the mean of the product of X and Y
 get_mean <- function(means, covs, n) {
   prod_mean <- means[1] * means[2] + covs[1, 2] * (n - 1) / n
   return(prod_mean)

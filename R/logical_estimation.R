@@ -14,6 +14,9 @@
 #' @param predictors list of objects of class \code{predictor} corresponding
 #'   to the order of the predictors in \code{means}.
 #' @param add_intercept logical. Should the linear model add an intercept term?
+#' @param response_assumption character. Either \code{"binary"} or 
+#'   \code{"continuous"}. If \code{"binary"}, specific calculations will be done
+#'   to estimate product means and variances.
 #' @param verbose should output be printed to console?
 #'
 #' @examples
@@ -64,6 +67,9 @@ approx_and <- function(means, covs, n, predictors, add_intercept = TRUE,
 #' @param predictors list of objects of class \code{predictor} corresponding
 #'   to the order of the predictors in \code{means}.
 #' @param add_intercept logical. Should the linear model add an intercept term?
+#' @param response_assumption character. Either \code{"binary"} or 
+#'   \code{"continuous"}. If \code{"binary"}, specific calculations will be done
+#'   to estimate product means and variances.
 #' @param verbose should output be printed to console?
 #'
 #' @examples
@@ -127,55 +133,7 @@ approx_or <- function(means, covs, n, predictors, add_intercept = TRUE,
 
 # Below functions are defunct/outdated -----------------------------------------
 
-#' Approximate a linear model for a series of logical OR statements
-#'
-#' \code{approx_or} approximates the linear model for a disjunction of m
-#'   phenotypes as a function of a set of predictors.
-#'
-#' @param means vector of predictor and response means with the last \code{m}
-#'   means being the means of \code{m} binary responses to combine in a
-#'   logical or statement.
-#' @param covs a matrix of the covariance of all model predictors and the
-#'   responses with the order of rows/columns corresponding to the order of
-#'   \code{means}.
-#' @param n sample size.
-#' @param predictors list of objects of class \code{predictor} corresponding
-#'   to the order of the predictors in \code{means}.
-#' @param add_intercept logical. Should the linear model add an intercept term?
-#' @param verbose should output be printed to console?
-#'
-#' @examples
-#' # 2 Responses ----------------------------------------------------
-#' ex_data <- bin_data[c("g", "x", "y1", "y2")]
-#' head(ex_data)
-#' means <- colMeans(ex_data)
-#' covs <- cov(ex_data)
-#' n <- nrow(ex_data)
-#' predictors <- list(
-#'   new_predictor_snp(maf = mean(ex_data$g) / 2),
-#'   new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
-#' )
-#'
-#' approx_or(means = means, covs = covs, n = n, predictors = predictors,
-#'   add_intercept = TRUE)
-#' y1_or_y2 <- with(ex_data, y1 | y2)
-#' coef(summary(lm(y1_or_y2 ~ g + x + 1, data = ex_data)))
-#'
-#' # 3 Responses ----------------------------------------------------
-#' ex_data <- test_data_bin[c("g", "x", "y1", "y2", "y3")]
-#' head(ex_data)
-#' means <- colMeans(ex_data)
-#' covs <- cov(ex_data)
-#' n <- nrow(ex_data)
-#' predictors <- list(
-#'   new_predictor_snp(maf = mean(ex_data$g) / 2),
-#'   new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
-#' )
-#' approx_or(means = means, covs = covs, n = n, predictors = predictors,
-#'  verbose = TRUE, add_intercept = TRUE)
-#' yor <- with(ex_data, (y1 | y2 | y3))
-#' coef(summary(lm(yor ~ 1 + g + x, data = ex_data)))
-#'
+# Approximate a linear model for a series of logical OR statements
 approx_or_OLD <- function(means, covs, n, predictors, add_intercept = TRUE, verbose = FALSE) {
   m <- length(means) - length(predictors)
   if (m == 2) {
@@ -190,20 +148,6 @@ approx_or_OLD <- function(means, covs, n, predictors, add_intercept = TRUE, verb
 }
 
 #' Approximate a linear model for a logical OR statement with 2 disjuncts
-#'
-#' \code{approx_or_2} approximates the linear model for the response
-#'   "y1 or y2" as a function of a set of predictors.
-#'
-#' @param means vector of predictor and response means with the last two means
-#'   the means of two binary responses to combine in a logical or statement
-#' @param covs a matrix of the covariance of all model predictors and the
-#'   responses with the order of rows/columns corresponding to the order of
-#'   \code{means}.
-#' @param n sample size.
-#' @param predictors list of objects of class \code{predictor} corresponding
-#'   to the order of the predictors in \code{means}.
-#' @param add_intercept logical. Should the linear model add an intercept term?
-#'
 approx_or_2_OLD <- function(means, covs, n, predictors, verbose = FALSE, add_intercept = TRUE) {
   # Number of responses
   m <- length(means) - length(predictors)
@@ -246,21 +190,7 @@ approx_or_2_OLD <- function(means, covs, n, predictors, verbose = FALSE, add_int
 
 }
 
-#' Approximate a linear model for a logical OR statement with 3 disjuncts
-#'
-#' \code{approx_or_3} approximates the linear model for the response
-#'   "y1 or y2 or y3" as a function of a set of predictors.
-#'
-#' @param means vector of predictor and response means with the last two means
-#'   the means of three binary responses to combine in a logical or statement
-#' @param covs a matrix of the covariance of all model predictors and the
-#'   responses with the order of rows/columns corresponding to the order of
-#'   \code{means}.
-#' @param n sample size.
-#' @param predictors list of objects of class \code{predictor} corresponding
-#'   to the order of the predictors in \code{means}.
-#' @param add_intercept logical. Should the linear model add an intercept term?
-#'
+# Approximate a linear model for a logical OR statement with 3 disjuncts
 approx_or_3_OLD <- function(means, covs, n, predictors, verbose = FALSE, add_intercept = TRUE) {
   # Number of responses
   m <- length(means) - length(predictors)

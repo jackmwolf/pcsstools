@@ -14,11 +14,16 @@ a random variable.}
 \item{predictor_type}{a character describing the random variable. Either "discrete"
 or "continuous".}
 
+\item{...}{additional arguments}
+
 \item{lb, ub}{if \code{predictor_type == "continuous"} double giving the
 lower/upper bound of the pdf \code{f}.}
 
 \item{support}{if \code{predictor_type == "discrete"} vector of the support of
 the pmf for \code{f}.}
+}
+\value{
+an object of class predictor.
 }
 \description{
 Create an object of class "predictor"

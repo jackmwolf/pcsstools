@@ -7,7 +7,9 @@
 get_pcor(covs, cors = cov2cor(covs))
 }
 \arguments{
-\item{covs}{Covariance matrix of X, Y, and Z}
+\item{covs}{Covariance matrix of X, Y, and Z.}
+
+\item{cors}{Correlation matrix of X, Y, and Z.}
 }
 \value{
 Approximated partial correlation of the later two terms given the first

@@ -23,16 +23,3 @@ A list of length 2 consisting of 2 functions that give the
 \description{
 Approximate the mean of Y conditional on X
 }
-\examples{
-# Discrete / Binary
-n <- 500
-x <- rbinom(n = n, size = 2, prob = 0.2)
-y <- rbinom(n = n, size = 1, prob = invLogit(x))
-XY <- cbind(x, y)
-preds <- approx_conditional(colMeans(XY), cov(XY), "binary", n = n)
-preds$c_mu(0:2)
-sapply(0:2, function(x0) mean(y[x==x0]))
-preds$c_var(0:2)
-sapply(0:2, function(x0) var(y[x==x0]))
-
-}

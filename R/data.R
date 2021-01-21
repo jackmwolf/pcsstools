@@ -7,7 +7,7 @@
 #' \describe{
 #'   \item{g}{Minor allele counts at one site}
 #'   \item{x}{A continuous covariate}
-#'   \item{y1,...,y5}{binary phenotypes}
+#'   \item{y1,y2,y3,y4,y5}{binary phenotypes}
 #' } 
 "bin_data"
 
@@ -20,6 +20,6 @@
 #' \describe{
 #'   \item{g}{Minor allele counts at one site}
 #'   \item{x}{A continuous covariate}
-#'   \item{y1,...,y5}{5 continuous phenotypes}
+#'   \item{y1,y2,y3,y4,y5}{5 continuous phenotypes}
 #' } 
 "cont_data"

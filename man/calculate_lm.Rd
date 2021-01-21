@@ -32,5 +32,18 @@ calculate_lm(means = means, covs = covs, n = n, add_intercept = TRUE)
 # Compare results to...
 mod <- lm(y1 ~ 1 + g + x, data = ex_data)
 summary(mod)$coef
+summary(mod)$sigma^2
 
+}
+\references{
+Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and 
+  Tintle, N.  (2020). Computationally efficient, exact, covariate-adjusted 
+  genetic principal component analysis by leveraging individual marker 
+  summary statistics from large biobanks. \emph{Pacific Symposium on 
+  Biocomputing}, 25, 719-730.
+
+  Gasdaska A., Friend D., Chen R., Westra J., Zawistowski M., Lindsey W. and 
+  Tintle N. (2019) Leveraging summary statistics to make inferences about 
+  complex phenotypes in large biobanks. \emph{Pacific Symposium on 
+  Biocomputing}, 24, 391-402.
 }
