@@ -4,7 +4,6 @@
 #'   a random variable.
 #' @param predictor_type a character describing the random variable. Either "discrete"
 #'   or "continuous".
-#' @param ... additional arguments
 #' @param lb,ub if \code{predictor_type == "continuous"} double giving the
 #'   lower/upper bound of the pdf \code{f}.
 #' @param support if \code{predictor_type == "discrete"} vector of the support of
@@ -16,8 +15,16 @@
 #'               predictor_type = "continuous", lb = -Inf, ub = Inf)
 #'
 #' @export
-new_predictor <- function(f = function() {}, predictor_type = character(), ...) {
-  x <- list(f = f, predictor_type = predictor_type, ...)
+new_predictor <- function(f = function() {}, predictor_type = character(), lb, ub, support) {
+  
+  x <- list(f = f, predictor_type = predictor_type)
+  
+  if (!missing(lb) & !missing(ub)) {
+    x <- c(x, lb = lb, ub = ub)
+  } else if (!missing(support)) {
+    x <- c(x, list(support = support))
+  }
+  
   validate_predictor(x)
   class(x) <- "predictor"
   return(x)

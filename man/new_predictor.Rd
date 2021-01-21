@@ -4,8 +4,13 @@
 \alias{new_predictor}
 \title{Create an object of class "predictor"}
 \usage{
-new_predictor(f = function() {
-}, predictor_type = character(), ...)
+new_predictor(
+  f = function() { },
+  predictor_type = character(),
+  lb,
+  ub,
+  support
+)
 }
 \arguments{
 \item{f}{a function that gives the probability mass/distribution function of
@@ -13,8 +18,6 @@ a random variable.}
 
 \item{predictor_type}{a character describing the random variable. Either "discrete"
 or "continuous".}
-
-\item{...}{additional arguments}
 
 \item{lb, ub}{if \code{predictor_type == "continuous"} double giving the
 lower/upper bound of the pdf \code{f}.}
