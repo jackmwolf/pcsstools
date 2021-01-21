@@ -6,10 +6,10 @@ Authors@R: as.person(c(
     "Jack Wolf <WolfX681@umn.edu> [aut, cre]"
   ))
 Description: Defines functions to describe regression models using only
-    summary statistics (i.e. means, variances, and covariances).
-    Possible models include linear models and region-based tests for linear 
-    combinations, products, and logical combinations of phenotypes.
-License: What license is it under?
+    pred-computed summary statistics (i.e. means, variances, and covariances).
+    Possible models include linear models for linear combinations, products, 
+    and logical combinations of phenotypes.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports:
