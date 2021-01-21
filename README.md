@@ -86,7 +86,7 @@ same order as the final elements of `means` and `covs`.
     SigmaY <- covs[c("y1", "y2", "y3"), c("y1", "y2", "y3")]
     phi <- eigen(SigmaY)$vectors[, 1]
 
-Then, we can calculate the linear model by using `calculate_lm_combo`.
+Then, we can calculate the linear model by using `calculate_lm_combo()`.
 
     model_pcss <- calculate_lm_combo(
       means = means, covs = covs, n = n, phi = phi, add_intercept = TRUE
@@ -168,7 +168,7 @@ that the order `predictors` matches the order of the predictors in
     class(predictors[[1]])
     #> [1] "predictor"
 
-Then we can approximate the linear model using `approx_or`.
+Then we can approximate the linear model using `approx_or()`.
 
     model_pcss <- approx_or(
       means = means, covs = covs, n = n, predictors = predictors, add_intercept = TRUE

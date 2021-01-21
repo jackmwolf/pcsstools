@@ -79,7 +79,7 @@ SigmaY <- covs[c("y1", "y2", "y3"), c("y1", "y2", "y3")]
 phi <- eigen(SigmaY)$vectors[, 1]
 ```
 
-Then, we can calculate the linear model by using `calculate_lm_combo`.
+Then, we can calculate the linear model by using `calculate_lm_combo()`.
 
 ```{r}
 model_pcss <- calculate_lm_combo(
@@ -133,7 +133,7 @@ predictors <- list(
 class(predictors[[1]])
 ```
 
-Then we can approximate the linear model using `approx_or`.
+Then we can approximate the linear model using `approx_or()`.
 
 ```{r}
 model_pcss <- approx_or(
