@@ -97,8 +97,7 @@ approx_mult_prod <- function(means, covs, n, response, predictors, responses, ve
 }
 
 
-#' Recursively approximate covariances with a product of responses
-#'
+# Recursively approximate covariances with a product of responses
 approx_prod_recursive <- function(means, covs, n, response, predictors, responses) {
   # Number of responses and predictors
   m <- length(means) - length(predictors)
@@ -160,24 +159,10 @@ approx_prod_recursive <- function(means, covs, n, response, predictors, response
 #' @param n Sample size
 #' @param response Character, Either "binary" or "continuous"
 #' @param responses List of lists with elements of class predictor
-#'
+#' @param verbose logical
+#' 
 #' @return A vector with the approximated covariance, and approximated mean and
 #'   variance of the product
-#'
-#' @examples
-#' Y <- bin_data[c("y1", "y2", "y3")]
-#' r_means <- colMeans(Y)
-#' r_covs <- cov(Y)
-#' n <- nrow(Y)
-#' responses <- lapply(r_means, new_predictor_binary)
-#' approx_response_cov_recursive(
-#'   ids = c(3, 2, 1), r_covs, r_means, n, responses, 
-#'   response = "binary", verbose = T
-#' )
-#' w2 <- with(Y, y1 * y2)
-#' cov(Y$y3, w2)
-#' mean(w2)
-#' var(w2)
 #'
 #'
 approx_response_cov_recursive <- function(ids, r_covs, r_means, n, responses,
