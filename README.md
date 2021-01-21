@@ -7,7 +7,7 @@ grass
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.com/jackmwolf/grass_alpha.svg?branch=master)](https://travis-ci.com/jackmwolf/grass_alpha)
+status](https://travis-ci.com/jackmwolf/grass_alpha.svg?branch=master)](https://travis-ci.com/jackmwolf/grass)
 <!-- badges: end -->
 
 `grass` (Genetic Regression Approximation through Summary Statistics) is

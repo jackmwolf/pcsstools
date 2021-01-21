@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 # grass
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.com/jackmwolf/grass_alpha.svg?branch=master)](https://travis-ci.com/jackmwolf/grass_alpha)
+[![Travis build status](https://travis-ci.com/jackmwolf/grass_alpha.svg?branch=master)](https://travis-ci.com/jackmwolf/grass)
 <!-- badges: end -->
 
 `grass` (Genetic Regression Approximation through Summary Statistics) is an in-development R package to describe various regression models using only pre-computed summary statistics (PCSS) from genome-wide association studies (GWASs) and PCSS repositories such as [GeneAtlas](http://geneatlas.roslin.ed.ac.uk/).
