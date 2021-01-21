@@ -9,7 +9,7 @@ Description: Defines functions to describe regression models using only
     pred-computed summary statistics (i.e. means, variances, and covariances).
     Possible models include linear models for linear combinations, products, 
     and logical combinations of phenotypes.
-License: GPL-3
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Imports:
