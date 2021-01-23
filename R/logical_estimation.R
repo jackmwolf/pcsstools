@@ -1,3 +1,105 @@
+#' Approximate a linear model for a series of logical AND statements
+#' 
+#' \code{model_and} approximates the linear model for the a conjunction
+#'   of m phenotypes as a function of a set of predictors.
+#'   
+#' @param formula an object of class \code{formula} whose dependent variable is
+#'   a combination of variables and logical \code{&} operators. All model terms
+#'   must be accounted for in \code{means} and \code{covs}.
+#' @param n sample size.
+#' @param means named vector of predictor and response means.
+#' @param covs named matrix of the covariance of all model predictors and the
+#'   responses.
+#' @param predictors named list of objects of class \code{predictor}.
+#' @param ... additional arguments
+#' 
+#' @examples 
+#' ex_data <- bin_data[c("g", "x", "y1", "y2")]
+#' head(ex_data)
+#' means <- colMeans(ex_data)
+#' covs <- cov(ex_data)
+#' n <- nrow(ex_data)
+#' predictors <- list(
+#'   g = new_predictor_snp(maf = mean(ex_data$g) / 2),
+#'   x = new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
+#' )
+#'
+#' model_and(
+#'   y1 & y2 ~ g + x, means = means, covs = covs, n = n, predictors = predictors
+#' )
+#' coef(summary(lm(y1 & y2 ~ g + x + 1, data = ex_data)))
+#' 
+#' @export
+#' 
+model_and <- function(formula, n, means, covs, predictors, ...) {
+  xterms <- extract_predictors(formula)
+  yterms <- parse_and(extract_response(formula))
+  
+  # Re-arrange means, covs, and predictors to match given formula
+  means0 <- means[c(xterms$predictors, yterms)]
+  covs0  <- covs[c(xterms$predictors, yterms), c(xterms$predictors, yterms)]
+  predictors0 <- predictors[xterms$predictors]
+  add_intercept <- xterms$add_intercept
+  
+  model <- approx_and(
+    means = means0, covs = covs0, n = n, predictors = predictors0,
+    add_intercept = add_intercept, ...
+    )
+  
+  return(model)
+}
+
+#' Approximate a linear model for a series of logical OR statements
+#' 
+#' \code{model_or} approximates the linear model for the a disjunction
+#'   of m phenotypes as a function of a set of predictors.
+#'   
+#' @param formula an object of class \code{formula} whose dependent variable is
+#'   a combination of variables and logical \code{|} operators. All model terms
+#'   must be accounted for in \code{means} and \code{covs}.
+#' @param n sample size.
+#' @param means named vector of predictor and response means.
+#' @param covs named matrix of the covariance of all model predictors and the
+#'   responses.
+#' @param predictors named list of objects of class \code{predictor}.
+#' @param ... additional arguments
+#' 
+#' @examples 
+#' ex_data <- bin_data[c("g", "x", "y1", "y2")]
+#' head(ex_data)
+#' means <- colMeans(ex_data)
+#' covs <- cov(ex_data)
+#' n <- nrow(ex_data)
+#' predictors <- list(
+#'   g = new_predictor_snp(maf = mean(ex_data$g) / 2),
+#'   x = new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
+#' )
+#'
+#' model_or(
+#'   y1 | y2 ~ g + x, means = means, covs = covs, n = n, predictors = predictors
+#' )
+#' coef(summary(lm(y1 | y2 ~ g + x + 1, data = ex_data)))
+#' 
+#' @export
+#' 
+model_or <- function(formula, n, means, covs, predictors, ...) {
+  xterms <- extract_predictors(formula)
+  yterms <- parse_or(extract_response(formula))
+  
+  # Re-arrange means, covs, and predictors to match given formula
+  means0 <- means[c(xterms$predictors, yterms)]
+  covs0  <- covs[c(xterms$predictors, yterms), c(xterms$predictors, yterms)]
+  predictors0 <- predictors[xterms$predictors]
+  add_intercept <- xterms$add_intercept
+  
+  model <- approx_or(
+    means = means0, covs = covs0, n = n, predictors = predictors0,
+    add_intercept = add_intercept, ...
+  )
+  
+  return(model)
+}
+
 
 #' Approximate a linear model for a series of logical AND statements
 #'
@@ -26,14 +128,13 @@
 #' covs <- cov(ex_data)
 #' n <- nrow(ex_data)
 #' predictors <- list(
-#'   new_predictor_snp(maf = mean(ex_data$g) / 2),
-#'   new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
+#'   g = new_predictor_snp(maf = mean(ex_data$g) / 2),
+#'   x = new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
 #' )
 #'
 #' approx_and(means = means, covs = covs, n = n, predictors = predictors,
 #'   add_intercept = TRUE)
-#' y1_and_y2 <- with(ex_data, y1 & y2)
-#' coef(summary(lm(y1_and_y2 ~ g + x + 1, data = ex_data)))
+#' coef(summary(lm(y1 & y2 ~ g + x + 1, data = ex_data)))
 #'
 #' @export
 approx_and <- function(means, covs, n, predictors, add_intercept = TRUE, 
@@ -147,7 +248,7 @@ approx_or_OLD <- function(means, covs, n, predictors, add_intercept = TRUE, verb
   }
 }
 
-#' Approximate a linear model for a logical OR statement with 2 disjuncts
+# Approximate a linear model for a logical OR statement with 2 disjuncts
 approx_or_2_OLD <- function(means, covs, n, predictors, verbose = FALSE, add_intercept = TRUE) {
   # Number of responses
   m <- length(means) - length(predictors)
