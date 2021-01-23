@@ -1,8 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-grass
-=====
+# grass
 
 <!-- badges: start -->
 
@@ -35,8 +34,7 @@ defined via functions of other phenotypes. Supported functions include:
 -   logical combinations (e.g. *y*<sub>1</sub> ∧ *y*<sub>2</sub> or
     *y*<sub>1</sub> ∨ *y*<sub>2</sub>)
 
-Installation
-------------
+## Installation
 
 grass is not currently available on CRAN.
 
@@ -46,8 +44,7 @@ You can install the in-development version of grass from
     # install.packages("devtools")
     devtools::install_github("jackmwolf/grass")
 
-Examples
---------
+## Examples
 
 We will walk through two examples using grass to model combinations of
 phenotypes using PCSS and then compare our results to those found using
@@ -82,7 +79,7 @@ elements are the phenotypes of interest.
     covs  <- cov(dat)
     n     <- nrow(dat)
 
-In addition, need our weights. These are the the first principal
+In addition, we need our weights. These are the the first principal
 component vector of the phenotype covariance matrix, and they are in the
 same order as the final elements of `means` and `covs`.
 
@@ -150,8 +147,7 @@ First we need data with binary phenotypes.
     #> 5 0  0.4686342  0  1
     #> 6 2  0.4620154  0  1
 
-Once again we will organize our PCSS such that `means` and `covs` have
-the same order with the phenotypes at the end.
+Once again we will organized our assumed PCSS.
 
     means <- colMeans(dat)
     covs  <- cov(dat)
@@ -160,9 +156,7 @@ the same order with the phenotypes at the end.
 We also need to describe the distributions of both of our predictors
 through objects of class `predictor`. (See `?new_predictor`.) grass has
 shortcut functions to create `predictor` objects for common types of
-variables, which we will use to create a list of `predictor`s. (Note
-that the order `predictors` matches the order of the predictors in
-`means` and `covs`.)
+variables, which we will use to create a list of `predictor`s.
 
     predictors <- list(
       g = new_predictor_snp(maf = means["g"] / 2),
@@ -171,12 +165,9 @@ that the order `predictors` matches the order of the predictors in
     class(predictors[[1]])
     #> [1] "predictor"
 
-Then we can approximate the linear model using `approx_or()`.
+Then we can approximate the linear model using `model_or()`.
 
-    model_pcss <- approx_or(
-      means = means, covs = covs, n = n, predictors = predictors, add_intercept = TRUE
-    )
-    model_pcss
+    model_or(y1 | y2 ~ g + x, n = n, means = means, covs = covs, predictors = predictors)
     #> $beta
     #> (Intercept)           g           x 
     #>  0.66927326 -0.09103735  0.19003213 
@@ -198,7 +189,7 @@ Then we can approximate the linear model using `approx_or()`.
 
 And here’s the result we would get using IPD:
 
-    model_ipd <- lm(y1 | y2 ~ 1 + g + x, data = dat)
+    model_ipd <- lm(y1 | y2 ~ g + x, data = dat)
     summary(model_ipd)$coef
     #>                Estimate Std. Error   t value      Pr(>|t|)
     #> (Intercept)  0.67337349 0.01887924 35.667413 3.007202e-180
@@ -207,8 +198,7 @@ And here’s the result we would get using IPD:
     summary(model_ipd)$sigma^2
     #> [1] 0.1992089
 
-Future Work
------------
+## Future Work
 
 -   Incorporate support for function notation (E.g.
     `y1 * y2 ~ 1 + g + x`) instead of depending on the order of input
@@ -216,8 +206,7 @@ Future Work
 
 -   Print model output in a more similar format to `summary.lm`
 
-References
-----------
+## References
 
 Following are the key references for the functions in this package
 
