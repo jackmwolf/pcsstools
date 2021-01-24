@@ -2,7 +2,7 @@
 % Please edit documentation in R/logical_estimation.R
 \name{model_and}
 \alias{model_and}
-\title{Approximate a linear model for a series of logical AND statements}
+\title{Approximate a linear model for a series of logical AND statements using PCSS}
 \usage{
 model_and(formula, n, means, covs, predictors, ...)
 }

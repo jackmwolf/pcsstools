@@ -2,7 +2,7 @@
 % Please edit documentation in R/logical_estimation.R
 \name{model_or}
 \alias{model_or}
-\title{Approximate a linear model for a series of logical OR statements}
+\title{Approximate a linear model for a series of logical OR statements using PCSS}
 \usage{
 model_or(formula, n, means, covs, predictors, ...)
 }

@@ -1,4 +1,4 @@
-#' Approximate a linear model for a series of logical AND statements
+#' Approximate a linear model for a series of logical AND statements using PCSS
 #' 
 #' \code{model_and} approximates the linear model for the a conjunction
 #'   of m phenotypes as a function of a set of predictors.
@@ -51,7 +51,7 @@ model_and <- function(formula, n, means, covs, predictors, ...) {
   return(model)
 }
 
-#' Approximate a linear model for a series of logical OR statements
+#' Approximate a linear model for a series of logical OR statements using PCSS
 #' 
 #' \code{model_or} approximates the linear model for the a disjunction
 #'   of m phenotypes as a function of a set of predictors.
