@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.com/jackmwolf/grass_alpha.svg?branch=master)](https://travis-ci.com/jackmwolf/grass)
+status](https://travis-ci.com/jackmwolf/grass.svg?branch=master)](https://travis-ci.com/jackmwolf/grass)
 <!-- badges: end -->
 
 `grass` (Genetic Regression Approximation through Summary Statistics) is
@@ -71,25 +71,20 @@ First, we’ll load in some data. We have a SNP’s minor allele counts
     #> 5 1  0.22346186  1.431919 -1.9866995  0.5214276
     #> 6 0  0.55236041 -2.282309 -0.2572408 -0.9526495
 
-First, we need our assumed summary statistics. We are careful so that
-the order of `means` and `covs` are the same, and that their last
-elements are the phenotypes of interest.
+First, we need our assumed summary statistics: means, the full
+covariance matrix, and our sample size.
 
     means <- colMeans(dat)
     covs  <- cov(dat)
     n     <- nrow(dat)
 
-In addition, we need our weights. These are the the first principal
-component vector of the phenotype covariance matrix, and they are in the
-same order as the final elements of `means` and `covs`.
+Then, we can calculate the linear model by using `model_prcomp()`. Our
+`formula` will list all phenotypes as one sum, joined together by `+`
+opperators and we indicate that we want the first principal component
+score by setting `comp = 1`.
 
-    SigmaY <- covs[c("y1", "y2", "y3"), c("y1", "y2", "y3")]
-    phi <- eigen(SigmaY)$vectors[, 1]
-
-Then, we can calculate the linear model by using `calculate_lm_combo()`.
-
-    model_pcss <- calculate_lm_combo(
-      means = means, covs = covs, n = n, phi = phi, add_intercept = TRUE
+    model_pcss <- model_prcomp(
+      y1 + y2 + y3 ~ g + x, comp = 1, n = n, means = means, covs = covs
       )
     model_pcss
     #> $beta
@@ -200,9 +195,9 @@ And here’s the result we would get using IPD:
 
 ## Future Work
 
--   Incorporate support for function notation (E.g.
-    `y1 * y2 ~ 1 + g + x`) instead of depending on the order of input
-    PCSS
+-   Support function notation for linear combinations of phenotypes
+    (e.g. `y1 - y2 + y3 ~ 1 + g + x`) instead of requiring a seperate
+    vector of weights
 
 -   Print model output in a more similar format to `summary.lm`
 
