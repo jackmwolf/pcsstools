@@ -32,8 +32,10 @@
 #' @export
 #' 
 model_and <- function(formula, n, means, covs, predictors, ...) {
-  xterms <- extract_predictors(formula)
-  yterms <- parse_and(extract_response(formula))
+  all_vars <- names(means)
+  
+  xterms <- extract_predictors(formula, all_vars)
+  yterms <- parse_and(extract_response(formula), all_vars)
   
   # Re-arrange means, covs, and predictors to match given formula
   means0 <- means[c(xterms$predictors, yterms)]
@@ -83,8 +85,10 @@ model_and <- function(formula, n, means, covs, predictors, ...) {
 #' @export
 #' 
 model_or <- function(formula, n, means, covs, predictors, ...) {
-  xterms <- extract_predictors(formula)
-  yterms <- parse_or(extract_response(formula))
+  all_vars <- names(means)
+  
+  xterms <- extract_predictors(formula, all_vars)
+  yterms <- parse_or(extract_response(formula), all_vars)
   
   # Re-arrange means, covs, and predictors to match given formula
   means0 <- means[c(xterms$predictors, yterms)]
