@@ -47,13 +47,12 @@ means <- colMeans(ex_data)
 covs <- cov(ex_data)
 n <- nrow(ex_data)
 predictors <- list(
-  new_predictor_snp(maf = mean(ex_data$g) / 2),
-  new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
+  g = new_predictor_snp(maf = mean(ex_data$g) / 2),
+  x = new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
 )
 
 approx_and(means = means, covs = covs, n = n, predictors = predictors,
   add_intercept = TRUE)
-y1_and_y2 <- with(ex_data, y1 & y2)
-coef(summary(lm(y1_and_y2 ~ g + x + 1, data = ex_data)))
+coef(summary(lm(y1 & y2 ~ g + x + 1, data = ex_data)))
 
 }
