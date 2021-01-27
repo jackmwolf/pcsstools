@@ -1,3 +1,78 @@
+#' Approximate a linear model for a product using PCSS
+#' 
+#' \code{model_product} approximates the linear model for the product
+#'   of m phenotypes as a function of a set of predictors.
+#'   
+#' @param formula an object of class \code{formula} whose dependent variable is
+#'   a combination of variables and  \code{*} operators. All model terms
+#'   must be accounted for in \code{means} and \code{covs}.
+#' @param n sample size.
+#' @param means named vector of predictor and response means.
+#' @param covs named matrix of the covariance of all model predictors and the
+#'   responses.
+#' @param predictors named list of objects of class \code{predictor} 
+#' @param responses named list of objects of class \code{predictor} 
+#'   corresponding to all terms being multiplied in the response. Can be 
+#'   left \code{NULL} if only multiplying two terms
+#' @param response character. Describe distribution of all product terms.
+#'   Either \code{"continuous"} or \code{"binary"}. If \code{"binary"} 
+#'   different approximations of product means and variances are used.
+#' @param ... additional arguments
+#' 
+#' @examples
+#' ex_data <- bin_data[c("g", "x", "y1", "y2", "y3")]
+#' head(ex_data)
+#' means <- colMeans(ex_data)
+#' covs <- cov(ex_data)
+#' n <- nrow(ex_data)
+#' predictors <- list(
+#'   g = new_predictor_snp(maf = mean(ex_data$g) / 2),
+#'   x = new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
+#' )
+#' responses <- lapply(means[3:length(means)], new_predictor_binary)
+#'
+#' model_product(
+#'   y1 * y2 * y3 ~ g + x, means = means, covs = covs, n = n, 
+#'   predictors = predictors, responses = responses, response = "binary"
+#' )
+#'
+#' summary(lm(y1 * y2 * y3 ~ g + x, data = ex_data))
+#' 
+#' @export
+#'
+model_product <- function(formula, n, means, covs, predictors, responses = NULL, 
+                          response = "continuous", ...) {
+  
+  cl <- match.call()
+  terms <- terms(formula)
+  
+  all_vars <- names(means)
+  
+  xterms <- extract_predictors(formula, all_vars)
+  yterms <- parse_product(extract_response(formula), all_vars)
+  
+  # Re-arrange means, covs, and predictors to match given formula
+  means0 <- means[c(xterms$predictors, yterms)]
+  covs0  <- covs[c(xterms$predictors, yterms), c(xterms$predictors, yterms)]
+  predictors0 <- predictors[xterms$predictors]
+  add_intercept <- xterms$add_intercept
+  
+  approx0 <- approx_mult_prod(
+    means = means0, covs = covs0, n = n,
+    response = response, responses = responses,
+    predictors = predictors, ...
+    )
+  
+  
+  model <- calculate_lm(
+    means = approx0$means, covs = approx0$covs, add_intercept = add_intercept,
+    n = n, cl = cl, terms = terms
+  )
+  
+  return(model)
+}
+
+
 #' Approximate the covariance of a set of predictors and a product of responses
 #'
 #' \code{approx_mult_prod} recursively estimates the covariances and means of a
