@@ -87,37 +87,49 @@ score by setting `comp = 1`.
       y1 + y2 + y3 ~ g + x, comp = 1, n = n, means = means, covs = covs
       )
     model_pcss
-    #> $beta
-    #> (Intercept)           g           x 
-    #>    1.047230    0.570501   -1.943404 
+    #> Model approximated using Pre-Computed Summary Statistics.
     #> 
-    #> $sd_beta
-    #> (Intercept)           g           x 
-    #>  0.06925072  0.07806084  0.04899036 
+    #> Call:
+    #> model_prcomp(formula = y1 + y2 + y3 ~ g + x, comp = 1, n = n, 
+    #>     means = means, covs = covs)
     #> 
-    #> $t_stat
-    #> (Intercept)           g           x 
-    #>   15.122303    7.308415  -39.669117 
+    #> Coefficients:
+    #>             Estimate Std. Error t value Pr(>|t|)    
+    #> (Intercept)  1.04723    0.06925  15.122  < 2e-16 ***
+    #> g            0.57050    0.07806   7.308 5.54e-13 ***
+    #> x           -1.94340    0.04899 -39.669  < 2e-16 ***
+    #> ---
+    #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     #> 
-    #> $p_val
-    #>   (Intercept)             g             x 
-    #>  1.142929e-46  5.535041e-13 2.836904e-207 
-    #> 
-    #> $sigma2
-    #> [1] 2.490841
+    #> Residual standard error: 1.578 on 997 degrees of freedom
+    #> Multiple R-squared:  0.6198, Adjusted R-squared:  0.619 
+    #> F-statistic: 812.6 on 2 and 996 DF,  p-value: < 2.2e-16
 
 Here’s the same model using individual patient data.
 
     pc_1 <- prcomp(x = dat[c("y1", "y2", "y3")])$x[, "PC1"]
 
     mod_ipd <- lm(pc_1 ~ 1 + g + x, data = dat)
-    summary(mod_ipd)$coef
-    #>               Estimate Std. Error   t value      Pr(>|t|)
-    #> (Intercept)  0.3300109 0.06925072  4.765452  2.164147e-06
-    #> g           -0.5705010 0.07806084 -7.308415  5.535041e-13
-    #> x            1.9434042 0.04899036 39.669117 2.836904e-207
-    summary(mod_ipd)$sigma^2
-    #> [1] 2.490841
+    summary(mod_ipd)
+    #> 
+    #> Call:
+    #> lm(formula = pc_1 ~ 1 + g + x, data = dat)
+    #> 
+    #> Residuals:
+    #>    Min     1Q Median     3Q    Max 
+    #> -5.117 -1.075 -0.011  1.076  6.439 
+    #> 
+    #> Coefficients:
+    #>             Estimate Std. Error t value Pr(>|t|)    
+    #> (Intercept)  0.33001    0.06925   4.765 2.16e-06 ***
+    #> g           -0.57050    0.07806  -7.308 5.54e-13 ***
+    #> x            1.94340    0.04899  39.669  < 2e-16 ***
+    #> ---
+    #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    #> 
+    #> Residual standard error: 1.578 on 997 degrees of freedom
+    #> Multiple R-squared:  0.6198, Adjusted R-squared:  0.619 
+    #> F-statistic: 812.6 on 2 and 997 DF,  p-value: < 2.2e-16
 
 In this case, our coefficient estimates for `g` and `x` are off by a
 factor of -1; this is because we picked the opposite vector of principal
@@ -163,43 +175,53 @@ variables, which we will use to create a list of `predictor`s.
 Then we can approximate the linear model using `model_or()`.
 
     model_or(y1 | y2 ~ g + x, n = n, means = means, covs = covs, predictors = predictors)
-    #> $beta
-    #> (Intercept)           g           x 
-    #>  0.66927326 -0.09103735  0.19003213 
+    #> Model approximated using Pre-Computed Summary Statistics.
     #> 
-    #> $sd_beta
-    #> (Intercept)           g           x 
-    #>  0.01878447  0.02200364  0.01412366 
+    #> Call:
+    #> model_or(formula = y1 | y2 ~ g + x, n = n, means = means, covs = covs, 
+    #>     predictors = predictors)
     #> 
-    #> $t_stat
-    #> (Intercept)           g           x 
-    #>   35.629066   -4.137377   13.454881 
+    #> Coefficients:
+    #>             Estimate Std. Error t value Pr(>|t|)    
+    #> (Intercept)  0.66927    0.01878  35.629  < 2e-16 ***
+    #> g           -0.09104    0.02200  -4.137 3.81e-05 ***
+    #> x            0.19003    0.01412  13.455  < 2e-16 ***
+    #> ---
+    #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     #> 
-    #> $p_val
-    #>   (Intercept)             g             x 
-    #> 5.487501e-180  3.809339e-05  4.832955e-38 
-    #> 
-    #> $sigma2
-    #> [1] 0.1972141
+    #> Residual standard error: 0.4441 on 997 degrees of freedom
+    #> Multiple R-squared:  0.172,  Adjusted R-squared:  0.1703 
+    #> F-statistic: 103.5 on 2 and 996 DF,  p-value: < 2.2e-16
 
 And here’s the result we would get using IPD:
 
     model_ipd <- lm(y1 | y2 ~ g + x, data = dat)
-    summary(model_ipd)$coef
-    #>                Estimate Std. Error   t value      Pr(>|t|)
-    #> (Intercept)  0.67337349 0.01887924 35.667413 3.007202e-180
-    #> g           -0.09862393 0.02211464 -4.459667  9.141119e-06
-    #> x            0.18289582 0.01419491 12.884609  3.007696e-35
-    summary(model_ipd)$sigma^2
-    #> [1] 0.1992089
+    summary(model_ipd)
+    #> 
+    #> Call:
+    #> lm(formula = y1 | y2 ~ g + x, data = dat)
+    #> 
+    #> Residuals:
+    #>     Min      1Q  Median      3Q     Max 
+    #> -1.0857 -0.4393  0.1538  0.3792  0.8597 
+    #> 
+    #> Coefficients:
+    #>             Estimate Std. Error t value Pr(>|t|)    
+    #> (Intercept)  0.67337    0.01888   35.67  < 2e-16 ***
+    #> g           -0.09862    0.02211   -4.46 9.14e-06 ***
+    #> x            0.18290    0.01419   12.88  < 2e-16 ***
+    #> ---
+    #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    #> 
+    #> Residual standard error: 0.4463 on 997 degrees of freedom
+    #> Multiple R-squared:  0.1636, Adjusted R-squared:  0.1619 
+    #> F-statistic:  97.5 on 2 and 997 DF,  p-value: < 2.2e-16
 
 ## Future Work
 
 -   Support function notation for linear combinations of phenotypes
     (e.g. `y1 - y2 + y3 ~ 1 + g + x`) instead of requiring a seperate
     vector of weights
-
--   Print model output in a more similar format to `summary.lm`
 
 ## References
 

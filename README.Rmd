@@ -88,8 +88,7 @@ Here's the same model using individual patient data.
 pc_1 <- prcomp(x = dat[c("y1", "y2", "y3")])$x[, "PC1"]
 
 mod_ipd <- lm(pc_1 ~ 1 + g + x, data = dat)
-summary(mod_ipd)$coef
-summary(mod_ipd)$sigma^2
+summary(mod_ipd)
 ```
 
 In this case, our coefficient estimates for `g` and `x` are off by a factor of -1; this is because we picked the opposite vector of principal component weights to `prcomp`.
@@ -136,15 +135,12 @@ And here's the result we would get using IPD:
 
 ```{r}
 model_ipd <- lm(y1 | y2 ~ g + x, data = dat)
-summary(model_ipd)$coef
-summary(model_ipd)$sigma^2
+summary(model_ipd)
 ```
 
 ## Future Work
 
 * Support  function notation for linear combinations of phenotypes (e.g. `y1 - y2 + y3 ~ 1 + g + x`)  instead of requiring a seperate vector of weights
-
-* Print model output in a more similar format to `summary.lm`
 
 ## References
 Following are the key references for the functions in this package
