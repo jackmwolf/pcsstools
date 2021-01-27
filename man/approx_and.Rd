@@ -43,19 +43,3 @@ to estimate product means and variances.}
 \code{approx_and} approximates the linear model for the a conjunction
   of m phenotypes as a function of a set of predictors.
 }
-\examples{
-ex_data <- bin_data[c("g", "x", "y1", "y2")]
-head(ex_data)
-means <- colMeans(ex_data)
-covs <- cov(ex_data)
-n <- nrow(ex_data)
-predictors <- list(
-  g = new_predictor_snp(maf = mean(ex_data$g) / 2),
-  x = new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
-)
-
-approx_and(means = means, covs = covs, n = n, predictors = predictors,
-  add_intercept = TRUE)
-summary(lm(y1 & y2 ~ g + x + 1, data = ex_data))
-
-}

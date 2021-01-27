@@ -27,14 +27,3 @@ A list with the predicted covariance matrix of all predictors and
 Approximate summary statistics for a product of phenotypes and a set of 
   predictors
 }
-\examples{
-ex_data <- cont_data[c("g", "x", "y3", "y5")]
-predictors <- list(
-  new_predictor_snp(maf = mean(ex_data$g) / 2),
-  new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
-  )
-approx_prod_stats(colMeans(ex_data), covs = cov(ex_data), n = nrow(ex_data),
-  response = "continuous", predictors = predictors)
-with(ex_data, cov(cbind(g, x, y3y5 = y3 * y5)))
-
-}

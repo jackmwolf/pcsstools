@@ -43,34 +43,3 @@ to estimate product means and variances.}
 \code{approx_or} approximates the linear model for a disjunction of m
   phenotypes as a function of a set of predictors.
 }
-\examples{
-# 2 Phenotypes --------------------------------------------------------------
-ex_data <- bin_data[c("g", "x", "y1", "y2")]
-head(ex_data)
-means <- colMeans(ex_data)
-covs <- cov(ex_data)
-n <- nrow(ex_data)
-predictors <- list(
-  new_predictor_snp(maf = mean(ex_data$g) / 2),
-  new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
-)
-
-approx_or(means = means, covs = covs, n = n, predictors = predictors,
-  add_intercept = TRUE)
-summary(lm(y1 | y2 ~ 1 + g + x, data = ex_data))
-# 3 Phenotypes --------------------------------------------------------------
-ex_data <- bin_data[c("g", "x", "y3", "y4", "y5")]
-head(ex_data)
-means <- colMeans(ex_data)
-covs <- cov(ex_data)
-n <- nrow(ex_data)
-predictors <- list(
-  new_predictor_snp(maf = mean(ex_data$g) / 2),
-  new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
-)
-
-approx_or(means = means, covs = covs, n = n, predictors = predictors,
-  add_intercept = TRUE)
-summary(lm(y3 | y4 | y5 ~ 1 + g + x, data = ex_data))
-
-}

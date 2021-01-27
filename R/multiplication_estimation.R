@@ -92,27 +92,6 @@ model_product <- function(formula, n, means, covs, predictors, responses = NULL,
 #' 
 #' @importFrom stats median integrate cov2cor
 #'
-#' @examples
-#' # 3 Binary Phenotypes
-#' ex_data <- bin_data[c("g", "x", "y1", "y2", "y3")]
-#' head(ex_data)
-#' means <- colMeans(ex_data)
-#' covs <- cov(ex_data)
-#' n <- nrow(ex_data)
-#' predictors <- list(
-#'   new_predictor_snp(maf = mean(ex_data$g) / 2),
-#'   new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
-#' )
-#' responses <- lapply(means[3:length(means)], new_predictor_binary)
-#'
-#' approx_mult_prod(means, covs, n, response = "binary",
-#'   predictors = predictors, responses = responses, verbose = TRUE)
-#' # Compare to
-#' w3 <- with(ex_data, y1 * y2 * y3)
-#' colMeans(cbind(ex_data[1:2], w3))
-#' cov(cbind(ex_data[1:2], w3))
-#'
-#' @export
 approx_mult_prod <- function(means, covs, n, response, predictors, responses, verbose = FALSE) {
   # Number of responses
   m <- length(means) - length(predictors)
@@ -321,17 +300,6 @@ approx_response_cov_recursive <- function(ids, r_covs, r_means, n, responses,
 #' @return A list with the predicted covariance matrix of all predictors and
 #'   the product and the means of all predictors and the product.
 #'
-#' @examples
-#' ex_data <- cont_data[c("g", "x", "y3", "y5")]
-#' predictors <- list(
-#'   new_predictor_snp(maf = mean(ex_data$g) / 2),
-#'   new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
-#'   )
-#' approx_prod_stats(colMeans(ex_data), covs = cov(ex_data), n = nrow(ex_data),
-#'   response = "continuous", predictors = predictors)
-#' with(ex_data, cov(cbind(g, x, y3y5 = y3 * y5)))
-#'
-#' @export
 approx_prod_stats <- function(means, covs, n, response, predictors) {
   n_preds <- length(means) - 2
   preds <- list()

@@ -27,17 +27,6 @@ response with the order of rows/columns corresponding to the order of
 in \code{means} and \code{covs} as a function of all other variables in
 \code{means} and \code{covs}.
 }
-\examples{
-ex_data <- cont_data[c("g", "x", "y1")]
-means <- colMeans(ex_data)
-covs <- cov(ex_data)
-n <- nrow(ex_data)
-calculate_lm(means = means, covs = covs, n = n, add_intercept = TRUE)
-# Compare results to...
-mod <- lm(y1 ~ 1 + g + x, data = ex_data)
-summary(mod)
-
-}
 \references{
 Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and 
   Tintle, N.  (2020). Computationally efficient, exact, covariate-adjusted 

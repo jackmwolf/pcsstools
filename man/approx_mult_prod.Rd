@@ -36,24 +36,3 @@ each entry corresponds to one predictor/response variable.}
   set of responses. Estimates are approximated using all unique response
   orderings and aggregated.
 }
-\examples{
-# 3 Binary Phenotypes
-ex_data <- bin_data[c("g", "x", "y1", "y2", "y3")]
-head(ex_data)
-means <- colMeans(ex_data)
-covs <- cov(ex_data)
-n <- nrow(ex_data)
-predictors <- list(
-  new_predictor_snp(maf = mean(ex_data$g) / 2),
-  new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
-)
-responses <- lapply(means[3:length(means)], new_predictor_binary)
-
-approx_mult_prod(means, covs, n, response = "binary",
-  predictors = predictors, responses = responses, verbose = TRUE)
-# Compare to
-w3 <- with(ex_data, y1 * y2 * y3)
-colMeans(cbind(ex_data[1:2], w3))
-cov(cbind(ex_data[1:2], w3))
-
-}

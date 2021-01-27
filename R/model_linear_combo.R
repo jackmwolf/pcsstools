@@ -170,18 +170,6 @@ model_combo <- function(formula, phi, n, means, covs, ...) {
 #'   complex phenotypes in large biobanks. \emph{Pacific Symposium on 
 #'   Biocomputing}, 24, 391-402.
 #'
-#' @examples
-#' ex_data <- cont_data[c("g", "x", "y1", "y2", "y3")]
-#' means <- colMeans(ex_data)
-#' covs <- cov(ex_data)
-#' n <- nrow(ex_data)
-#' phi <- c(1, 0.5, 2)
-#' calculate_lm_combo(means = means, covs = covs, n = n, phi = phi, m = 3, add_intercept = TRUE)
-#' # Compare results to...
-#' mod <- lm(y1 + 0.5 * y2 + 2 * y3 ~ 1 + g + x, data = ex_data)
-#' summary(mod)
-#'
-#' @export
 calculate_lm_combo <- function(means, covs, n, phi, m = length(phi), add_intercept, ...) {
   p <- length(means) - m
   

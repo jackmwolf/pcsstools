@@ -135,22 +135,6 @@ model_or <- function(formula, n, means, covs, predictors, ...) {
 #' @param verbose should output be printed to console?
 #' @param ... additional arguments
 #'
-#' @examples
-#' ex_data <- bin_data[c("g", "x", "y1", "y2")]
-#' head(ex_data)
-#' means <- colMeans(ex_data)
-#' covs <- cov(ex_data)
-#' n <- nrow(ex_data)
-#' predictors <- list(
-#'   g = new_predictor_snp(maf = mean(ex_data$g) / 2),
-#'   x = new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
-#' )
-#'
-#' approx_and(means = means, covs = covs, n = n, predictors = predictors,
-#'   add_intercept = TRUE)
-#' summary(lm(y1 & y2 ~ g + x + 1, data = ex_data))
-#'
-#' @export
 approx_and <- function(means, covs, n, predictors, add_intercept = TRUE, 
                        verbose = FALSE, response_assumption = "binary", 
                        ...) {
@@ -195,37 +179,6 @@ approx_and <- function(means, covs, n, predictors, add_intercept = TRUE,
 #' @param verbose should output be printed to console?
 #' @param ... additional arguments
 #'
-#' @examples
-#' # 2 Phenotypes --------------------------------------------------------------
-#' ex_data <- bin_data[c("g", "x", "y1", "y2")]
-#' head(ex_data)
-#' means <- colMeans(ex_data)
-#' covs <- cov(ex_data)
-#' n <- nrow(ex_data)
-#' predictors <- list(
-#'   new_predictor_snp(maf = mean(ex_data$g) / 2),
-#'   new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
-#' )
-#'
-#' approx_or(means = means, covs = covs, n = n, predictors = predictors,
-#'   add_intercept = TRUE)
-#' summary(lm(y1 | y2 ~ 1 + g + x, data = ex_data))
-#' # 3 Phenotypes --------------------------------------------------------------
-#' ex_data <- bin_data[c("g", "x", "y3", "y4", "y5")]
-#' head(ex_data)
-#' means <- colMeans(ex_data)
-#' covs <- cov(ex_data)
-#' n <- nrow(ex_data)
-#' predictors <- list(
-#'   new_predictor_snp(maf = mean(ex_data$g) / 2),
-#'   new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
-#' )
-#'
-#' approx_or(means = means, covs = covs, n = n, predictors = predictors,
-#'   add_intercept = TRUE)
-#' summary(lm(y3 | y4 | y5 ~ 1 + g + x, data = ex_data))
-#' 
-#' @export
 approx_or <- function(means, covs, n, predictors, add_intercept = TRUE, 
                       verbose = FALSE, response_assumption = "binary", ...) {
   # Model "y1 or y2 or ..." via "not(not y1 and not y2 and ...)"

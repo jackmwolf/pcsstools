@@ -27,17 +27,6 @@
 #'   complex phenotypes in large biobanks. \emph{Pacific Symposium on 
 #'   Biocomputing}, 24, 391-402.
 #' 
-#' @examples
-#' ex_data <- cont_data[c("g", "x", "y1")]
-#' means <- colMeans(ex_data)
-#' covs <- cov(ex_data)
-#' n <- nrow(ex_data)
-#' calculate_lm(means = means, covs = covs, n = n, add_intercept = TRUE)
-#' # Compare results to...
-#' mod <- lm(y1 ~ 1 + g + x, data = ex_data)
-#' summary(mod)
-#'
-#' @export
 calculate_lm <- function(means, covs, n, add_intercept = FALSE, cl = NULL, terms = NULL) {
 
   p <- ncol(covs) - 1
