@@ -219,9 +219,17 @@ And here’s the result we would get using IPD:
 
 ## Future Work
 
+-   Add functions to check that all required PCSS are provided in
+    `means` and `covs` (and `predictors` and `responses`, if applicable)
+
 -   Support function notation for linear combinations of phenotypes
-    (e.g. `y1 - y2 + y3 ~ 1 + g + x`) instead of requiring a seperate
-    vector of weights
+    (e.g. `y1 - y2 + 0.5 * y3 ~ 1 + g + x`) instead of requiring a
+    seperate vector of weights
+
+-   Support functions using `.` and `-` in the dependent variable
+    (e.g. `y1 ~ .`, `y1 ~ . -x`)
+
+-   Write a vignette
 
 ## References
 
