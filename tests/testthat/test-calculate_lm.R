@@ -6,7 +6,7 @@ test_that("calculate_lm betas are exact", {
   covs <- cov(ex_data)
   n <- nrow(ex_data)
 
-  betas <- calculate_lm(means = means, covs = covs, n = n, add_intercept = TRUE)$beta
+  betas <- coef(calculate_lm(means = means, covs = covs, n = n, add_intercept = TRUE))[, 1]
   expected_betas <- coef(lm(y1 ~ g + x + 1, data = ex_data))
 
   expect_equal(betas, expected_betas)
@@ -18,7 +18,7 @@ test_that("calculate_lm standard errors are exact", {
   covs <- cov(ex_data)
   n <- nrow(ex_data)
 
-  ses <- calculate_lm(means = means, covs = covs, n = n, add_intercept = TRUE)$sd_beta
+  ses <- coef(calculate_lm(means = means, covs = covs, n = n, add_intercept = TRUE))[, 2]
   expected_ses <- coef(summary(lm(y1 ~ g + x + 1, data = ex_data)))[, 2]
 
   expect_equal(ses, expected_ses)
