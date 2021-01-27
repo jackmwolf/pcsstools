@@ -4,7 +4,7 @@
 \alias{calculate_lm}
 \title{Calculate a linear model}
 \usage{
-calculate_lm(means, covs, n, add_intercept = FALSE)
+calculate_lm(means, covs, n, add_intercept = FALSE, cl = NULL, terms = NULL)
 }
 \arguments{
 \item{means}{a vector of means of all model predictors and the response with
@@ -17,6 +17,10 @@ response with the order of rows/columns corresponding to the order of
 \item{n}{sample size}
 
 \item{add_intercept}{logical. If \code{TRUE} adds an intercept to the model.}
+
+\item{cl}{call}
+
+\item{terms}{terms}
 }
 \description{
 \code{calculate_lm} describes the linear model of the last listed variable
@@ -31,8 +35,7 @@ n <- nrow(ex_data)
 calculate_lm(means = means, covs = covs, n = n, add_intercept = TRUE)
 # Compare results to...
 mod <- lm(y1 ~ 1 + g + x, data = ex_data)
-summary(mod)$coef
-summary(mod)$sigma^2
+summary(mod)
 
 }
 \references{

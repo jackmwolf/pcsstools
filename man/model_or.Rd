@@ -40,6 +40,6 @@ predictors <- list(
 model_or(
   y1 | y2 ~ g + x, means = means, covs = covs, n = n, predictors = predictors
 )
-coef(summary(lm(y1 | y2 ~ g + x + 1, data = ex_data)))
+summary(lm(y1 | y2 ~ g + x + 1, data = ex_data))
 
 }

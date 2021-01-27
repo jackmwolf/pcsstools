@@ -4,7 +4,7 @@
 \alias{model_prcomp}
 \title{Model the principal component score of a set of phenotypes using PCSS}
 \usage{
-model_prcomp(formula, comp = 1, n, means, covs)
+model_prcomp(formula, comp = 1, n, means, covs, ...)
 }
 \arguments{
 \item{formula}{an object of class \code{formula} whose dependent variable is
@@ -22,6 +22,8 @@ Must be less than or equal to the total number of phenotypes.}
 
 \item{covs}{named matrix of the covariance of all model predictors and the
 responses.}
+
+\item{...}{additional arguments}
 }
 \description{
 \code{model_prcomp} calculates the linear model for the mth principal 

@@ -11,7 +11,8 @@ approx_and(
   predictors,
   add_intercept = TRUE,
   verbose = FALSE,
-  response_assumption = "binary"
+  response_assumption = "binary",
+  ...
 )
 }
 \arguments{
@@ -35,6 +36,8 @@ to the order of the predictors in \code{means}.}
 \item{response_assumption}{character. Either \code{"binary"} or 
 \code{"continuous"}. If \code{"binary"}, specific calculations will be done
 to estimate product means and variances.}
+
+\item{...}{additional arguments}
 }
 \description{
 \code{approx_and} approximates the linear model for the a conjunction
@@ -53,6 +56,6 @@ predictors <- list(
 
 approx_and(means = means, covs = covs, n = n, predictors = predictors,
   add_intercept = TRUE)
-coef(summary(lm(y1 & y2 ~ g + x + 1, data = ex_data)))
+summary(lm(y1 & y2 ~ g + x + 1, data = ex_data))
 
 }

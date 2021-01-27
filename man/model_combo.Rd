@@ -4,7 +4,7 @@
 \alias{model_combo}
 \title{Model a linear combination of a set of phenotypes using PCSS}
 \usage{
-model_combo(formula, phi, n, means, covs)
+model_combo(formula, phi, n, means, covs, ...)
 }
 \arguments{
 \item{formula}{an object of class \code{formula} whose dependent variable is
@@ -22,6 +22,8 @@ dependent variable in \code{formula}.}
 
 \item{covs}{named matrix of the covariance of all model predictors and the
 responses.}
+
+\item{...}{additional arguments}
 }
 \description{
 \code{model_combo} calculates the linear model for a linear combination of 
@@ -40,7 +42,7 @@ model_combo(
 )
 
 
-coef(summary(lm(y1 - y2 + 0.5 * y3 ~ g + x, data = ex_data)))
+summary(lm(y1 - y2 + 0.5 * y3 ~ g + x, data = ex_data))
 
 }
 \references{

@@ -16,6 +16,7 @@
 #' @param means named vector of predictor and response means.
 #' @param covs named matrix of the covariance of all model predictors and the
 #'   responses.
+#' @param ... additional arguments   
 #'   
 #' @references Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and 
 #'   Tintle, N.  (2020). Computationally efficient, exact, covariate-adjusted 
@@ -41,7 +42,11 @@
 #' 
 #' 
 #' @export
-model_prcomp <- function(formula, comp = 1, n, means, covs) {
+model_prcomp <- function(formula, comp = 1, n, means, covs, ...) {
+  
+  cl <- match.call()
+  terms <- terms(formula)
+  
   all_vars <- names(means)
   
   xterms <- extract_predictors(formula, all_vars)
@@ -57,7 +62,8 @@ model_prcomp <- function(formula, comp = 1, n, means, covs) {
   phi <- eigen(ysigma)$vectors[, comp]
   
   model <- calculate_lm_combo(
-    means = means0, covs = covs0, n = n, phi = phi, add_intercept = add_intercept
+    means = means0, covs = covs0, n = n, phi = phi, add_intercept = add_intercept,
+    cl = cl, terms = terms, ...
   )
   
   return(model)
@@ -81,6 +87,7 @@ model_prcomp <- function(formula, comp = 1, n, means, covs) {
 #' @param means named vector of predictor and response means.
 #' @param covs named matrix of the covariance of all model predictors and the
 #'   responses.
+#' @param ... additional arguments
 #' 
 #' @references Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and 
 #'   Tintle, N.  (2020). Computationally efficient, exact, covariate-adjusted 
@@ -106,10 +113,14 @@ model_prcomp <- function(formula, comp = 1, n, means, covs) {
 #' )
 #' 
 #'
-#' coef(summary(lm(y1 - y2 + 0.5 * y3 ~ g + x, data = ex_data)))
+#' summary(lm(y1 - y2 + 0.5 * y3 ~ g + x, data = ex_data))
 #' 
 #' @export
-model_combo <- function(formula, phi, n, means, covs) {
+model_combo <- function(formula, phi, n, means, covs, ...) {
+  
+  cl <- match.call()
+  terms <- terms(formula)
+  
   all_vars <- names(means)
   
   xterms <- extract_predictors(formula, all_vars)
@@ -123,7 +134,8 @@ model_combo <- function(formula, phi, n, means, covs) {
   phi0 <- phi[yterms]
   
   model <- calculate_lm_combo(
-    means = means0, covs = covs0, n = n, phi = phi, add_intercept = add_intercept
+    means = means0, covs = covs0, n = n, phi = phi, add_intercept = add_intercept,
+    cl = cl, terms = terms, ...
   )
   
   return(model)

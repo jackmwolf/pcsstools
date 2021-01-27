@@ -11,7 +11,8 @@ approx_or(
   predictors,
   add_intercept = TRUE,
   verbose = FALSE,
-  response_assumption = "binary"
+  response_assumption = "binary",
+  ...
 )
 }
 \arguments{
@@ -35,6 +36,8 @@ to the order of the predictors in \code{means}.}
 \item{response_assumption}{character. Either \code{"binary"} or 
 \code{"continuous"}. If \code{"binary"}, specific calculations will be done
 to estimate product means and variances.}
+
+\item{...}{additional arguments}
 }
 \description{
 \code{approx_or} approximates the linear model for a disjunction of m
@@ -54,7 +57,7 @@ predictors <- list(
 
 approx_or(means = means, covs = covs, n = n, predictors = predictors,
   add_intercept = TRUE)
-coef(summary(lm(y1 | y2 ~ 1 + g + x, data = ex_data)))
+summary(lm(y1 | y2 ~ 1 + g + x, data = ex_data))
 # 3 Phenotypes --------------------------------------------------------------
 ex_data <- bin_data[c("g", "x", "y3", "y4", "y5")]
 head(ex_data)
@@ -68,6 +71,6 @@ predictors <- list(
 
 approx_or(means = means, covs = covs, n = n, predictors = predictors,
   add_intercept = TRUE)
-coef(summary(lm(y3 | y4 | y5 ~ 1 + g + x, data = ex_data)))
+summary(lm(y3 | y4 | y5 ~ 1 + g + x, data = ex_data))
 
 }

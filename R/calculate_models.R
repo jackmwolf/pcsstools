@@ -11,6 +11,8 @@
 #'   \code{means}.
 #' @param n sample size
 #' @param add_intercept logical. If \code{TRUE} adds an intercept to the model.
+#' @param cl call
+#' @param terms terms
 #' 
 #' @importFrom stats pt
 #' 
@@ -33,11 +35,11 @@
 #' calculate_lm(means = means, covs = covs, n = n, add_intercept = TRUE)
 #' # Compare results to...
 #' mod <- lm(y1 ~ 1 + g + x, data = ex_data)
-#' summary(mod)$coef
-#' summary(mod)$sigma^2
+#' summary(mod)
 #'
 #' @export
-calculate_lm <- function(means, covs, n, add_intercept = FALSE) {
+calculate_lm <- function(means, covs, n, add_intercept = FALSE, cl = NULL, terms = NULL) {
+
   p <- ncol(covs) - 1
   if (add_intercept) {
     p <- p + 1
@@ -49,6 +51,7 @@ calculate_lm <- function(means, covs, n, add_intercept = FALSE) {
       rownames(covs)[1] <- "(Intercept)" 
     }
   }
+  
   covX <- covs[-(p + 1), -(p + 1)]
   meanX <- means[-(p + 1)]
   XtX <- (n - 1) * covX + n * meanX %*% t(meanX)
@@ -64,10 +67,49 @@ calculate_lm <- function(means, covs, n, add_intercept = FALSE) {
 
   t_stat <- beta / sd_beta
   p_val <- 2 * pt(abs(t_stat), df = n - p, lower.tail = F)
-
-  return(list(beta = beta, sd_beta = sd_beta,
-              t_stat = t_stat, p_val = p_val,
-              sigma2 = sigma2))
+  
+  coefficients <- cbind(beta, sd_beta, t_stat, p_val)
+  colnames(coefficients) <- c("Estimate", "Std. Error", "t value", "Pr(>|t|)")
+  
+  aliased <- rep(FALSE, p)
+  names(aliased) <- rownames(coefficients)
+  
+  sigma <- sqrt(sigma2)
+  
+  df <- c(p, n - p, p)
+  
+  
+  SSE <- drop(yty - t(Xty) %*% solve(XtX) %*% Xty)
+  SST <- (n - 1) * covs[p + 1, p + 1]
+  SSR <- SST - SSE
+  
+  SS <- c(SSR = SSR, SSE = SSE, SST = SST)
+  
+  MSR <- SSR / (p - 1)
+  MSE <- SSE / (n - p)
+  
+  r.squared <- 1 - (SSE / SST)
+  adj.r.squared <- 1 - (1 - r.squared) * (n - 1) / (n - p)
+  
+  fstatistic <- c(value = MSR/MSE, numdf = p - 1, numdf = n - p - 1)
+  
+  cov.unscaled <- solve(XtX)
+  
+  re <- list(
+    call = cl, terms = terms, residuals = NULL,
+    coefficients = coefficients,
+    aliased = aliased,
+    sigma = sigma, 
+    df = df,
+    r.squared = r.squared,
+    adj.r.squared = adj.r.squared,
+    fstatistic = fstatistic,
+    cov.unscaled = cov.unscaled,
+    `Sum Sq` = SS
+  )
+  class(re) <- "summary.lm_pcss"
+  
+  return(re)
 }
 
 #' Calculate a linear model for a linear combination of responses
@@ -86,6 +128,7 @@ calculate_lm <- function(means, covs, n, add_intercept = FALSE) {
 #' @param phi vector of linear combination weights with one entry per response
 #'   variable.
 #' @param add_intercept logical. If \code{TRUE} adds an intercept to the model.
+#' @param ... additional arguments
 #'
 #' @references Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and 
 #'   Tintle, N.  (2020). Computationally efficient, exact, covariate-adjusted 
@@ -107,10 +150,10 @@ calculate_lm <- function(means, covs, n, add_intercept = FALSE) {
 #' calculate_lm_combo(means = means, covs = covs, n = n, phi = phi, m = 3, add_intercept = TRUE)
 #' # Compare results to...
 #' mod <- lm(y1 + 0.5 * y2 + 2 * y3 ~ 1 + g + x, data = ex_data)
-#' summary(mod)$coef
+#' summary(mod)
 #'
 #' @export
-calculate_lm_combo <- function(means, covs, n, phi, m = length(phi), add_intercept) {
+calculate_lm_combo <- function(means, covs, n, phi, m = length(phi), add_intercept, ...) {
   p <- length(means) - m
 
   # Covariances with linear combo and variance/mean of the linear combo
@@ -121,7 +164,7 @@ calculate_lm_combo <- function(means, covs, n, phi, m = length(phi), add_interce
   means0 <- c(means[1:p], new_mean)
   covs0 <- rbind(cbind(covs[1:p, 1:p], new_covs), c(t(new_covs), new_var))
 
-  calculate_lm(means = means0, covs = covs0, n = n, add_intercept = add_intercept)
+  calculate_lm(means = means0, covs = covs0, n = n, add_intercept = add_intercept, ...)
 }
 
 

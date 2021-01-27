@@ -27,11 +27,15 @@
 #' model_and(
 #'   y1 & y2 ~ g + x, means = means, covs = covs, n = n, predictors = predictors
 #' )
-#' coef(summary(lm(y1 & y2 ~ g + x + 1, data = ex_data)))
+#' summary(lm(y1 & y2 ~ g + x + 1, data = ex_data))
 #' 
 #' @export
 #' 
 model_and <- function(formula, n, means, covs, predictors, ...) {
+
+  cl <- match.call()
+  terms <- terms(formula)
+  
   all_vars <- names(means)
   
   xterms <- extract_predictors(formula, all_vars)
@@ -45,7 +49,7 @@ model_and <- function(formula, n, means, covs, predictors, ...) {
   
   model <- approx_and(
     means = means0, covs = covs0, n = n, predictors = predictors0,
-    add_intercept = add_intercept, ...
+    add_intercept = add_intercept, cl = cl, terms = terms
     )
   
   return(model)
@@ -80,11 +84,15 @@ model_and <- function(formula, n, means, covs, predictors, ...) {
 #' model_or(
 #'   y1 | y2 ~ g + x, means = means, covs = covs, n = n, predictors = predictors
 #' )
-#' coef(summary(lm(y1 | y2 ~ g + x + 1, data = ex_data)))
+#' summary(lm(y1 | y2 ~ g + x + 1, data = ex_data))
 #' 
 #' @export
 #' 
 model_or <- function(formula, n, means, covs, predictors, ...) {
+
+  cl <- match.call()
+  terms <- terms(formula)
+  
   all_vars <- names(means)
   
   xterms <- extract_predictors(formula, all_vars)
@@ -98,7 +106,8 @@ model_or <- function(formula, n, means, covs, predictors, ...) {
   
   model <- approx_or(
     means = means0, covs = covs0, n = n, predictors = predictors0,
-    add_intercept = add_intercept, ...
+    add_intercept = add_intercept,
+    cl = cl, terms = terms, ...
   )
   
   return(model)
@@ -124,6 +133,7 @@ model_or <- function(formula, n, means, covs, predictors, ...) {
 #'   \code{"continuous"}. If \code{"binary"}, specific calculations will be done
 #'   to estimate product means and variances.
 #' @param verbose should output be printed to console?
+#' @param ... additional arguments
 #'
 #' @examples
 #' ex_data <- bin_data[c("g", "x", "y1", "y2")]
@@ -138,11 +148,12 @@ model_or <- function(formula, n, means, covs, predictors, ...) {
 #'
 #' approx_and(means = means, covs = covs, n = n, predictors = predictors,
 #'   add_intercept = TRUE)
-#' coef(summary(lm(y1 & y2 ~ g + x + 1, data = ex_data)))
+#' summary(lm(y1 & y2 ~ g + x + 1, data = ex_data))
 #'
 #' @export
 approx_and <- function(means, covs, n, predictors, add_intercept = TRUE, 
-                       verbose = FALSE, response_assumption = "binary") {
+                       verbose = FALSE, response_assumption = "binary", 
+                       ...) {
   m <- length(means) - length(predictors)
   p <- length(means) - m
 
@@ -154,7 +165,13 @@ approx_and <- function(means, covs, n, predictors, add_intercept = TRUE,
     means = means, covs = covs, n = n,
     response = response_assumption, responses = responses,
     predictors = predictors, verbose = verbose)
-  do.call(calculate_lm, c(approx0, n = n, add_intercept = TRUE))
+  
+  
+  model <- calculate_lm(
+    means = approx0$means, covs = approx0$covs, add_intercept = add_intercept,
+    n = n, ...
+    )
+  return(model)
 }
 
 #' Approximate a linear model for a series of logical OR statements
@@ -176,6 +193,7 @@ approx_and <- function(means, covs, n, predictors, add_intercept = TRUE,
 #'   \code{"continuous"}. If \code{"binary"}, specific calculations will be done
 #'   to estimate product means and variances.
 #' @param verbose should output be printed to console?
+#' @param ... additional arguments
 #'
 #' @examples
 #' # 2 Phenotypes --------------------------------------------------------------
@@ -191,7 +209,7 @@ approx_and <- function(means, covs, n, predictors, add_intercept = TRUE,
 #'
 #' approx_or(means = means, covs = covs, n = n, predictors = predictors,
 #'   add_intercept = TRUE)
-#' coef(summary(lm(y1 | y2 ~ 1 + g + x, data = ex_data)))
+#' summary(lm(y1 | y2 ~ 1 + g + x, data = ex_data))
 #' # 3 Phenotypes --------------------------------------------------------------
 #' ex_data <- bin_data[c("g", "x", "y3", "y4", "y5")]
 #' head(ex_data)
@@ -205,11 +223,11 @@ approx_and <- function(means, covs, n, predictors, add_intercept = TRUE,
 #'
 #' approx_or(means = means, covs = covs, n = n, predictors = predictors,
 #'   add_intercept = TRUE)
-#' coef(summary(lm(y3 | y4 | y5 ~ 1 + g + x, data = ex_data)))
+#' summary(lm(y3 | y4 | y5 ~ 1 + g + x, data = ex_data))
 #' 
 #' @export
 approx_or <- function(means, covs, n, predictors, add_intercept = TRUE, 
-                      verbose = FALSE, response_assumption = "binary") {
+                      verbose = FALSE, response_assumption = "binary", ...) {
   # Model "y1 or y2 or ..." via "not(not y1 and not y2 and ...)"
   m <- length(means) - length(predictors)
   p <- length(means) - m
@@ -233,7 +251,9 @@ approx_or <- function(means, covs, n, predictors, add_intercept = TRUE,
   out_covs <- t(approx_not_and$covs * tau) * tau 
   out_means <- approx_not_and$means * tau + c(rep(0, p), 1)
   
-  calculate_lm(means = out_means, covs = out_covs, n = n, add_intercept = add_intercept)
+  model <- calculate_lm(
+    means = out_means, covs = out_covs, n = n, add_intercept = add_intercept, ...)
+  return(model)
 }
 
 # Below functions are defunct/outdated -----------------------------------------
