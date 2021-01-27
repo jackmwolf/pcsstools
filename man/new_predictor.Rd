@@ -34,5 +34,9 @@ Create an object of class "predictor"
 \examples{
 new_predictor(f = function(x0) dnorm(x0, mean = 0, sd = 1),
               predictor_type = "continuous", lb = -Inf, ub = Inf)
-
+              
+}
+\seealso{
+\code{\link{new_predictor_normal}}, 
+  \code{\link{new_predictor_snp}} and \code{\link{new_predictor_binary}}.
 }
