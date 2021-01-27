@@ -23,7 +23,7 @@ responses.}
 \item{...}{additional arguments}
 }
 \description{
-\code{model_and} approximates the linear model for the a conjunction
+\code{model_and} approximates the linear model for the conjunction
   of m phenotypes as a function of a set of predictors.
 }
 \examples{

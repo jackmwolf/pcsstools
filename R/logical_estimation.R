@@ -1,6 +1,6 @@
 #' Approximate a linear model for a series of logical AND statements using PCSS
 #' 
-#' \code{model_and} approximates the linear model for the a conjunction
+#' \code{model_and} approximates the linear model for the conjunction
 #'   of m phenotypes as a function of a set of predictors.
 #'   
 #' @param formula an object of class \code{formula} whose dependent variable is
