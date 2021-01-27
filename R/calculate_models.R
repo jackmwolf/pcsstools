@@ -112,60 +112,6 @@ calculate_lm <- function(means, covs, n, add_intercept = FALSE, cl = NULL, terms
   return(re)
 }
 
-#' Calculate a linear model for a linear combination of responses
-#'
-#' \code{calculate_lm_combo} describes the linear model for a linear combination
-#'   of responses as a function of a set of predictors.
-#'
-#' @param means a vector of means of all model predictors and the response with
-#'   the last \code{m} elements the response means (with order corresponding to
-#'   the order of weights in \code{phi}).
-#' @param covs a matrix of the covariance of all model predictors and the
-#'   responses with the order of rows/columns corresponding to the order of
-#'   \code{means}.
-#' @param n sample size.
-#' @param m number of responses to combine. Defaults to \code{length(weighs)}.
-#' @param phi vector of linear combination weights with one entry per response
-#'   variable.
-#' @param add_intercept logical. If \code{TRUE} adds an intercept to the model.
-#' @param ... additional arguments
-#'
-#' @references Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and 
-#'   Tintle, N.  (2020). Computationally efficient, exact, covariate-adjusted 
-#'   genetic principal component analysis by leveraging individual marker 
-#'   summary statistics from large biobanks. \emph{Pacific Symposium on 
-#'   Biocomputing}, 25, 719-730.
-#' 
-#'   Gasdaska A., Friend D., Chen R., Westra J., Zawistowski M., Lindsey W. and 
-#'   Tintle N. (2019) Leveraging summary statistics to make inferences about 
-#'   complex phenotypes in large biobanks. \emph{Pacific Symposium on 
-#'   Biocomputing}, 24, 391-402.
-#'
-#' @examples
-#' ex_data <- cont_data[c("g", "x", "y1", "y2", "y3")]
-#' means <- colMeans(ex_data)
-#' covs <- cov(ex_data)
-#' n <- nrow(ex_data)
-#' phi <- c(1, 0.5, 2)
-#' calculate_lm_combo(means = means, covs = covs, n = n, phi = phi, m = 3, add_intercept = TRUE)
-#' # Compare results to...
-#' mod <- lm(y1 + 0.5 * y2 + 2 * y3 ~ 1 + g + x, data = ex_data)
-#' summary(mod)
-#'
-#' @export
-calculate_lm_combo <- function(means, covs, n, phi, m = length(phi), add_intercept, ...) {
-  p <- length(means) - m
-
-  # Covariances with linear combo and variance/mean of the linear combo
-  new_covs <- covs[1:p, (p + 1):(p + m)] %*% phi
-  new_var  <- drop(t(phi) %*% covs[(p + 1):(p + m), (p + 1):(p + m)] %*% phi)
-  new_mean <- sum(phi * means[(p + 1):(p + m)])
-
-  means0 <- c(means[1:p], new_mean)
-  covs0 <- rbind(cbind(covs[1:p, 1:p], new_covs), c(t(new_covs), new_var))
-
-  calculate_lm(means = means0, covs = covs0, n = n, add_intercept = add_intercept, ...)
-}
 
 
 
