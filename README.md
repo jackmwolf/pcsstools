@@ -222,6 +222,11 @@ And here’s the result we would get using IPD:
 -   Add functions to check that all required PCSS are provided in
     `means` and `covs` (and `predictors` and `responses`, if applicable)
 
+-   Return output from `calculate_lm` as an `S3` object of class
+    `lm_pcss`, not `summary.lm_pcss`. Create a `print` method for this
+    class and then define `summary` method for this class (and use
+    existing `print.summary.lm_pcss`).
+
 -   Support function notation for linear combinations of phenotypes
     (e.g. `y1 - y2 + 0.5 * y3 ~ 1 + g + x`) instead of requiring a
     seperate vector of weights
