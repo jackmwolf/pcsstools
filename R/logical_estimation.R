@@ -1,8 +1,8 @@
 #' Approximate a linear model for a series of logical AND statements using PCSS
-#' 
+#'
 #' \code{model_and} approximates the linear model for the conjunction
 #'   of m phenotypes as a function of a set of predictors.
-#'   
+#'
 #' @param formula an object of class \code{formula} whose dependent variable is
 #'   a combination of variables and logical \code{&} operators. All model terms
 #'   must be accounted for in \code{means} and \code{covs}.
@@ -12,8 +12,8 @@
 #'   responses.
 #' @param predictors named list of objects of class \code{predictor}.
 #' @param ... additional arguments
-#' 
-#' @examples 
+#'
+#' @examples
 #' ex_data <- bin_data[c("g", "x", "y1", "y2")]
 #' head(ex_data)
 #' means <- colMeans(ex_data)
@@ -25,41 +25,40 @@
 #' )
 #'
 #' model_and(
-#'   y1 & y2 ~ g + x, means = means, covs = covs, n = n, predictors = predictors
+#'   y1 & y2 ~ g + x,
+#'   means = means, covs = covs, n = n, predictors = predictors
 #' )
 #' summary(lm(y1 & y2 ~ g + x + 1, data = ex_data))
-#' 
 #' @export
-#' 
+#'
 model_and <- function(formula, n, means, covs, predictors, ...) {
-
   cl <- match.call()
   terms <- terms(formula)
-  
+
   all_vars <- names(means)
-  
+
   xterms <- extract_predictors(formula, all_vars)
   yterms <- parse_and(extract_response(formula), all_vars)
-  
+
   # Re-arrange means, covs, and predictors to match given formula
   means0 <- means[c(xterms$predictors, yterms)]
-  covs0  <- covs[c(xterms$predictors, yterms), c(xterms$predictors, yterms)]
+  covs0 <- covs[c(xterms$predictors, yterms), c(xterms$predictors, yterms)]
   predictors0 <- predictors[xterms$predictors]
   add_intercept <- xterms$add_intercept
-  
+
   model <- approx_and(
     means = means0, covs = covs0, n = n, predictors = predictors0,
     add_intercept = add_intercept, cl = cl, terms = terms
-    )
-  
+  )
+
   return(model)
 }
 
 #' Approximate a linear model for a series of logical OR statements using PCSS
-#' 
+#'
 #' \code{model_or} approximates the linear model for the a disjunction
 #'   of m phenotypes as a function of a set of predictors.
-#'   
+#'
 #' @param formula an object of class \code{formula} whose dependent variable is
 #'   a combination of variables and logical \code{|} operators. All model terms
 #'   must be accounted for in \code{means} and \code{covs}.
@@ -69,8 +68,8 @@ model_and <- function(formula, n, means, covs, predictors, ...) {
 #'   responses.
 #' @param predictors named list of objects of class \code{predictor}.
 #' @param ... additional arguments
-#' 
-#' @examples 
+#'
+#' @examples
 #' ex_data <- bin_data[c("g", "x", "y1", "y2")]
 #' head(ex_data)
 #' means <- colMeans(ex_data)
@@ -82,34 +81,33 @@ model_and <- function(formula, n, means, covs, predictors, ...) {
 #' )
 #'
 #' model_or(
-#'   y1 | y2 ~ g + x, means = means, covs = covs, n = n, predictors = predictors
+#'   y1 | y2 ~ g + x,
+#'   means = means, covs = covs, n = n, predictors = predictors
 #' )
 #' summary(lm(y1 | y2 ~ g + x + 1, data = ex_data))
-#' 
 #' @export
-#' 
+#'
 model_or <- function(formula, n, means, covs, predictors, ...) {
-
   cl <- match.call()
   terms <- terms(formula)
-  
+
   all_vars <- names(means)
-  
+
   xterms <- extract_predictors(formula, all_vars)
   yterms <- parse_or(extract_response(formula), all_vars)
-  
+
   # Re-arrange means, covs, and predictors to match given formula
   means0 <- means[c(xterms$predictors, yterms)]
-  covs0  <- covs[c(xterms$predictors, yterms), c(xterms$predictors, yterms)]
+  covs0 <- covs[c(xterms$predictors, yterms), c(xterms$predictors, yterms)]
   predictors0 <- predictors[xterms$predictors]
   add_intercept <- xterms$add_intercept
-  
+
   model <- approx_or(
     means = means0, covs = covs0, n = n, predictors = predictors0,
     add_intercept = add_intercept,
     cl = cl, terms = terms, ...
   )
-  
+
   return(model)
 }
 
@@ -129,32 +127,33 @@ model_or <- function(formula, n, means, covs, predictors, ...) {
 #' @param predictors list of objects of class \code{predictor} corresponding
 #'   to the order of the predictors in \code{means}.
 #' @param add_intercept logical. Should the linear model add an intercept term?
-#' @param response_assumption character. Either \code{"binary"} or 
+#' @param response_assumption character. Either \code{"binary"} or
 #'   \code{"continuous"}. If \code{"binary"}, specific calculations will be done
 #'   to estimate product means and variances.
 #' @param verbose should output be printed to console?
 #' @param ... additional arguments
 #'
-approx_and <- function(means, covs, n, predictors, add_intercept = TRUE, 
-                       verbose = FALSE, response_assumption = "binary", 
+approx_and <- function(means, covs, n, predictors, add_intercept = TRUE,
+                       verbose = FALSE, response_assumption = "binary",
                        ...) {
   m <- length(means) - length(predictors)
   p <- length(means) - m
 
   # Generate responses' pmfs
-  r_means <- means[(p + 1) : (p + m)]
+  r_means <- means[(p + 1):(p + m)]
   responses <- lapply(r_means, new_predictor_binary)
 
   approx0 <- approx_mult_prod(
     means = means, covs = covs, n = n,
     response = response_assumption, responses = responses,
-    predictors = predictors, verbose = verbose)
-  
-  
+    predictors = predictors, verbose = verbose
+  )
+
+
   model <- calculate_lm(
     means = approx0$means, covs = approx0$covs, add_intercept = add_intercept,
     n = n, ...
-    )
+  )
   return(model)
 }
 
@@ -173,39 +172,40 @@ approx_and <- function(means, covs, n, predictors, add_intercept = TRUE,
 #' @param predictors list of objects of class \code{predictor} corresponding
 #'   to the order of the predictors in \code{means}.
 #' @param add_intercept logical. Should the linear model add an intercept term?
-#' @param response_assumption character. Either \code{"binary"} or 
+#' @param response_assumption character. Either \code{"binary"} or
 #'   \code{"continuous"}. If \code{"binary"}, specific calculations will be done
 #'   to estimate product means and variances.
 #' @param verbose should output be printed to console?
 #' @param ... additional arguments
 #'
-approx_or <- function(means, covs, n, predictors, add_intercept = TRUE, 
+approx_or <- function(means, covs, n, predictors, add_intercept = TRUE,
                       verbose = FALSE, response_assumption = "binary", ...) {
   # Model "y1 or y2 or ..." via "not(not y1 and not y2 and ...)"
   m <- length(means) - length(predictors)
   p <- length(means) - m
-  
+
   not_means <- c(means[1:p], 1 - means[(p + 1):(p + m)])
   phi <- c(rep(1, p), rep(-1, m))
   not_covs <- t(covs * phi) * phi
-  
+
   # Generate responses' pmfs
-  r_means <- not_means[(p + 1) : (p + m)]
+  r_means <- not_means[(p + 1):(p + m)]
   responses <- lapply(r_means, new_predictor_binary)
-  
+
   approx_not_and <- approx_mult_prod(
     means = not_means, covs = not_covs, n = n,
     response = response_assumption, responses = responses,
     predictors = predictors,
     verbose = verbose
   )
-  
+
   tau <- c(rep(1, p), -1)
-  out_covs <- t(approx_not_and$covs * tau) * tau 
+  out_covs <- t(approx_not_and$covs * tau) * tau
   out_means <- approx_not_and$means * tau + c(rep(0, p), 1)
-  
+
   model <- calculate_lm(
-    means = out_means, covs = out_covs, n = n, add_intercept = add_intercept, ...)
+    means = out_means, covs = out_covs, n = n, add_intercept = add_intercept, ...
+  )
   return(model)
 }
 
@@ -215,11 +215,15 @@ approx_or <- function(means, covs, n, predictors, add_intercept = TRUE,
 approx_or_OLD <- function(means, covs, n, predictors, add_intercept = TRUE, verbose = FALSE) {
   m <- length(means) - length(predictors)
   if (m == 2) {
-    approx_or_2_OLD(means = means, covs=  covs, n = n, predictors = predictors,
-                add_intercept = add_intercept, verbose = verbose)
+    approx_or_2_OLD(
+      means = means, covs = covs, n = n, predictors = predictors,
+      add_intercept = add_intercept, verbose = verbose
+    )
   } else if (m == 3) {
-    approx_or_3_OLD(means = means, covs=  covs, n = n, predictors = predictors,
-                add_intercept = add_intercept, verbose = verbose)
+    approx_or_3_OLD(
+      means = means, covs = covs, n = n, predictors = predictors,
+      add_intercept = add_intercept, verbose = verbose
+    )
   } else {
     stop("approx_or currently only supports up to three responses.")
   }
@@ -235,27 +239,29 @@ approx_or_2_OLD <- function(means, covs, n, predictors, verbose = FALSE, add_int
   }
 
   # response means/covariance matrix
-  r_means <- means[(p + 1) : (p + m)]
-  r_covs  <- covs[((p + 1) : (p + m)), ((p + 1) : (p + m))]
+  r_means <- means[(p + 1):(p + m)]
+  r_covs <- covs[((p + 1):(p + m)), ((p + 1):(p + m))]
 
   # Generate responses' pmfs
   responses <- lapply(r_means, new_predictor_binary)
 
   # Approximate predictor/product covariances
-  approx0 <- approx_mult_prod(means = means, covs = covs, n = n, response = "binary",
-                           predictors = predictors, responses = responses)
+  approx0 <- approx_mult_prod(
+    means = means, covs = covs, n = n, response = "binary",
+    predictors = predictors, responses = responses
+  )
   cov0 <- approx0$covs
 
   # Calculate response/product covariances: cov(y1, y1*y2) and cov(y2, y1*y2)
   resp_covs <- approx0$means[p + 1] * (1 - r_means) * n / (n - 1)
 
-  cov_B <- rbind(covs[1:p, (p + 1) : (p + m)], resp_covs)
+  cov_B <- rbind(covs[1:p, (p + 1):(p + m)], resp_covs)
 
   cov_C <- cbind(t(cov_B), r_covs)
 
   big_cov <- rbind(cbind(cov0, cov_B), cov_C)
   # Reorder columns
-  reorder_ids <- c(1:p, p+2:3, p+1)
+  reorder_ids <- c(1:p, p + 2:3, p + 1)
   big_cov <- big_cov[reorder_ids, reorder_ids]
   big_means <- c(approx0$means, r_means)[reorder_ids]
 
@@ -263,9 +269,10 @@ approx_or_2_OLD <- function(means, covs, n, predictors, verbose = FALSE, add_int
   phi <- c(1, 1, -1)
 
   # linear regression of linear combination of y1, y2, y1*y2
-  calculate_lm_combo(means = big_means, covs = big_cov, n = n, phi = phi, m = 3,
-                     add_intercept = add_intercept)
-
+  calculate_lm_combo(
+    means = big_means, covs = big_cov, n = n, phi = phi, m = 3,
+    add_intercept = add_intercept
+  )
 }
 
 # Approximate a linear model for a logical OR statement with 3 disjuncts
@@ -278,8 +285,8 @@ approx_or_3_OLD <- function(means, covs, n, predictors, verbose = FALSE, add_int
   }
 
   # response means/covariance matrix
-  r_means <- means[(p + 1) : (p + m)]
-  r_covs  <- covs[((p + 1) : (p + m)), ((p + 1) : (p + m))]
+  r_means <- means[(p + 1):(p + m)]
+  r_covs <- covs[((p + 1):(p + m)), ((p + 1):(p + m))]
 
   # Generate responses' pmfs
   responses <- lapply(r_means, new_predictor_binary)
@@ -287,7 +294,7 @@ approx_or_3_OLD <- function(means, covs, n, predictors, verbose = FALSE, add_int
   # 2 term products ------------------------------------------------------------
   cov_B_2 <- matrix(nrow = p, ncol = m)
   means_2 <- numeric(length = m)
-  vars_2  <- numeric(length = m)
+  vars_2 <- numeric(length = m)
   prod_names_2 <- character(length = m)
   for (i in m:1) {
     exclude_id <- p + i
@@ -315,7 +322,8 @@ approx_or_3_OLD <- function(means, covs, n, predictors, verbose = FALSE, add_int
   approx3 <- approx_mult_prod(
     means = means, covs = covs, n = n, response = "binary",
     predictors = predictors, responses = responses,
-    verbose = verbose)
+    verbose = verbose
+  )
   cov_B_3[, 1] <- approx3$covs[1:p, p + 1]
   means_3[1] <- approx3$means[p + 1]
   vars_3[1] <- approx3$covs[p + 1, p + 1]
@@ -331,13 +339,15 @@ approx_or_3_OLD <- function(means, covs, n, predictors, verbose = FALSE, add_int
   # cov(y1, y2*y3), cov(y2, y1*y3), and cov(y3, y1*y2)
   id_list <- list(c(1, 2, 3), c(2, 1, 3), c(3, 1, 2))
   mix_covs_2 <-
-    sapply(id_list,
-           function(id0) {
-             approx_response_cov_recursive(
-               ids = id0, r_covs = r_covs, r_means = r_means, n = n,
-               responses = responses, response = "binary"
-             )[["cov"]]
-           })
+    sapply(
+      id_list,
+      function(id0) {
+        approx_response_cov_recursive(
+          ids = id0, r_covs = r_covs, r_means = r_means, n = n,
+          responses = responses, response = "binary"
+        )[["cov"]]
+      }
+    )
 
   # cov(y1, y1*y2), cov(y1, y1*y3), cov(y2, y1*y2), cov(y2, y2*y3),
   # cov(y3, y1*y3), and cov(y3, y2*y3)
@@ -346,10 +356,13 @@ approx_or_3_OLD <- function(means, covs, n, predictors, verbose = FALSE, add_int
     means_2[c(1, 2, 1, 3, 2, 3)] * (1 - r_means[c(1, 1, 2, 2, 3, 3)]) * n / (n - 1)
 
   cov_C_2 <- matrix(
-    c(auto_covs_2[1:2], mix_covs_2[1],
+    c(
+      auto_covs_2[1:2], mix_covs_2[1],
       auto_covs_2[3], mix_covs_2[2], auto_covs_2[4],
-      mix_covs_2[3], auto_covs_2[5:6]),
-    nrow = 3, ncol = 3, byrow = TRUE)
+      mix_covs_2[3], auto_covs_2[5:6]
+    ),
+    nrow = 3, ncol = 3, byrow = TRUE
+  )
 
 
   cov_C_3 <- means_3[1] * (1 - r_means) * n / (n - 1)
@@ -365,10 +378,12 @@ approx_or_3_OLD <- function(means, covs, n, predictors, verbose = FALSE, add_int
   diag(cov_D_1) <- vars_2
 
   # Covariance of y1y2y3 with y1y2, y1y3, and y2y3
-  cov_D_2 <- means_3[1] * (1 - means_2) * n / (n-1)
+  cov_D_2 <- means_3[1] * (1 - means_2) * n / (n - 1)
 
-  cov_D <- rbind(cbind(cov_D_1, cov_D_2),
-                 c(cov_D_2, vars_3[1]))
+  cov_D <- rbind(
+    cbind(cov_D_1, cov_D_2),
+    c(cov_D_2, vars_3[1])
+  )
 
   big_cov <- rbind(
     cbind(covs, rbind(cov_B, cov_C)),
@@ -384,7 +399,8 @@ approx_or_3_OLD <- function(means, covs, n, predictors, verbose = FALSE, add_int
   phi <- c(rep(1, 3), rep(-1, 3), 1)
 
   # linear regression of linear combination of y1, y2, y1*y2
-  calculate_lm_combo(means = big_means, covs = big_cov, n = n, phi = phi, m = 7,
-                     add_intercept = add_intercept)
-
+  calculate_lm_combo(
+    means = big_means, covs = big_cov, n = n, phi = phi, m = 7,
+    add_intercept = add_intercept
+  )
 }

@@ -1,8 +1,8 @@
 #' Approximate a linear model for a product using PCSS
-#' 
+#'
 #' \code{model_product} approximates the linear model for the product
 #'   of m phenotypes as a function of a set of predictors.
-#'   
+#'
 #' @param formula an object of class \code{formula} whose dependent variable is
 #'   a combination of variables and  \code{*} operators. All model terms
 #'   must be accounted for in \code{means} and \code{covs}.
@@ -10,15 +10,15 @@
 #' @param means named vector of predictor and response means.
 #' @param covs named matrix of the covariance of all model predictors and the
 #'   responses.
-#' @param predictors named list of objects of class \code{predictor} 
-#' @param responses named list of objects of class \code{predictor} 
-#'   corresponding to all terms being multiplied in the response. Can be 
+#' @param predictors named list of objects of class \code{predictor}
+#' @param responses named list of objects of class \code{predictor}
+#'   corresponding to all terms being multiplied in the response. Can be
 #'   left \code{NULL} if only multiplying two terms
 #' @param response character. Describe distribution of all product terms.
-#'   Either \code{"continuous"} or \code{"binary"}. If \code{"binary"} 
+#'   Either \code{"continuous"} or \code{"binary"}. If \code{"binary"}
 #'   different approximations of product means and variances are used.
 #' @param ... additional arguments
-#' 
+#'
 #' @examples
 #' ex_data <- bin_data[c("g", "x", "y1", "y2", "y3")]
 #' head(ex_data)
@@ -32,43 +32,42 @@
 #' responses <- lapply(means[3:length(means)], new_predictor_binary)
 #'
 #' model_product(
-#'   y1 * y2 * y3 ~ g + x, means = means, covs = covs, n = n, 
+#'   y1 * y2 * y3 ~ g + x,
+#'   means = means, covs = covs, n = n,
 #'   predictors = predictors, responses = responses, response = "binary"
 #' )
 #'
 #' summary(lm(y1 * y2 * y3 ~ g + x, data = ex_data))
-#' 
 #' @export
 #'
-model_product <- function(formula, n, means, covs, predictors, responses = NULL, 
+model_product <- function(formula, n, means, covs, predictors, responses = NULL,
                           response = "continuous", ...) {
-  
   cl <- match.call()
   terms <- terms(formula)
-  
+
   all_vars <- names(means)
-  
+
   xterms <- extract_predictors(formula, all_vars)
   yterms <- parse_product(extract_response(formula), all_vars)
-  
+
   # Re-arrange means, covs, and predictors to match given formula
   means0 <- means[c(xterms$predictors, yterms)]
-  covs0  <- covs[c(xterms$predictors, yterms), c(xterms$predictors, yterms)]
+  covs0 <- covs[c(xterms$predictors, yterms), c(xterms$predictors, yterms)]
   predictors0 <- predictors[xterms$predictors]
   add_intercept <- xterms$add_intercept
-  
+
   approx0 <- approx_mult_prod(
     means = means0, covs = covs0, n = n,
     response = response, responses = responses,
     predictors = predictors, ...
-    )
-  
-  
+  )
+
+
   model <- calculate_lm(
     means = approx0$means, covs = approx0$covs, add_intercept = add_intercept,
     n = n, cl = cl, terms = terms
   )
-  
+
   return(model)
 }
 
@@ -89,7 +88,7 @@ model_product <- function(formula, n, means, covs, predictors, responses = NULL,
 #' @param predictors,responses lists of objects of class \code{predictor} where
 #'   each entry corresponds to one predictor/response variable.
 #' @param verbose logical.
-#' 
+#'
 #' @importFrom stats median integrate cov2cor
 #'
 approx_mult_prod <- function(means, covs, n, response, predictors, responses, verbose = FALSE) {
@@ -107,7 +106,7 @@ approx_mult_prod <- function(means, covs, n, response, predictors, responses, ve
 
       # Re-arrange order of means and covs to match order0
       means0 <- means[c(1:p, p + order0)]
-      covs0  <- covs[c(1:p, p + order0), c(1:p, p + order0)]
+      covs0 <- covs[c(1:p, p + order0), c(1:p, p + order0)]
 
       # Print estimation order
       if (verbose & m > 2) {
@@ -123,9 +122,11 @@ approx_mult_prod <- function(means, covs, n, response, predictors, responses, ve
 
       # Estimate covariances and means recursively according to order0
       approx0 <-
-        approx_prod_recursive(means = means0, covs = covs0, n = n,
-                              response = response, predictors = predictors,
-                              responses = responses[order0])
+        approx_prod_recursive(
+          means = means0, covs = covs0, n = n,
+          response = response, predictors = predictors,
+          responses = responses[order0]
+        )
     })
 
   # Take pairwise medians of estimates
@@ -139,11 +140,11 @@ approx_mult_prod <- function(means, covs, n, response, predictors, responses, ve
 
 
   means_out <- c(means[1:p], pred_mean)
-  covs_out  <- rbind(cbind(covs[1:p, 1:p], pred_covs[1:p]), pred_covs)
+  covs_out <- rbind(cbind(covs[1:p, 1:p], pred_covs[1:p]), pred_covs)
 
   # Prepare names
-  prod_name <- paste(names(means)[(p + 1) : (p + m)], collapse = "")
-  names(means_out)[p + 1]  <- prod_name
+  prod_name <- paste(names(means)[(p + 1):(p + m)], collapse = "")
+  names(means_out)[p + 1] <- prod_name
   colnames(covs_out)[p + 1] <- prod_name
   rownames(covs_out)[p + 1] <- prod_name
 
@@ -158,16 +159,18 @@ approx_prod_recursive <- function(means, covs, n, response, predictors, response
   p <- length(means) - m
 
   if (m == 2) {
-    cov_out <- approx_prod_stats(means = means, covs = covs, n = n,
-                                 response = response, predictors = predictors)
+    cov_out <- approx_prod_stats(
+      means = means, covs = covs, n = n,
+      response = response, predictors = predictors
+    )
     return(cov_out)
   } else if (m > 2) {
     # mean of y_m, covariance with each predictor, and variance
     mean_m <- means[p + 1]
-    covs_m  <- covs[1:(p + 1), p + 1]
+    covs_m <- covs[1:(p + 1), p + 1]
 
     # mean of w_(m-1), covariance with each predictor, and variance
-    ids2 <- -(p  + 1)
+    ids2 <- -(p + 1)
     approx_w <- approx_prod_recursive(
       means = means[ids2],
       covs = covs[ids2, ids2],
@@ -182,17 +185,21 @@ approx_prod_recursive <- function(means, covs, n, response, predictors, response
     resp_ids <- (p + 1):(p + m)
     w_cov <- approx_response_cov_recursive(
       ids = 1:m, r_means = means[resp_ids], r_covs = covs[resp_ids, resp_ids],
-      n = n, response = response, responses = responses)
+      n = n, response = response, responses = responses
+    )
 
 
     means_in <- c(approx_w$means, mean_m)
-    cov_in <- c(covs_m[1:p], w_cov[["cov"]], covs_m[p+1])
-    covs_in <- rbind(cbind(approx_w$covs, cov_in[1:(length(cov_in) - 1)]),
-                     cov_in
+    cov_in <- c(covs_m[1:p], w_cov[["cov"]], covs_m[p + 1])
+    covs_in <- rbind(
+      cbind(approx_w$covs, cov_in[1:(length(cov_in) - 1)]),
+      cov_in
     )
 
-    cov_out <- approx_prod_stats(means = means_in, covs = covs_in, n = n,
-                                 response = response, predictors = predictors)
+    cov_out <- approx_prod_stats(
+      means = means_in, covs = covs_in, n = n,
+      response = response, predictors = predictors
+    )
 
     return(cov_out)
   } else {
@@ -214,7 +221,7 @@ approx_prod_recursive <- function(means, covs, n, response, predictors, response
 #' @param response Character, Either "binary" or "continuous"
 #' @param responses List of lists with elements of class predictor
 #' @param verbose logical
-#' 
+#'
 #' @return A vector with the approximated covariance, and approximated mean and
 #'   variance of the product
 #'
@@ -230,14 +237,20 @@ approx_response_cov_recursive <- function(ids, r_covs, r_means, n, responses,
       }
 
       message(
-        paste("Estimating covariance of", resp_names[ids[1]], "and",
-              paste(resp_names[ids[2:length(ids)]], collapse = "")))
+        paste(
+          "Estimating covariance of", resp_names[ids[1]], "and",
+          paste(resp_names[ids[2:length(ids)]], collapse = "")
+        )
+      )
     }
     covs0 <- r_covs[ids, ids]
     means0 <- r_means[ids]
-    cov_out <- do.call(approx_cov,
-                       c(list(means = means0, covs = covs0, n = n, response = response),
-                         responses[[ids[1]]])
+    cov_out <- do.call(
+      approx_cov,
+      c(
+        list(means = means0, covs = covs0, n = n, response = response),
+        responses[[ids[1]]]
+      )
     )
     return(cov_out)
   } else if (length(ids) > 3) {
@@ -247,38 +260,44 @@ approx_response_cov_recursive <- function(ids, r_covs, r_means, n, responses,
     cov_12 <- r_covs[ids[1], ids[2]]
 
     mean_1 <- r_means[ids[1]]
-    var_1  <- r_covs[ids[1], ids[1]]
+    var_1 <- r_covs[ids[1], ids[1]]
 
     mean_2 <- r_means[ids[2]]
-    var_2  <- r_covs[ids[2], ids[2]]
+    var_2 <- r_covs[ids[2], ids[2]]
 
     # Approx cov of 1st id and product of 3rd to END
     ids0 <- c(ids[1], ids[3:length(ids)])
     approx_13 <- approx_response_cov_recursive(
       ids = ids0, r_covs = r_covs, r_means = r_means, n = n, responses = responses,
-      response = response, verbose = verbose)
+      response = response, verbose = verbose
+    )
     cov_13 <- approx_13[["cov"]]
     # Approx cov of 2nd id and product of 3rd to END and mean of product of 3rd
     # to END
     ids0 <- c(ids[2], ids[3:length(ids)])
     approx_23 <- approx_response_cov_recursive(
       ids = ids0, r_covs = r_covs, r_means = r_means, n = n, responses = responses,
-      response = response, verbose = verbose)
+      response = response, verbose = verbose
+    )
     cov_23 <- approx_23[["cov"]]
 
-    var_3  <- median(c(approx_13[["var"]],  approx_23[["var"]]))
+    var_3 <- median(c(approx_13[["var"]], approx_23[["var"]]))
     mean_3 <- median(c(approx_13[["mean"]], approx_23[["mean"]]))
 
     means0 <- c(mean_1, mean_2, mean_3)
-    covs0  <- matrix(c(
-      var_1,   cov_12, cov_13,
-      cov_12, var_2,  cov_23,
+    covs0 <- matrix(c(
+      var_1, cov_12, cov_13,
+      cov_12, var_2, cov_23,
       cov_13, cov_23, var_3
     ), ncol = 3)
 
-    cov_out <- do.call(approx_cov,
-                       c(list(means = means0, covs = covs0, n = n, response = response),
-                         responses[[ids[1]]]))
+    cov_out <- do.call(
+      approx_cov,
+      c(
+        list(means = means0, covs = covs0, n = n, response = response),
+        responses[[ids[1]]]
+      )
+    )
     return(cov_out)
   } else {
     stop("At least three id values are required.")
@@ -288,10 +307,10 @@ approx_response_cov_recursive <- function(ids, r_covs, r_means, n, responses,
 
 
 
-#' Approximate summary statistics for a product of phenotypes and a set of 
+#' Approximate summary statistics for a product of phenotypes and a set of
 #'   predictors
 #'
-#' @param means Vector of means of predictors and the two phenotypes to be 
+#' @param means Vector of means of predictors and the two phenotypes to be
 #'   multiplied
 #' @param covs Covariance matrix of all predictors and the two phenotypes
 #' @param n Sample size
@@ -312,8 +331,8 @@ approx_prod_stats <- function(means, covs, n, response, predictors) {
     )
     preds[[j]] <- do.call(approx_cov, c(params, predictors[[j]]))
   }
-  prod_covs  <- sapply(preds, function(.) .[["cov"]])
-  prod_vars  <- sapply(preds, function(.) .[["var"]])
+  prod_covs <- sapply(preds, function(.) .[["cov"]])
+  prod_vars <- sapply(preds, function(.) .[["var"]])
   prod_means <- sapply(preds, function(.) .[["mean"]])
 
   prod_var <- median(prod_vars)
@@ -327,7 +346,7 @@ approx_prod_stats <- function(means, covs, n, response, predictors) {
 
   # Put names on
   prod_name <- paste(names(means)[n_preds + 1:2], collapse = "")
-  names(means_out)[n_preds + 1]  <- prod_name
+  names(means_out)[n_preds + 1] <- prod_name
   colnames(cov_out)[n_preds + 1] <- prod_name
   rownames(cov_out)[n_preds + 1] <- prod_name
 
@@ -357,7 +376,6 @@ approx_conditional <- function(means, covs, response, n) {
     }
 
     p_var <- function(x0) p_mu(x0) * (1 - p_mu(x0))
-
   } else if (response == "continuous") {
     p_mu <- function(x0) {
       p <- a + b * x0
@@ -366,7 +384,7 @@ approx_conditional <- function(means, covs, response, n) {
     # Approximate the conditional variance of a continuous Y given X under the
     # OLS assumption of homoscedasticity.
     p_s2 <- (n * means[2]^2 + (n - 1) * covs[2, 2] - a * n * means[2] -
-               b * (n * means[1] * means[2] + (n - 1) * covs[1, 2])) / (n - 2)
+      b * (n * means[1] * means[2] + (n - 1) * covs[1, 2])) / (n - 2)
     p_var <- function(x0) p_s2
   }
 
@@ -394,11 +412,15 @@ approx_cov <- function(means, covs, predictor_type, response, n, f, ...) {
 
   # COVARIANCE ##
   # Conditional means / variances for phenotype 1 and 2
-  c_1 <- approx_conditional(means = means[c(1, 2)], covs = covs[c(1, 2), c(1, 2)],
-                            response = response, n = n)
+  c_1 <- approx_conditional(
+    means = means[c(1, 2)], covs = covs[c(1, 2), c(1, 2)],
+    response = response, n = n
+  )
 
-  c_2 <- approx_conditional(means = means[c(1, 3)], covs = covs[c(1, 3), c(1, 3)],
-                            response = response, n = n)
+  c_2 <- approx_conditional(
+    means = means[c(1, 3)], covs = covs[c(1, 3), c(1, 3)],
+    response = response, n = n
+  )
 
   # Partial correlation
   rho <- get_pcor(covs)
@@ -410,38 +432,43 @@ approx_cov <- function(means, covs, predictor_type, response, n, f, ...) {
 
   if (predictor_type == "discrete") {
     # Estimated product covariance
-    pred_cov <- approx_cov_discrete(c_prod_mean = c_prod_mean,
-                                    predictor_mean = means[1],
-                                    f = f, ...)
+    pred_cov <- approx_cov_discrete(
+      c_prod_mean = c_prod_mean,
+      predictor_mean = means[1],
+      f = f, ...
+    )
   } else if (predictor_type == "continuous") {
-    pred_cov <- approx_cov_continuous(c_prod_mean = c_prod_mean,
-                                      predictor_mean = means[1],
-                                      f = f, ...)
+    pred_cov <- approx_cov_continuous(
+      c_prod_mean = c_prod_mean,
+      predictor_mean = means[1],
+      f = f, ...
+    )
   } else {
     stop("Invalid predictor_type argument to approx_cov")
   }
 
   ## VARIANCE ##
   if (response == "binary") {
-    pred_var <- pred_mean * (1 - pred_mean) *  n / (n - 1)
-
+    pred_var <- pred_mean * (1 - pred_mean) * n / (n - 1)
   } else if (response == "continuous") {
     # Estimate the conditional variance
     c_prod_var <- function(x0) {
-      (c_1$c_mu(x0)^2/c_1$c_var(x0) + c_2$c_mu(x0)^2/c_2$c_var(x0) +
-         2 * rho *  c_1$c_mu(x0) * c_2$c_mu(x0) / sqrt(c_1$c_var(x0) * c_2$c_var(x0)) +
-         1 + rho^2) * c_1$c_var(x0) * c_2$c_var(x0)
+      (c_1$c_mu(x0)^2 / c_1$c_var(x0) + c_2$c_mu(x0)^2 / c_2$c_var(x0) +
+        2 * rho * c_1$c_mu(x0) * c_2$c_mu(x0) / sqrt(c_1$c_var(x0) * c_2$c_var(x0)) +
+        1 + rho^2) * c_1$c_var(x0) * c_2$c_var(x0)
     }
 
     # Take the expectation(?) of the conditional variance of
     if (predictor_type == "discrete") {
       pred_var <- approx_var_discrete(
         c_prod_mean = c_prod_mean, c_prod_var = c_prod_var,
-        prod_mean = pred_mean, n = n, f = f, ...)
+        prod_mean = pred_mean, n = n, f = f, ...
+      )
     } else if (predictor_type == "continuous") {
       pred_var <- approx_var_continuous(
         c_prod_mean = c_prod_mean, c_prod_var = c_prod_var,
-        prod_mean = pred_mean, n = n, f = f, ...)
+        prod_mean = pred_mean, n = n, f = f, ...
+      )
     }
   }
   return(c(cov = unname(pred_cov), mean = unname(pred_mean), var = unname(pred_var)))
@@ -469,7 +496,7 @@ approx_var_discrete <- function(c_prod_mean, c_prod_var, prod_mean, n, f, suppor
   g <- function(x0) {
     (n * f(x0) - 1) * c_prod_var(x0) + n * f(x0) * (c_prod_mean(x0) - prod_mean)^2
   }
-  pred_var <- sum(g(support))/(n - 1)
+  pred_var <- sum(g(support)) / (n - 1)
   return(pred_var)
 }
 

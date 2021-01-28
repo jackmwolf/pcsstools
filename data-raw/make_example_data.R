@@ -31,11 +31,11 @@ make_data <- function(response, m, n = 1000, correlated_errors = TRUE) {
 }
 
 set.seed(1004)
-bin_data  <- make_data(response = "binary", m = 5)
+bin_data <- make_data(response = "binary", m = 5)
 cont_data <- make_data(response = "continuous", m = 5)
 
-save(cont_data, file="data/cont_data.RData")
-save(bin_data, file="data/bin_data.RData")
+save(cont_data, file = "data/cont_data.RData")
+save(bin_data, file = "data/bin_data.RData")
 
 
 test_data_bin <- make_data(response = "binary", n = 10000, m = 3)

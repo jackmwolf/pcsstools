@@ -4,14 +4,14 @@
 #' @importFrom stats terms
 extract_predictors <- function(formula = formula(), all_vars = character()) {
   terms0 <- terms(formula)
-  
+
   model_terms <- attributes(terms0)$term.labels
   add_intercept <- attributes(terms0)$intercept
-  
+
   if (any(!(model_terms %in% all_vars))) {
     stop("Independent variable in formula without summary stats provided")
   }
-  
+
   re <- list(
     predictors = model_terms,
     add_intercept = add_intercept
@@ -32,11 +32,11 @@ parse_response <- function(response = character(), all_vars = character(), split
   terms0 <- strsplit(response, split = split)[[1]]
   # Trim white space at start and end
   terms0 <- sapply(terms0, trimws, simplify = T)
-  
+
   if (any(!(terms0 %in% all_vars))) {
     stop("Dependent variable in formula without summary stats provided")
   }
-  
+
   return(terms0)
 }
 
@@ -60,11 +60,11 @@ parse_sum <- function(response = character(), ...) {
   return(terms0)
 }
 
-parse_linear_combo <- function(response = character(), ...) {
-  # Replace "-" with "+ -1 *"
-  
-  gsub("^-", "-1 * ", response)
-  
-  gsub("[{- }{y%}]", "-1 *", response)
-  terms0 <- parse_sum(response)
-}
+# parse_linear_combo <- function(response = character(), ...) {
+#   # Replace "-" with "+ -1 *"
+#
+#   gsub("^-", "-1 * ", response)
+#
+#   gsub("[{- }{y%}]", "-1 *", response)
+#   terms0 <- parse_sum(response)
+# }
