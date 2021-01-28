@@ -17,7 +17,7 @@
 
 \item{digits}{the number of significant digits to use when printing.}
 
-\item{symbolic.cor}{logical. If TRUE, print the correlations in a symbolic 
+\item{symbolic.cor}{logical. If TRUE, print the correlations in a symbolic
 form (see \link[stats]{symnum}) rather than as numbers.}
 
 \item{signif.stars}{logical. If \code{TRUE}, ‘significance stars’ are printed
@@ -27,4 +27,7 @@ for each coefficient.}
 }
 \description{
 Prints a linear model fit through pre-computed summary statistics
+}
+\author{
+R Core Team and contributors worldwide. Modified by Jack Wolf
 }
