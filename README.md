@@ -103,7 +103,7 @@ score by setting `comp = 1`.
     #> 
     #> Residual standard error: 1.578 on 997 degrees of freedom
     #> Multiple R-squared:  0.6198, Adjusted R-squared:  0.619 
-    #> F-statistic: 812.6 on 2 and 996 DF,  p-value: < 2.2e-16
+    #> F-statistic: 812.6 on 2 and 997 DF,  p-value: < 2.2e-16
 
 Here’s the same model using individual patient data.
 
@@ -191,7 +191,7 @@ Then we can approximate the linear model using `model_or()`.
     #> 
     #> Residual standard error: 0.4441 on 997 degrees of freedom
     #> Multiple R-squared:  0.172,  Adjusted R-squared:  0.1703 
-    #> F-statistic: 103.5 on 2 and 996 DF,  p-value: < 2.2e-16
+    #> F-statistic: 103.5 on 2 and 997 DF,  p-value: < 2.2e-16
 
 And here’s the result we would get using IPD:
 
@@ -221,11 +221,6 @@ And here’s the result we would get using IPD:
 
 -   Add functions to check that all required PCSS are provided in
     `means` and `covs` (and `predictors` and `responses`, if applicable)
-
--   Return output from `calculate_lm` as an `S3` object of class
-    `lm_pcss`, not `summary.lm_pcss`. Create a `print` method for this
-    class and then define `summary` method for this class (and use
-    existing `print.summary.lm_pcss`).
 
 -   Support function notation for linear combinations of phenotypes
     (e.g. `y1 - y2 + 0.5 * y3 ~ 1 + g + x`) instead of requiring a
