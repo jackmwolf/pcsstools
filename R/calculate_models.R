@@ -79,7 +79,7 @@ calculate_lm <- function(means, covs, n, add_intercept = FALSE, cl = NULL, terms
   r.squared <- 1 - (SSE / SST)
   adj.r.squared <- 1 - (1 - r.squared) * (n - 1) / (n - p)
 
-  fstatistic <- c(value = MSR / MSE, numdf = p - 1, numdf = n - p - 1)
+  fstatistic <- c(value = MSR / MSE, numdf = p - 1, numdf = n - p)
 
   cov.unscaled <- solve(XtX)
 
@@ -95,7 +95,8 @@ calculate_lm <- function(means, covs, n, add_intercept = FALSE, cl = NULL, terms
     cov.unscaled = cov.unscaled,
     `Sum Sq` = SS
   )
-  class(re) <- "summary.lm_pcss"
+  
+  class(re) <- "pcsslm"
 
   return(re)
 }

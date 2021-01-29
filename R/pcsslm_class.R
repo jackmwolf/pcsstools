@@ -193,13 +193,13 @@
 # 1. Remove printing of residual information
 # 2. Add a message that this output was generated using summary statistics
 
-#' Print an object of class summary.lm_pcss
+#' Print an object of class pcsslm
 #'
 #' Prints a linear model fit through pre-computed summary statistics
 #' @author R Core Team and contributors worldwide. Modified by Jack Wolf
-#' @method print summary.lm_pcss
+#' @method print pcsslm
 #'
-#' @param x an object of class \code{"summary.lm_pcss"}
+#' @param x an object of class \code{"pcsslm"}
 #' @param digits the number of significant digits to use when printing.
 #' @param symbolic.cor logical. If \code{TRUE}, print the correlations in a 
 #'   symbolic form (see \link[stats]{symnum}) rather than as numbers.
@@ -212,9 +212,9 @@
 #'
 #' @export
 #'
-print.summary.lm_pcss <- function(x, digits = max(3L, getOption("digits") - 3L),
-                                  symbolic.cor = x$symbolic.cor, signif.stars = getOption("show.signif.stars"),
-                                  ...) {
+print.pcsslm <- function(x, digits = max(3L, getOption("digits") - 3L),
+                         symbolic.cor = x$symbolic.cor, signif.stars = getOption("show.signif.stars"),
+                         ...) {
   cat("Model approximated using Pre-Computed Summary Statistics.\n")
   cat("\nCall:\n", paste(deparse(x$call),
     sep = "\n",
