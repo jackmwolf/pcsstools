@@ -7,7 +7,7 @@
 check_terms(xterms, yterms, pcssterms, pcsstype)
 }
 \arguments{
-\item{xterms, }{yterms character vector of model's independent variables or
+\item{xterms, yterms}{character vector of model's independent variables or
 variables combined to the dependent variable}
 
 \item{pcssterms}{character vector of variables with provided PCSS}

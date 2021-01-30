@@ -61,7 +61,7 @@ parse_sum <- function(response = character(), ...) {
 # }
 
 #' Check that independent and dependent variables are accounted for through PCSS
-#' @param xterms, yterms character vector of model's independent variables or
+#' @param xterms,yterms character vector of model's independent variables or
 #'   variables combined to the dependent variable
 #' @param pcssterms character vector of variables with provided PCSS
 #' @param pcsstype character describing the PCSS being checked. Either
