@@ -38,8 +38,8 @@ predictors <- list(
 )
 
 model_and(
-  y1 & y2 ~ g + x, means = means, covs = covs, n = n, predictors = predictors
+  y1 & y2 ~ g + x,
+  means = means, covs = covs, n = n, predictors = predictors
 )
 summary(lm(y1 & y2 ~ g + x + 1, data = ex_data))
-
 }

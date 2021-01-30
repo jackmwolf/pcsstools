@@ -33,7 +33,7 @@ to the order of the predictors in \code{means}.}
 
 \item{verbose}{should output be printed to console?}
 
-\item{response_assumption}{character. Either \code{"binary"} or 
+\item{response_assumption}{character. Either \code{"binary"} or
 \code{"continuous"}. If \code{"binary"}, specific calculations will be done
 to estimate product means and variances.}
 

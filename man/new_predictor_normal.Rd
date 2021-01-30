@@ -19,5 +19,4 @@ an object of class predictor.
 }
 \examples{
 new_predictor_normal(mean = 10, sd = 1)
-
 }

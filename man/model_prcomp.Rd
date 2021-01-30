@@ -10,7 +10,7 @@ model_prcomp(formula, comp = 1, n, means, covs, ...)
 \item{formula}{an object of class \code{formula} whose dependent variable is
 a series of variables joined by \code{+} operators. \code{model_prcomp}
 will treat a principal component score of those variables as the actual
-dependent variable. All model terms must be accounted for in \code{means} 
+dependent variable. All model terms must be accounted for in \code{means}
 and \code{covs}.}
 
 \item{comp}{integer indicating which principal component score to analyze.
@@ -26,8 +26,8 @@ responses.}
 \item{...}{additional arguments}
 }
 \description{
-\code{model_prcomp} calculates the linear model for the mth principal 
-  component score of a set of phenotypes as a function of a set of 
+\code{model_prcomp} calculates the linear model for the mth principal
+  component score of a set of phenotypes as a function of a set of
   predictors.
 }
 \examples{
@@ -35,23 +35,22 @@ ex_data <- cont_data[c("g", "x", "y1", "y2", "y3")]
 head(ex_data)
 means <- colMeans(ex_data)
 covs <- cov(ex_data)
-n <- nrow(ex_data)   
+n <- nrow(ex_data)
 
 model_prcomp(
-  y1 + y2 + y3 ~ g + x, comp = 1, n = n, means = means, covs = covs
+  y1 + y2 + y3 ~ g + x,
+  comp = 1, n = n, means = means, covs = covs
 )
-
-
 }
 \references{
-Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and 
-  Tintle, N.  (2020). Computationally efficient, exact, covariate-adjusted 
-  genetic principal component analysis by leveraging individual marker 
-  summary statistics from large biobanks. \emph{Pacific Symposium on 
+Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and
+  Tintle, N.  (2020). Computationally efficient, exact, covariate-adjusted
+  genetic principal component analysis by leveraging individual marker
+  summary statistics from large biobanks. \emph{Pacific Symposium on
   Biocomputing}, 25, 719-730.
 
-  Gasdaska A., Friend D., Chen R., Westra J., Zawistowski M., Lindsey W. and 
-  Tintle N. (2019) Leveraging summary statistics to make inferences about 
-  complex phenotypes in large biobanks. \emph{Pacific Symposium on 
+  Gasdaska A., Friend D., Chen R., Westra J., Zawistowski M., Lindsey W. and
+  Tintle N. (2019) Leveraging summary statistics to make inferences about
+  complex phenotypes in large biobanks. \emph{Pacific Symposium on
   Biocomputing}, 24, 391-402.
 }

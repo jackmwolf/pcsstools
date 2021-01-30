@@ -4,7 +4,7 @@
 \alias{extract_predictors}
 \title{Extract independent variables from a formula}
 \usage{
-extract_predictors(formula = formula(), all_vars = character())
+extract_predictors(formula = formula())
 }
 \arguments{
 \item{formula}{an object of class \code{formula}.}

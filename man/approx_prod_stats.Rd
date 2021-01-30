@@ -2,13 +2,13 @@
 % Please edit documentation in R/multiplication_estimation.R
 \name{approx_prod_stats}
 \alias{approx_prod_stats}
-\title{Approximate summary statistics for a product of phenotypes and a set of 
+\title{Approximate summary statistics for a product of phenotypes and a set of
   predictors}
 \usage{
 approx_prod_stats(means, covs, n, response, predictors)
 }
 \arguments{
-\item{means}{Vector of means of predictors and the two phenotypes to be 
+\item{means}{Vector of means of predictors and the two phenotypes to be
 multiplied}
 
 \item{covs}{Covariance matrix of all predictors and the two phenotypes}
@@ -24,6 +24,6 @@ A list with the predicted covariance matrix of all predictors and
   the product and the means of all predictors and the product.
 }
 \description{
-Approximate summary statistics for a product of phenotypes and a set of 
+Approximate summary statistics for a product of phenotypes and a set of
   predictors
 }

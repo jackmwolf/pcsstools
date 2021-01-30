@@ -17,5 +17,4 @@ an object of class predictor.
 }
 \examples{
 new_predictor_binary(p = 0.75)
-
 }

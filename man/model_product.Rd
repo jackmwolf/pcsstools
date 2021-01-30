@@ -10,7 +10,7 @@ model_product(
   means,
   covs,
   predictors,
-  responses,
+  responses = NULL,
   response = "continuous",
   ...
 )
@@ -29,12 +29,12 @@ responses.}
 
 \item{predictors}{named list of objects of class \code{predictor}}
 
-\item{responses}{named list of objects of class \code{predictor} 
-corresponding to all terms being multiplied in the response. Can be 
+\item{responses}{named list of objects of class \code{predictor}
+corresponding to all terms being multiplied in the response. Can be
 left \code{NULL} if only multiplying two terms}
 
 \item{response}{character. Describe distribution of all product terms.
-Either \code{"continuous"} or \code{"binary"}. If \code{"binary"} 
+Either \code{"continuous"} or \code{"binary"}. If \code{"binary"}
 different approximations of product means and variances are used.}
 
 \item{...}{additional arguments}
@@ -56,10 +56,10 @@ predictors <- list(
 responses <- lapply(means[3:length(means)], new_predictor_binary)
 
 model_product(
-  y1 * y2 * y3 ~ g + x, means = means, covs = covs, n = n, 
-  predictors = predictors, responses = responses
+  y1 * y2 * y3 ~ g + x,
+  means = means, covs = covs, n = n,
+  predictors = predictors, responses = responses, response = "binary"
 )
 
 summary(lm(y1 * y2 * y3 ~ g + x, data = ex_data))
-
 }
