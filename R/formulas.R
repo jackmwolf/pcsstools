@@ -105,3 +105,22 @@ check_terms <- function(xterms, yterms, pcssterms, pcsstype) {
   return(TRUE)
 }
 
+check_terms_combo <- function(xterms, yterms, means, covs) {
+  check_terms(xterms, yterms, names(means), "means")
+  check_terms(xterms, yterms, dimnames(covs)[[1]], "covs")
+  return(TRUE)
+}
+
+check_terms_product <- function(xterms, yterms, means, covs, 
+                                predictors, responses) {
+  check_terms(xterms, yterms, names(means), "means")
+  check_terms(xterms, yterms, dimnames(covs)[[1]], "covs")
+  check_terms(xterms, yterms, names(predictors), "predictors")
+  if (length(yterms) > 2) {
+    check_terms(xterms, yterms, names(responses), "responses")
+  }
+  
+  return(TRUE)
+}
+
+
