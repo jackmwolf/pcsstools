@@ -35,10 +35,11 @@ model_and <- function(formula, n, means, covs, predictors, ...) {
   cl <- match.call()
   terms <- terms(formula)
 
-  all_vars <- names(means)
-
-  xterms <- extract_predictors(formula, all_vars)
-  yterms <- parse_and(extract_response(formula), all_vars)
+  xterms <- extract_predictors(formula)
+  yterms <- parse_and(extract_response(formula))
+  
+  check_terms_logical(xterms$predictors, yterms, means, covs, predictors, ...)
+  
 
   # Re-arrange means, covs, and predictors to match given formula
   means0 <- means[c(xterms$predictors, yterms)]
@@ -91,10 +92,10 @@ model_or <- function(formula, n, means, covs, predictors, ...) {
   cl <- match.call()
   terms <- terms(formula)
 
-  all_vars <- names(means)
-
-  xterms <- extract_predictors(formula, all_vars)
-  yterms <- parse_or(extract_response(formula), all_vars)
+  xterms <- extract_predictors(formula)
+  yterms <- parse_or(extract_response(formula))
+  
+  check_terms_logical(xterms$predictors, yterms, means, covs, predictors, ...)
 
   # Re-arrange means, covs, and predictors to match given formula
   means0 <- means[c(xterms$predictors, yterms)]

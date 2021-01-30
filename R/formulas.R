@@ -2,15 +2,11 @@
 #' @param formula an object of class \code{formula}.
 #' @param all_vars character vector of possible terms
 #' @importFrom stats terms
-extract_predictors <- function(formula = formula(), all_vars = character()) {
+extract_predictors <- function(formula = formula()) {
   terms0 <- terms(formula)
 
   model_terms <- attributes(terms0)$term.labels
   add_intercept <- attributes(terms0)$intercept
-
-  if (any(!(model_terms %in% all_vars))) {
-    stop("Independent variable in formula without summary stats provided")
-  }
 
   re <- list(
     predictors = model_terms,
@@ -28,14 +24,10 @@ extract_response <- function(formula = formula()) {
   return(response)
 }
 
-parse_response <- function(response = character(), all_vars = character(), split = character()) {
+parse_response <- function(response = character(), split = character()) {
   terms0 <- strsplit(response, split = split)[[1]]
   # Trim white space at start and end
   terms0 <- sapply(terms0, trimws, simplify = T)
-
-  if (any(!(terms0 %in% all_vars))) {
-    stop("Dependent variable in formula without summary stats provided")
-  }
 
   return(terms0)
 }
@@ -79,7 +71,7 @@ parse_sum <- function(response = character(), ...) {
 #'    
 check_terms <- function(xterms, yterms, pcssterms, pcsstype) {
   
-  if (pcsstype %in% c("means", "covs", "predictors")) {
+  if (pcsstype %in% c("means", "covs")) {
     missing.x <- setdiff(xterms, pcssterms)
     missing.y <- setdiff(yterms, pcssterms)
     

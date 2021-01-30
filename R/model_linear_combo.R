@@ -45,10 +45,10 @@ model_prcomp <- function(formula, comp = 1, n, means, covs, ...) {
   cl <- match.call()
   terms <- terms(formula)
 
-  all_vars <- names(means)
-
-  xterms <- extract_predictors(formula, all_vars)
-  yterms <- parse_sum(extract_response(formula), all_vars)
+  xterms <- extract_predictors(formula)
+  yterms <- parse_sum(extract_response(formula))
+  
+  check_terms_combo(xterms$predictors, yterms, means, covs)
 
   # Re-arrange means, covs, and predictors to match given formula
   means0 <- means[c(xterms$predictors, yterms)]
@@ -118,11 +118,11 @@ model_combo <- function(formula, phi, n, means, covs, ...) {
   cl <- match.call()
   terms <- terms(formula)
 
-  all_vars <- names(means)
+  xterms <- extract_predictors(formula)
+  yterms <- parse_sum(extract_response(formula))
 
-  xterms <- extract_predictors(formula, all_vars)
-  yterms <- parse_sum(extract_response(formula), all_vars)
-
+  check_terms_combo(xterms$predictors, yterms, means, covs)
+  
   # Re-arrange means, covs, and predictors to match given formula
   means0 <- means[c(xterms$predictors, yterms)]
   covs0 <- covs[c(xterms$predictors, yterms), c(xterms$predictors, yterms)]

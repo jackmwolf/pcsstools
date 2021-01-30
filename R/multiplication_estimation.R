@@ -45,10 +45,10 @@ model_product <- function(formula, n, means, covs, predictors, responses = NULL,
   cl <- match.call()
   terms <- terms(formula)
 
-  all_vars <- names(means)
-
-  xterms <- extract_predictors(formula, all_vars)
-  yterms <- parse_product(extract_response(formula), all_vars)
+  xterms <- extract_predictors(formula)
+  yterms <- parse_product(extract_response(formula))
+  
+  check_terms_product(xterms$predictors, yterms, means, covs, predictors, responses)
 
   # Re-arrange means, covs, and predictors to match given formula
   means0 <- means[c(xterms$predictors, yterms)]
