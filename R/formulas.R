@@ -111,6 +111,16 @@ check_terms_combo <- function(xterms, yterms, means, covs) {
   return(TRUE)
 }
 
+check_terms_logical <- function(xterms, yterms, means, covs, 
+                                predictors) {
+  check_terms(xterms, yterms, names(means), "means")
+  check_terms(xterms, yterms, dimnames(covs)[[1]], "covs")
+  check_terms(xterms, yterms, names(predictors), "predictors")
+
+  return(TRUE)
+}
+
+
 check_terms_product <- function(xterms, yterms, means, covs, 
                                 predictors, responses) {
   check_terms(xterms, yterms, names(means), "means")
