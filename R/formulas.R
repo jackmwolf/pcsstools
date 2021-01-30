@@ -68,3 +68,40 @@ parse_sum <- function(response = character(), ...) {
 #   gsub("[{- }{y%}]", "-1 *", response)
 #   terms0 <- parse_sum(response)
 # }
+
+#' Check that independent and dependent variables are accounted for through PCSS
+#' @param xterms, yterms character vector of model's independent variables or
+#'   variables combined to the dependent variable
+#' @param pcssterms character vector of variables with provided PCSS
+#' @param pcsstype character describing the PCSS being checked. Either
+#'   \code{"means"}, \code{"covs"}, \code{"predictors"}, or
+#'   \code{"responses"}.
+#'    
+check_terms <- function(xterms, yterms, pcssterms, pcsstype) {
+  
+  if (pcsstype %in% c("means", "covs", "predictors")) {
+    missing.x <- setdiff(xterms, pcssterms)
+    missing.y <- setdiff(yterms, pcssterms)
+    
+  } else if (pcsstype %in% c("predictors")) {
+    missing.x <- setdiff(xterms, pcssterms)
+    missing.y <- character(0)
+    
+  } else if (pcsstype %in% c("responses")) {
+    missing.x <- character(0)
+    missing.y <- setdiff(yterms, pcssterms)
+    
+  }
+  
+  if (length(missing.x) != 0) {
+    stop(paste0("Independent variable(s) not listed in `", pcsstype, "`: ", 
+                paste(missing.x, collapse = ", ")))
+  }
+  if (length(missing.y) != 0) {
+    stop(paste0("Dependent variable(s) not listed in `", pcsstype, "`: ", 
+                paste(missing.y, collapse = ", ")))
+  }
+  
+  return(TRUE)
+}
+
