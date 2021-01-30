@@ -1,6 +1,5 @@
 #' Extract independent variables from a formula
 #' @param formula an object of class \code{formula}.
-#' @param all_vars character vector of possible terms
 #' @importFrom stats terms
 extract_predictors <- function(formula = formula()) {
   terms0 <- terms(formula)

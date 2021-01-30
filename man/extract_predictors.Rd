@@ -8,8 +8,6 @@ extract_predictors(formula = formula())
 }
 \arguments{
 \item{formula}{an object of class \code{formula}.}
-
-\item{all_vars}{character vector of possible terms}
 }
 \description{
 Extract independent variables from a formula
