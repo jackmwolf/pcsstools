@@ -4,7 +4,15 @@
 \alias{calculate_lm}
 \title{Calculate a linear model}
 \usage{
-calculate_lm(means, covs, n, add_intercept = FALSE, cl = NULL, terms = NULL)
+calculate_lm(
+  means,
+  covs,
+  n,
+  add_intercept = FALSE,
+  keep_pcss = FALSE,
+  cl = NULL,
+  terms = NULL
+)
 }
 \arguments{
 \item{means}{a vector of means of all model predictors and the response with
@@ -17,6 +25,9 @@ response with the order of rows/columns corresponding to the order of
 \item{n}{sample size}
 
 \item{add_intercept}{logical. If \code{TRUE} adds an intercept to the model.}
+
+\item{keep_pcss}{logical. If \code{TRUE}, returns \code{means} and 
+\code{covs}.}
 
 \item{cl}{call}
 

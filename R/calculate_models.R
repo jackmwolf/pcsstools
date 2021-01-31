@@ -11,6 +11,8 @@
 #'   \code{means}.
 #' @param n sample size
 #' @param add_intercept logical. If \code{TRUE} adds an intercept to the model.
+#' @param keep_pcss logical. If \code{TRUE}, returns \code{means} and 
+#'   \code{covs}.
 #' @param cl call
 #' @param terms terms
 #'
@@ -27,7 +29,8 @@
 #'   complex phenotypes in large biobanks. \emph{Pacific Symposium on
 #'   Biocomputing}, 24, 391-402.
 #'
-calculate_lm <- function(means, covs, n, add_intercept = FALSE, cl = NULL, terms = NULL) {
+calculate_lm <- function(means, covs, n, add_intercept = FALSE, 
+                         keep_pcss = FALSE, cl = NULL, terms = NULL) {
   p <- ncol(covs) - 1
   if (add_intercept) {
     p <- p + 1
@@ -95,6 +98,11 @@ calculate_lm <- function(means, covs, n, add_intercept = FALSE, cl = NULL, terms
     cov.unscaled = cov.unscaled,
     `Sum Sq` = SS
   )
+  
+  if (keep_pcss) {
+    re$means <- means
+    re$covs <- covs
+  }
   
   class(re) <- "pcsslm"
 
