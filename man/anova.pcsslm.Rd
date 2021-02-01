@@ -12,8 +12,8 @@
 \arguments{
 \item{object, ...}{objects of class \code{pcsslm}.}
 
-\item{scale}{numeric. An estimate of the noise variance σ^2. If zero this 
-will be estimated from the largest model considered.}
+\item{scale}{numeric. An estimate of the noise variance \eqn{\sigma^2}. If 
+zero this will be estimated from the largest model considered.}
 
 \item{test}{a character string specifying the test statistic to be used. Can 
 be one of \code{"F"}, \code{"Chisq"} or \code{"Cp"}, with partial matching 
