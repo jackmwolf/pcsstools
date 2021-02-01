@@ -177,6 +177,9 @@ calculate_lm_combo <- function(means, covs, n, phi, m = length(phi), add_interce
 
   means0 <- c(means[1:p], new_mean)
   covs0 <- rbind(cbind(covs[1:p, 1:p], new_covs), c(t(new_covs), new_var))
+  
+  colnames(covs0) <- c(names(means)[1:p], NA)
+  rownames(covs0) <- c(names(means)[1:p], NA)
 
   calculate_lm(means = means0, covs = covs0, n = n, add_intercept = add_intercept, ...)
 }
