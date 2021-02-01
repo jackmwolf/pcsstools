@@ -345,10 +345,12 @@ approx_prod_stats <- function(means, covs, n, response, predictors) {
   )
 
   # Put names on
-  prod_name <- paste(names(means)[n_preds + 1:2], collapse = "")
+  prod_name <- paste(names(means)[n_preds + 1:2], collapse = ":")
   names(means_out)[n_preds + 1] <- prod_name
   colnames(cov_out)[n_preds + 1] <- prod_name
   rownames(cov_out)[n_preds + 1] <- prod_name
+  colnames(cov_out)[1:n_preds] <- names(means)[1:n_preds]
+  rownames(cov_out)[1:n_preds] <- names(means)[1:n_preds]
 
   return(list(means = means_out, covs = cov_out))
 }
