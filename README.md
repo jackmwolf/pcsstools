@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.com/jackmwolf/grass.svg?branch=master)](https://travis-ci.com/jackmwolf/grass)
+status](https://travis-ci.com/jackmwolf/pcsstools.svg?branch=master)](https://travis-ci.com/jackmwolf/pcsstools)
 <!-- badges: end -->
 
 `pcsstools` is an in-development R package to describe various
