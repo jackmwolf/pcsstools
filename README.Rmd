@@ -66,20 +66,19 @@ head(dat)
 First, we need our assumed summary statistics: means, the full covariance matrix, and our sample size.
 
 ```{r}
-means <- colMeans(dat)
-covs  <- cov(dat)
-n     <- nrow(dat)
+pcss <- list(
+  means = colMeans(dat),
+  covs  = cov(dat),
+  n     = nrow(dat)
+)
 ```
 
-Then, we can calculate the linear model by using `model_prcomp()`.
+Then, we can calculate the linear model by using `pcsslm()`.
 Our `formula` will list all phenotypes as one sum, joined together by `+` opperators and we indicate that we want the first principal component score by setting `comp = 1`.
 
 ```{r}
-model_pcss <- model_prcomp(
-  y1 + y2 + y3 ~ g + x, comp = 1, n = n, means = means, covs = covs
-  )
+model_pcss <- pcsslm(y1 + y2 + y3 ~ g + x, pcss = pcss, comp = 1)
 model_pcss
-
 ```
 
 Here's the same model using individual patient data. 
@@ -106,29 +105,29 @@ head(dat)
 ```
 
 Once again we will organized our assumed PCSS.
-
-```{r}
-means <- colMeans(dat)
-covs  <- cov(dat)
-n     <- nrow(dat)
-```
-
-We also need to describe the distributions of both of our predictors through objects of class `predictor`. 
+In addition to the summary statistics we needed for the previous example, we also need to describe the distributions of both of our predictors through objects of class `predictor`. 
 (See `?new_predictor`.)
 grass has shortcut functions to create `predictor` objects for common types of variables, which we will use to create a list of `predictor`s.
 
 ```{r}
-predictors <- list(
-  g = new_predictor_snp(maf = means["g"] / 2),
-  x = new_predictor_normal(mean = means["x"], sd = sqrt(covs["x", "x"]))
+pcss <- list(
+ means = colMeans(dat),
+ covs = cov(dat),
+ n = nrow(dat),
+ predictors = list(
+   g = new_predictor_snp(maf = mean(dat$g) / 2),
+   x = new_predictor_normal(mean = mean(dat$x), sd = sd(dat$x))
+ )
 )
-class(predictors[[1]])
+
+class(pcss$predictors[[1]])
 ```
 
-Then we can approximate the linear model using `model_or()`.
+Then we can approximate the linear model using `pcsslm()`.
 
 ```{r}
-model_or(y1 | y2 ~ g + x, n = n, means = means, covs = covs, predictors = predictors)
+model_pcss <- pcsslm(y1 | y2 ~ g + x, pcss = pcss) 
+model_pcss
 ```
 
 And here's the result we would get using IPD:
@@ -139,6 +138,10 @@ summary(model_ipd)
 ```
 
 ## Future Work
+
+* Add arguments to center and standardize responses in  `model_prcomp()`. 
+
+* Write a `model_singular()` function to modify a lone variable. (Mainly useful for covariate adjustment.)
 
 * Support function notation for linear combinations of phenotypes (e.g. `y1 - y2 + 0.5 * y3 ~ 1 + g + x`)  instead of requiring a seperate vector of weights
 

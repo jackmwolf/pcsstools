@@ -74,24 +74,23 @@ First, we’ll load in some data. We have a SNP’s minor allele counts
 First, we need our assumed summary statistics: means, the full
 covariance matrix, and our sample size.
 
-    means <- colMeans(dat)
-    covs  <- cov(dat)
-    n     <- nrow(dat)
+    pcss <- list(
+      means = colMeans(dat),
+      covs  = cov(dat),
+      n     = nrow(dat)
+    )
 
-Then, we can calculate the linear model by using `model_prcomp()`. Our
+Then, we can calculate the linear model by using `pcsslm()`. Our
 `formula` will list all phenotypes as one sum, joined together by `+`
 opperators and we indicate that we want the first principal component
 score by setting `comp = 1`.
 
-    model_pcss <- model_prcomp(
-      y1 + y2 + y3 ~ g + x, comp = 1, n = n, means = means, covs = covs
-      )
+    model_pcss <- pcsslm(y1 + y2 + y3 ~ g + x, pcss = pcss, comp = 1)
     model_pcss
     #> Model approximated using Pre-Computed Summary Statistics.
     #> 
     #> Call:
-    #> model_prcomp(formula = y1 + y2 + y3 ~ g + x, comp = 1, n = n, 
-    #>     means = means, covs = covs)
+    #> pcsslm(formula = y1 + y2 + y3 ~ g + x, pcss = pcss, comp = 1)
     #> 
     #> Coefficients:
     #>             Estimate Std. Error t value Pr(>|t|)    
@@ -154,32 +153,34 @@ First we need data with binary phenotypes.
     #> 5 0  0.4686342  0  1
     #> 6 2  0.4620154  0  1
 
-Once again we will organized our assumed PCSS.
+Once again we will organized our assumed PCSS. In addition to the
+summary statistics we needed for the previous example, we also need to
+describe the distributions of both of our predictors through objects of
+class `predictor`. (See `?new_predictor`.) grass has shortcut functions
+to create `predictor` objects for common types of variables, which we
+will use to create a list of `predictor`s.
 
-    means <- colMeans(dat)
-    covs  <- cov(dat)
-    n     <- nrow(dat)
-
-We also need to describe the distributions of both of our predictors
-through objects of class `predictor`. (See `?new_predictor`.) grass has
-shortcut functions to create `predictor` objects for common types of
-variables, which we will use to create a list of `predictor`s.
-
-    predictors <- list(
-      g = new_predictor_snp(maf = means["g"] / 2),
-      x = new_predictor_normal(mean = means["x"], sd = sqrt(covs["x", "x"]))
+    pcss <- list(
+     means = colMeans(dat),
+     covs = cov(dat),
+     n = nrow(dat),
+     predictors = list(
+       g = new_predictor_snp(maf = mean(dat$g) / 2),
+       x = new_predictor_normal(mean = mean(dat$x), sd = sd(dat$x))
+     )
     )
-    class(predictors[[1]])
+
+    class(pcss$predictors[[1]])
     #> [1] "predictor"
 
-Then we can approximate the linear model using `model_or()`.
+Then we can approximate the linear model using `pcsslm()`.
 
-    model_or(y1 | y2 ~ g + x, n = n, means = means, covs = covs, predictors = predictors)
+    model_pcss <- pcsslm(y1 | y2 ~ g + x, pcss = pcss) 
+    model_pcss
     #> Model approximated using Pre-Computed Summary Statistics.
     #> 
     #> Call:
-    #> model_or(formula = y1 | y2 ~ g + x, n = n, means = means, covs = covs, 
-    #>     predictors = predictors)
+    #> pcsslm(formula = y1 | y2 ~ g + x, pcss = pcss)
     #> 
     #> Coefficients:
     #>             Estimate Std. Error t value Pr(>|t|)    
@@ -218,6 +219,12 @@ And here’s the result we would get using IPD:
     #> F-statistic:  97.5 on 2 and 997 DF,  p-value: < 2.2e-16
 
 ## Future Work
+
+-   Add arguments to center and standardize responses in
+    `model_prcomp()`.
+
+-   Write a `model_singular()` function to modify a lone variable.
+    (Mainly useful for covariate adjustment.)
 
 -   Support function notation for linear combinations of phenotypes
     (e.g. `y1 - y2 + 0.5 * y3 ~ 1 + g + x`) instead of requiring a
