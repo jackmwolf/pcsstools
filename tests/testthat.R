@@ -1,4 +1,4 @@
 library(testthat)
-library(grass)
+library(pcsstools)
 
-test_check("grass")
+test_check("pcsstools")
