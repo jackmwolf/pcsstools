@@ -42,7 +42,7 @@ You can install the in-development version of `pcsstools` from
 [GitHub](https://github.com/) with:
 
     # install.packages("devtools")
-    devtools::install_github("jackmwolf/grass")
+    devtools::install_github("jackmwolf/pcsstools")
 
 ## Examples
 
