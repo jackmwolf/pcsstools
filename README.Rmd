@@ -12,21 +12,21 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
-# grass
+# pcsstools
 
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.com/jackmwolf/grass.svg?branch=master)](https://travis-ci.com/jackmwolf/grass)
 <!-- badges: end -->
 
-`grass` (Genetic Regression Approximation through Summary Statistics) is an in-development R package to describe various regression models using only pre-computed summary statistics (PCSS) from genome-wide association studies (GWASs) and PCSS repositories such as [GeneAtlas](http://geneatlas.roslin.ed.ac.uk/).
+`pcsstools`  is an in-development R package to describe various regression models using only pre-computed summary statistics (PCSS) from genome-wide association studies (GWASs) and PCSS repositories such as [GeneAtlas](http://geneatlas.roslin.ed.ac.uk/).
 This eliminates the logistic, privacy, and access concerns that accompany the use of individual patient-level data (IPD).
 
 
-The following figure highlights the information typically needed to perform regression analysis on a set of $m$ phenotypes with $p$ covariates when IPD is available, and the PCSS that are commonly needed to approximate this same model in `grass`.
+The following figure highlights the information typically needed to perform regression analysis on a set of $m$ phenotypes with $p$ covariates when IPD is available, and the PCSS that are commonly needed to approximate this same model in `pcsstools`.
 
 ![Data needed for analysis using IPD compared to that when using PCSS](./man/figures/IPDvsPCSS.png)
 
-Currently, `grass` supports the linear modeling of complex phenotypes defined via functions of other phenotypes.
+Currently, `pcsstools` supports the linear modeling of complex phenotypes defined via functions of other phenotypes.
 Supported functions include:
 
 * linear combinations (e.g. $\phi_1y_1 + \phi_2y_2$)
@@ -35,9 +35,9 @@ Supported functions include:
 
 ## Installation
 
-grass is not currently available on CRAN.
+`pcsstools` is not currently available on CRAN.
 
-You can install the in-development version of grass from [GitHub](https://github.com/) with:
+You can install the in-development version of `pcsstools` from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -45,10 +45,10 @@ devtools::install_github("jackmwolf/grass")
 ```
 ## Examples
 
-We will walk through two examples using grass to model combinations of phenotypes using PCSS and then compare our results to those found using IPD.
+We will walk through two examples using `pcsstools` to model combinations of phenotypes using PCSS and then compare our results to those found using IPD.
 
 ```{r}
-library(grass)
+library(pcsstools)
 ```
 
 
@@ -59,7 +59,7 @@ Let's model the first principal component score of three phenotypes using PCSS.
 First, we'll load in some data. We have a SNP's minor allele counts (`g`), a continuous covariate (`x`), and three continuous phenotypes (`y1`, `y2`, and `y3`).
 
 ```{r}
-dat <- grass::cont_data[c("g", "x", "y1", "y2", "y3")]
+dat <- pcsstools::cont_data[c("g", "x", "y1", "y2", "y3")]
 head(dat)
 ```
 
@@ -100,14 +100,14 @@ In this example we will approximate a linear model where our response is the log
 First we need data with binary phenotypes.
 
 ```{r}
-dat <- grass::bin_data[c("g", "x", "y1", "y2")]
+dat <- pcsstools::bin_data[c("g", "x", "y1", "y2")]
 head(dat)
 ```
 
 Once again we will organized our assumed PCSS.
 In addition to the summary statistics we needed for the previous example, we also need to describe the distributions of both of our predictors through objects of class `predictor`. 
 (See `?new_predictor`.)
-grass has shortcut functions to create `predictor` objects for common types of variables, which we will use to create a list of `predictor`s.
+`pcsstools` has shortcut functions to create `predictor` objects for common types of variables, which we will use to create a list of `predictor`s.
 
 ```{r}
 pcss <- list(

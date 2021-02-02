@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# grass
+# pcsstools
 
 <!-- badges: start -->
 
@@ -9,10 +9,9 @@
 status](https://travis-ci.com/jackmwolf/grass.svg?branch=master)](https://travis-ci.com/jackmwolf/grass)
 <!-- badges: end -->
 
-`grass` (Genetic Regression Approximation through Summary Statistics) is
-an in-development R package to describe various regression models using
-only pre-computed summary statistics (PCSS) from genome-wide association
-studies (GWASs) and PCSS repositories such as
+`pcsstools` is an in-development R package to describe various
+regression models using only pre-computed summary statistics (PCSS) from
+genome-wide association studies (GWASs) and PCSS repositories such as
 [GeneAtlas](http://geneatlas.roslin.ed.ac.uk/). This eliminates the
 logistic, privacy, and access concerns that accompany the use of
 individual patient-level data (IPD).
@@ -20,13 +19,14 @@ individual patient-level data (IPD).
 The following figure highlights the information typically needed to
 perform regression analysis on a set of *m* phenotypes with *p*
 covariates when IPD is available, and the PCSS that are commonly needed
-to approximate this same model in `grass`.
+to approximate this same model in `pcsstools`.
 
 ![Data needed for analysis using IPD compared to that when using
 PCSS](./man/figures/IPDvsPCSS.png)
 
-Currently, `grass` supports the linear modeling of complex phenotypes
-defined via functions of other phenotypes. Supported functions include:
+Currently, `pcsstools` supports the linear modeling of complex
+phenotypes defined via functions of other phenotypes. Supported
+functions include:
 
 -   linear combinations
     (e.g. *ϕ*<sub>1</sub>*y*<sub>1</sub> + *ϕ*<sub>2</sub>*y*<sub>2</sub>)
@@ -36,9 +36,9 @@ defined via functions of other phenotypes. Supported functions include:
 
 ## Installation
 
-grass is not currently available on CRAN.
+`pcsstools` is not currently available on CRAN.
 
-You can install the in-development version of grass from
+You can install the in-development version of `pcsstools` from
 [GitHub](https://github.com/) with:
 
     # install.packages("devtools")
@@ -46,11 +46,11 @@ You can install the in-development version of grass from
 
 ## Examples
 
-We will walk through two examples using grass to model combinations of
-phenotypes using PCSS and then compare our results to those found using
-IPD.
+We will walk through two examples using `pcsstools` to model
+combinations of phenotypes using PCSS and then compare our results to
+those found using IPD.
 
-    library(grass)
+    library(pcsstools)
 
 ### Principal Component Analysis
 
@@ -61,7 +61,7 @@ First, we’ll load in some data. We have a SNP’s minor allele counts
 (`g`), a continuous covariate (`x`), and three continuous phenotypes
 (`y1`, `y2`, and `y3`).
 
-    dat <- grass::cont_data[c("g", "x", "y1", "y2", "y3")]
+    dat <- pcsstools::cont_data[c("g", "x", "y1", "y2", "y3")]
     head(dat)
     #>   g           x        y1         y2         y3
     #> 1 0  0.08613585  1.248199 -2.4208709  0.8490036
@@ -143,7 +143,7 @@ the logical combination “*y*<sub>1</sub> or *y*<sub>1</sub>”
 
 First we need data with binary phenotypes.
 
-    dat <- grass::bin_data[c("g", "x", "y1", "y2")]
+    dat <- pcsstools::bin_data[c("g", "x", "y1", "y2")]
     head(dat)
     #>   g          x y1 y2
     #> 1 0 -0.9161478  1  0
@@ -156,9 +156,9 @@ First we need data with binary phenotypes.
 Once again we will organized our assumed PCSS. In addition to the
 summary statistics we needed for the previous example, we also need to
 describe the distributions of both of our predictors through objects of
-class `predictor`. (See `?new_predictor`.) grass has shortcut functions
-to create `predictor` objects for common types of variables, which we
-will use to create a list of `predictor`s.
+class `predictor`. (See `?new_predictor`.) `pcsstools` has shortcut
+functions to create `predictor` objects for common types of variables,
+which we will use to create a list of `predictor`s.
 
     pcss <- list(
      means = colMeans(dat),
