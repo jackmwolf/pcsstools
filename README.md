@@ -9,8 +9,10 @@
 status](https://travis-ci.com/jackmwolf/pcsstools.svg?branch=master)](https://travis-ci.com/jackmwolf/pcsstools)
 <!-- badges: end -->
 
-`pcsstools` is an in-development R package to describe various
-regression models using only pre-computed summary statistics (PCSS) from
+## Overview
+
+pcsstools is an in-development R package to describe various regression
+models using only pre-computed summary statistics (PCSS) from
 genome-wide association studies (GWASs) and PCSS repositories such as
 [GeneAtlas](http://geneatlas.roslin.ed.ac.uk/). This eliminates the
 logistic, privacy, and access concerns that accompany the use of
@@ -19,14 +21,13 @@ individual patient-level data (IPD).
 The following figure highlights the information typically needed to
 perform regression analysis on a set of *m* phenotypes with *p*
 covariates when IPD is available, and the PCSS that are commonly needed
-to approximate this same model in `pcsstools`.
+to approximate this same model in pcsstools.
 
 ![Data needed for analysis using IPD compared to that when using
 PCSS](./man/figures/IPDvsPCSS.png)
 
-Currently, `pcsstools` supports the linear modeling of complex
-phenotypes defined via functions of other phenotypes. Supported
-functions include:
+Currently, pcsstools supports the linear modeling of complex phenotypes
+defined via functions of other phenotypes. Supported functions include:
 
 -   linear combinations
     (e.g. *ϕ*<sub>1</sub>*y*<sub>1</sub> + *ϕ*<sub>2</sub>*y*<sub>2</sub>)
@@ -36,9 +37,9 @@ functions include:
 
 ## Installation
 
-`pcsstools` is not currently available on CRAN.
+pcsstools is not currently available on CRAN.
 
-You can install the in-development version of `pcsstools` from
+You can install the in-development version of pcsstools from
 [GitHub](https://github.com/) with:
 
     # install.packages("devtools")
@@ -46,9 +47,9 @@ You can install the in-development version of `pcsstools` from
 
 ## Examples
 
-We will walk through two examples using `pcsstools` to model
-combinations of phenotypes using PCSS and then compare our results to
-those found using IPD.
+We will walk through two examples using pcsstools to model combinations
+of phenotypes using PCSS and then compare our results to those found
+using IPD.
 
     library(pcsstools)
 
