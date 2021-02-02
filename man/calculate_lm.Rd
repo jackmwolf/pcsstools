@@ -2,7 +2,7 @@
 % Please edit documentation in R/calculate_models.R
 \name{calculate_lm}
 \alias{calculate_lm}
-\title{Calculate a linear model}
+\title{Calculate a linear model using PCSS}
 \usage{
 calculate_lm(
   means,
@@ -10,7 +10,6 @@ calculate_lm(
   n,
   add_intercept = FALSE,
   keep_pcss = FALSE,
-  cl = NULL,
   terms = NULL
 )
 }
@@ -28,8 +27,6 @@ response with the order of rows/columns corresponding to the order of
 
 \item{keep_pcss}{logical. If \code{TRUE}, returns \code{means} and 
 \code{covs}.}
-
-\item{cl}{call}
 
 \item{terms}{terms}
 }

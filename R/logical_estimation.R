@@ -47,12 +47,14 @@ model_and <- function(formula, n, means, covs, predictors, ...) {
   predictors0 <- predictors[xterms$predictors]
   add_intercept <- xterms$add_intercept
 
-  model <- approx_and(
+  re <- approx_and(
     means = means0, covs = covs0, n = n, predictors = predictors0,
-    add_intercept = add_intercept, cl = cl, terms = terms
+    add_intercept = add_intercept, terms = terms
   )
+  re$call <- cl
+  class(re) <- "pcsslm"
 
-  return(model)
+  return(re)
 }
 
 #' Approximate a linear model for a series of logical OR statements using PCSS
@@ -103,13 +105,15 @@ model_or <- function(formula, n, means, covs, predictors, ...) {
   predictors0 <- predictors[xterms$predictors]
   add_intercept <- xterms$add_intercept
 
-  model <- approx_or(
+  re <- approx_or(
     means = means0, covs = covs0, n = n, predictors = predictors0,
     add_intercept = add_intercept,
-    cl = cl, terms = terms, ...
+    terms = terms, ...
   )
+  re$call <- cl
+  class(re) <- "pcsslm"
 
-  return(model)
+  return(re)
 }
 
 

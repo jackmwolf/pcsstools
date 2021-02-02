@@ -59,12 +59,14 @@ model_prcomp <- function(formula, comp = 1, n, means, covs, ...) {
   ysigma <- covs0[yterms, yterms]
   phi <- eigen(ysigma)$vectors[, comp]
 
-  model <- calculate_lm_combo(
+  re <- calculate_lm_combo(
     means = means0, covs = covs0, n = n, phi = phi, add_intercept = add_intercept,
-    cl = cl, terms = terms, ...
+    terms = terms, ...
   )
+  re$call <- cl
+  class(re) <- "pcsslm"
 
-  return(model)
+  return(re)
 }
 
 
@@ -115,6 +117,7 @@ model_prcomp <- function(formula, comp = 1, n, means, covs, ...) {
 #' summary(lm(y1 - y2 + 0.5 * y3 ~ g + x, data = ex_data))
 #' @export
 model_combo <- function(formula, phi, n, means, covs, ...) {
+  
   cl <- match.call()
   terms <- terms(formula)
 
@@ -130,12 +133,14 @@ model_combo <- function(formula, phi, n, means, covs, ...) {
 
   phi0 <- phi[yterms]
 
-  model <- calculate_lm_combo(
-    means = means0, covs = covs0, n = n, phi = phi, add_intercept = add_intercept,
-    cl = cl, terms = terms, ...
+  re <- calculate_lm_combo(
+    means = means0, covs = covs0, n = n, phi = phi, add_intercept = add_intercept, 
+    terms = terms, ...
   )
+  re$call <- cl
+  class(re) <- "pcsslm"
 
-  return(model)
+  return(re)
 }
 
 #' Calculate a linear model for a linear combination of responses

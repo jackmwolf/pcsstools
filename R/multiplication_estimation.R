@@ -63,12 +63,14 @@ model_product <- function(formula, n, means, covs, predictors, responses = NULL,
   )
 
 
-  model <- calculate_lm(
+  re <- calculate_lm(
     means = approx0$means, covs = approx0$covs, add_intercept = add_intercept,
-    n = n, cl = cl, terms = terms
+    n = n, terms = terms
   )
+  re$call <- cl
+  class(re) <- "pcsslm"
 
-  return(model)
+  return(re)
 }
 
 

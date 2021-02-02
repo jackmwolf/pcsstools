@@ -23,6 +23,36 @@ extract_response <- function(formula = formula()) {
   return(response)
 }
 
+#' Guess the function that is applied to a set of responses
+#'
+#' \code{guess_response} takes a character vector of the dependent variable
+#' from a \code{formula} object and identifies which function separates the
+#' individual variables that make up the response. It then returns the
+#' \code{model_} function to model the appropriate response using PCSS.
+#' 
+#' @param response character. Output of \code{extract_response}.
+guess_response <- function(response = character()) {
+  
+  seps <- c("\\+", "\\*", "\\|", "\\&")
+  names(seps) <- c("model_combo", "model_product", "model_or", "model_and")
+  
+  
+  response_types <- sapply(seps, function(.x) grepl(.x, response))
+  response_type <- names(response_types[response_types])
+  
+  if (length(response_type) > 1) {
+    stop("Multiple response functions detected")
+  } else if (length(response_type) == 0) {
+    # No seperator detected. Assume response is one variable of its own
+    func <- "model_singular"
+  } else {
+    func <- response_type
+  }
+  
+  return(func)
+
+}
+
 parse_response <- function(response = character(), split = character()) {
   terms0 <- strsplit(response, split = split)[[1]]
   # Trim white space at start and end
