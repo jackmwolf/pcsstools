@@ -1,6 +1,6 @@
 Package: pcsstools
 Type: Package
-Title: Tools for regression models using pre-computed summary statistics
+Title: Tools for regression using pre-computed summary statistics
 Version: 0.0.0.9000
 Authors@R: c(
     person("Jack", "Wolf", email = "WolfX681@umn.edu", role = c("aut", "cre", "cph")),
