@@ -224,9 +224,6 @@ And here’s the result we would get using IPD:
 -   Add arguments to center and standardize responses in
     `model_prcomp()`.
 
--   Write a `model_singular()` function to modify a lone variable.
-    (Mainly useful for covariate adjustment.)
-
 -   Support function notation for linear combinations of phenotypes
     (e.g. `y1 - y2 + 0.5 * y3 ~ 1 + g + x`) instead of requiring a
     seperate vector of weights
