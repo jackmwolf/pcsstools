@@ -115,10 +115,10 @@ approx_mult_prod <- function(means, covs, n, response, predictors, responses, ve
         resp_names <- names(means0)[(p + 1):(p + m)]
         if (any(is.null(resp_names)) | "" %in% resp_names) {
           order_chr <- paste(rev(order0), collapse = " * ")
-          cat(paste("Approximating with response columns order: "), order_chr, "\n")
+          message(paste("Approximating with response columns order: "), order_chr, "\n")
         } else {
           y_names <- paste(rev(resp_names), collapse = " * ")
-          cat(paste("Approximating with responses ordered as: ", y_names, "\n"))
+          message(paste("Approximating with responses ordered as: ", y_names, "\n"))
         }
       }
 
