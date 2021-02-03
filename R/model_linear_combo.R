@@ -143,6 +143,67 @@ model_combo <- function(formula, phi, n, means, covs, ...) {
   return(re)
 }
 
+
+#' Model an individual phenotype using PCSS
+#'
+#' \code{model_singular} calculates the linear model for a singular
+#'   phenotype as a function of a set of predictors.
+#'
+#' @param formula an object of class \code{formula} whose dependent variable is
+#'   only variable. All model terms must be accounted for in \code{means}
+#'   and \code{covs}.
+#' @param n sample size.
+#' @param means named vector of predictor and response means.
+#' @param covs named matrix of the covariance of all model predictors and the
+#'   responses.
+#' @param ... additional arguments
+#'
+#' @references Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and
+#'   Tintle, N.  (2020). Computationally efficient, exact, covariate-adjusted
+#'   genetic principal component analysis by leveraging individual marker
+#'   summary statistics from large biobanks. \emph{Pacific Symposium on
+#'   Biocomputing}, 25, 719-730.
+#'
+#' @export
+#' 
+#' @examples 
+#' ex_data <- cont_data[c("g", "x", "y1")]
+#' means <- colMeans(ex_data)
+#' covs <- cov(ex_data)
+#' n <- nrow(ex_data)
+#'
+#' model_singular(
+#'   y1 ~ g + x,
+#'   n = n, means = means, covs = covs
+#' )
+#' summary(lm(y1 ~ g + x, data = ex_data))
+model_singular <- function(formula, n, means, covs, ...) {
+  cl <- match.call()
+  terms <- terms(formula)
+  
+  xterms <- extract_predictors(formula)
+  yterms <- parse_sum(extract_response(formula))
+  
+  check_terms_combo(xterms$predictors, yterms, means, covs)
+  
+  # Re-arrange means, covs, and predictors to match given formula
+  means0 <- means[c(xterms$predictors, yterms)]
+  covs0 <- covs[c(xterms$predictors, yterms), c(xterms$predictors, yterms)]
+  add_intercept <- xterms$add_intercept
+  
+  re <- calculate_lm(
+    means = means0, covs = covs0, n = n, add_intercept = add_intercept, 
+    terms = terms, ...
+  )
+  re$call <- cl
+  class(re) <- "pcsslm"
+  
+  return(re)
+}
+
+
+
+
 #' Calculate a linear model for a linear combination of responses
 #'
 #' \code{calculate_lm_combo} describes the linear model for a linear combination
