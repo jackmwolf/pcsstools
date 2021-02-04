@@ -1,11 +1,17 @@
 Package: pcsstools
 Type: Package
-Title: Tools for regression using pre-computed summary statistics
+Title: Tools for Regression Using Pre-Computed Summary Statistics
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Jack", "Wolf", email = "WolfX681@umn.edu", role = c("aut", "cre", "cph")),
-    person("R Core Team and contributors worldwide", role = c("cph", "aut"), 
-           comment = "Author and copyright holder of modified stats fragments")
+    person(
+      "Jack", "Wolf", email = "WolfX681@umn.edu", 
+      role = c("aut", "cre", "cph"),
+      comment = c(ORCID = "0000-0002-8919-8740")
+      ),
+    person(
+      "R Core Team and contributors worldwide", role = c("cph", "aut"), 
+      comment = "Author and copyright holder of modified 'stats' fragments"
+      )
   )
 Description: Defines functions to describe regression models using only
     pre-computed summary statistics (i.e. means, variances, and covariances).
