@@ -44,7 +44,6 @@ an object of class \code{"pcsslm"}.
 
   An object of class \code{"pcsslm"} is a list containing at least the 
   following components:
-  \describe{
     \item{call}{the matched call}
     \item{terms}{the \code{terms} object used}
     \item{coefficients}{a \eqn{p x 4} matrix with columns for the 
@@ -65,7 +64,6 @@ an object of class \code{"pcsslm"}.
       \eqn{coef[j], j=1,...p}.}
     \item{Sum Sq}{a 3-vector with the model's Sum of Squares Regression 
       (SSR), Sum of Squares Error (SSE), and Sum of Squares Total (SST).}
-  }
 }
 \description{
 \code{model_product} approximates the linear model for the product
