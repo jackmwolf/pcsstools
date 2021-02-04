@@ -9,7 +9,7 @@
 #' @param support if \code{predictor_type == "discrete"} vector of the support of
 #'   the pmf for \code{f}.
 #'
-#' @return an object of class predictor.
+#' @return an object of class \code{"predictor"}.
 #' @examples
 #' new_predictor(
 #'   f = function(x0) dnorm(x0, mean = 0, sd = 1),
@@ -55,7 +55,7 @@ validate_predictor <- function(x) {
 #' @param mean predictor mean (double).
 #' @param sd predictor standard deviation (double)
 #'
-#' @return an object of class predictor.
+#' @inherit new_predictor return
 #'
 #' @importFrom stats dnorm
 #'
@@ -75,7 +75,7 @@ new_predictor_normal <- function(mean, sd) {
 #'
 #' @param maf minor allele frequency
 #'
-#' @return an object of class predictor.
+#' @inherit new_predictor return
 #'
 #' @examples
 #' new_predictor_snp(maf = 0.3)
@@ -93,7 +93,7 @@ new_predictor_snp <- function(maf) {
 #'
 #' @param p probability of success (predictor mean)
 #'
-#' @return an object of class predictor.
+#' @inherit new_predictor return
 #'
 #' @importFrom stats dbinom
 #'

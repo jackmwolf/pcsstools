@@ -17,6 +17,8 @@
 #' @param covs named matrix of the covariance of all model predictors and the
 #'   responses.
 #' @param ... additional arguments
+#' 
+#' @inherit pcsslm return
 #'
 #' @references Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and
 #'   Tintle, N.  (2020). Computationally efficient, exact, covariate-adjusted
@@ -100,6 +102,7 @@ model_prcomp <- function(formula, comp = 1, n, means, covs, ...) {
 #'   complex phenotypes in large biobanks. \emph{Pacific Symposium on
 #'   Biocomputing}, 24, 391-402.
 #'
+#' @inherit pcsslm return
 #' @examples
 #' ex_data <- cont_data[c("g", "x", "y1", "y2", "y3")]
 #' head(ex_data)
@@ -164,8 +167,9 @@ model_combo <- function(formula, phi, n, means, covs, ...) {
 #'   summary statistics from large biobanks. \emph{Pacific Symposium on
 #'   Biocomputing}, 25, 719-730.
 #'
+#' @inherit pcsslm return
+#'
 #' @export
-#' 
 #' @examples 
 #' ex_data <- cont_data[c("g", "x", "y1")]
 #' means <- colMeans(ex_data)

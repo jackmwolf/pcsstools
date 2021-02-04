@@ -26,7 +26,7 @@ lower/upper bound of the pdf \code{f}.}
 the pmf for \code{f}.}
 }
 \value{
-an object of class predictor.
+an object of class \code{"predictor"}.
 }
 \description{
 Create an object of class "predictor"

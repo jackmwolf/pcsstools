@@ -13,6 +13,7 @@
 #' @param predictors named list of objects of class \code{predictor}.
 #' @param ... additional arguments
 #'
+#' @inherit pcsslm return
 #' @examples
 #' ex_data <- bin_data[c("g", "x", "y1", "y2")]
 #' head(ex_data)
@@ -71,7 +72,8 @@ model_and <- function(formula, n, means, covs, predictors, ...) {
 #'   responses.
 #' @param predictors named list of objects of class \code{predictor}.
 #' @param ... additional arguments
-#'
+#' 
+#' @inherit pcsslm return
 #' @examples
 #' ex_data <- bin_data[c("g", "x", "y1", "y2")]
 #' head(ex_data)

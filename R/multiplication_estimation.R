@@ -18,6 +18,8 @@
 #'   Either \code{"continuous"} or \code{"binary"}. If \code{"binary"}
 #'   different approximations of product means and variances are used.
 #' @param ... additional arguments
+#' 
+#' @inherit pcsslm return
 #'
 #' @examples
 #' ex_data <- bin_data[c("g", "x", "y1", "y2", "y3")]

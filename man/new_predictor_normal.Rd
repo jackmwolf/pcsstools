@@ -12,7 +12,7 @@ new_predictor_normal(mean, sd)
 \item{sd}{predictor standard deviation (double)}
 }
 \value{
-an object of class predictor.
+an object of class \code{"predictor"}.
 }
 \description{
 \code{new_predictor_normal} calls \code{new_predictor}

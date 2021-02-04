@@ -10,7 +10,7 @@ new_predictor_binary(p)
 \item{p}{probability of success (predictor mean)}
 }
 \value{
-an object of class predictor.
+an object of class \code{"predictor"}.
 }
 \description{
 \code{new_predictor_binary} calls \code{new_predictor}
