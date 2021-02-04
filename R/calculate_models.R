@@ -37,7 +37,7 @@
 #'   
 #'   If modeling a product, include the argument \code{response}, a character
 #'   equal to either \code{"continuous"} or \code{"binary"}. If \code{"binary"},
-#'   specalized approximations are performed to estimate means and variances.
+#'   specialized approximations are performed to estimate means and variances.
 #' 
 #' @param formula an object of class formula whose dependent variable is a 
 #'     combination of variables and logical | operators. 

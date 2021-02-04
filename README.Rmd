@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 ## Overview 
-pcsstools  is an in-development R package to describe various regression models using only pre-computed summary statistics (PCSS) from genome-wide association studies (GWASs) and PCSS repositories such as [GeneAtlas](http://geneatlas.roslin.ed.ac.uk/).
+pcsstools is an in-development R package to describe various regression models using only pre-computed summary statistics (PCSS) from genome-wide association studies (GWASs) and PCSS repositories such as [GeneAtlas](http://geneatlas.roslin.ed.ac.uk/).
 This eliminates the logistic, privacy, and access concerns that accompany the use of individual patient-level data (IPD).
 
 
@@ -33,6 +33,7 @@ Supported functions include:
 * linear combinations (e.g. $\phi_1y_1 + \phi_2y_2$)
 * products (e.g. $y_1\circ y_2$)
 * logical combinations (e.g. $y_1\wedge y_2$ or $y_1\vee y_2$)
+
 
 ## Installation
 
@@ -75,7 +76,7 @@ pcss <- list(
 ```
 
 Then, we can calculate the linear model by using `pcsslm()`.
-Our `formula` will list all phenotypes as one sum, joined together by `+` opperators and we indicate that we want the first principal component score by setting `comp = 1`.
+Our `formula` will list all phenotypes as one sum, joined together by `+` operators and we indicate that we want the first principal component score by setting `comp = 1`.
 
 ```{r}
 model_pcss <- pcsslm(y1 + y2 + y3 ~ g + x, pcss = pcss, comp = 1)
@@ -87,8 +88,8 @@ Here's the same model using individual patient data.
 ```{r}
 pc_1 <- prcomp(x = dat[c("y1", "y2", "y3")])$x[, "PC1"]
 
-mod_ipd <- lm(pc_1 ~ 1 + g + x, data = dat)
-summary(mod_ipd)
+model_ipd <- lm(pc_1 ~ 1 + g + x, data = dat)
+summary(model_ipd)
 ```
 
 In this case, our coefficient estimates for `g` and `x` are off by a factor of -1; this is because we picked the opposite vector of principal component weights to `prcomp`.
@@ -142,7 +143,7 @@ summary(model_ipd)
 
 * Add arguments to center and standardize responses in  `model_prcomp()`. 
 
-* Support function notation for linear combinations of phenotypes (e.g. `y1 - y2 + 0.5 * y3 ~ 1 + g + x`)  instead of requiring a seperate vector of weights
+* Support function notation for linear combinations of phenotypes (e.g. `y1 - y2 + 0.5 * y3 ~ 1 + g + x`)  instead of requiring a separate vector of weights
 
 * Support functions using `.` and `-` in the dependent variable (e.g. `y1 ~ .`, `y1 ~ . -x`)
 

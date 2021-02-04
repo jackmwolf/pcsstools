@@ -83,7 +83,7 @@ covariance matrix, and our sample size.
 
 Then, we can calculate the linear model by using `pcsslm()`. Our
 `formula` will list all phenotypes as one sum, joined together by `+`
-opperators and we indicate that we want the first principal component
+operators and we indicate that we want the first principal component
 score by setting `comp = 1`.
 
     model_pcss <- pcsslm(y1 + y2 + y3 ~ g + x, pcss = pcss, comp = 1)
@@ -109,8 +109,8 @@ Here’s the same model using individual patient data.
 
     pc_1 <- prcomp(x = dat[c("y1", "y2", "y3")])$x[, "PC1"]
 
-    mod_ipd <- lm(pc_1 ~ 1 + g + x, data = dat)
-    summary(mod_ipd)
+    model_ipd <- lm(pc_1 ~ 1 + g + x, data = dat)
+    summary(model_ipd)
     #> 
     #> Call:
     #> lm(formula = pc_1 ~ 1 + g + x, data = dat)
@@ -226,7 +226,7 @@ And here’s the result we would get using IPD:
 
 -   Support function notation for linear combinations of phenotypes
     (e.g. `y1 - y2 + 0.5 * y3 ~ 1 + g + x`) instead of requiring a
-    seperate vector of weights
+    separate vector of weights
 
 -   Support functions using `.` and `-` in the dependent variable
     (e.g. `y1 ~ .`, `y1 ~ . -x`)

@@ -57,7 +57,7 @@ including all predictors and responses. See Details for more information.}
   
   If modeling a product, include the argument \code{response}, a character
   equal to either \code{"continuous"} or \code{"binary"}. If \code{"binary"},
-  specalized approximations are performed to estimate means and variances.
+  specialized approximations are performed to estimate means and variances.
 }
 \examples{
 ## Principal Component Analysis
