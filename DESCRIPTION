@@ -14,9 +14,13 @@ Authors@R: c(
       )
   )
 Description: Defines functions to describe regression models using only
-    pre-computed summary statistics (i.e. means, variances, and covariances).
+    pre-computed summary statistics (i.e. means, variances, and covariances)
+    in place of individual participant data.
     Possible models include linear models for linear combinations, products, 
     and logical combinations of phenotypes.
+    Implements methods presented in 
+    Wolf et al. (2020) <doi:10.1142/9789811215636_0063> and 
+    Gasdaska et al. (2019) <doi:10.1142/9789813279827_0036>.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
@@ -24,5 +28,10 @@ Imports:
     gtools
 RoxygenNote: 7.1.1
 Suggests: 
-    testthat
+    testthat,
+    knitr,
+    rmarkdown,
+    spelling
 BugReports: https://github.com/jackmwolf/pcsstools/issues
+VignetteBuilder: knitr
+Language: en-US
