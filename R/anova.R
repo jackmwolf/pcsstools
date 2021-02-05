@@ -228,7 +228,9 @@ anova.pcsslm <- function(object, ...) {
     ss <- c(object$`Sum Sq`["SSR"], ssr)
     df <- c(p - 1, dfr)
 
-    tlabels <- paste(c(attr(object$terms, "term.labels")), collapse = ", ")
+    tlabels <- c(attr(object$terms, "term.labels"))
+    tlabels <- tlabels[tlabels %in% names(which(!object$aliased))]
+    tlabels <- paste(tlabels, collapse = ", ")
   }
   else {
     ss <- ssr
