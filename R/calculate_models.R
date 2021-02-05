@@ -215,15 +215,42 @@ calculate_lm <- function(means, covs, n, add_intercept = FALSE,
 
   covX <- covs[-(p + 1), -(p + 1)]
   meanX <- means[-(p + 1)]
-  XtX <- (n - 1) * covX + n * meanX %*% t(meanX)
-  Xty <- (n - 1) * covs[p + 1, -(p + 1)] + n * meanX * means[p + 1]
-  yty <- (n - 1) * covs[p + 1, p + 1] + n * means[p + 1]^2
+  covXY <- covs[p + 1, -(p + 1)]
+  varY <- covs[p + 1, p + 1]
+  meanY <- means[p + 1]
+  
+  yty <- (n - 1) * varY + n * meanY^2
+  
+  aliased <- rep(FALSE, p)
+  names(aliased) <- names(meanX)
+  while(TRUE) {
+  
+    XtX <- (n - 1) * covX + n * meanX %*% t(meanX)
+    Xty <- (n - 1) * covXY + n * meanX * means[p + 1]
+    
+    # Check if XtX can be inverted
+    XtX1 <- try(solve(XtX), silent = T)
+    if (class(XtX1) == "try-error") {
+      rankifremoved <- sapply(1:ncol(XtX), function (x) qr(XtX[,-x])$rank)
+      # Remove last column with linear dependence
+      lind.col <- max(which(rankifremoved == max(rankifremoved)))
+      covX <- covX[-lind.col, -lind.col]
+      meanX <- meanX[-lind.col]
+      covXY <- covXY[-lind.col]
+      aliased[lind.col] <- TRUE
+    }
+    else{
+      break()
+    }
+  }
+  
+  p <- length(aliased[!aliased])
 
-  beta <- drop(solve(XtX) %*% Xty)
+  beta <- drop(XtX1 %*% Xty)
 
   sigma2 <- drop((yty - t(beta) %*% Xty) / (n - p))
 
-  var_beta <- diag(sigma2 * solve(XtX))
+  var_beta <- diag(sigma2 * XtX1)
   sd_beta <- sqrt(var_beta)
 
   t_stat <- beta / sd_beta
@@ -232,16 +259,13 @@ calculate_lm <- function(means, covs, n, add_intercept = FALSE,
   coefficients <- cbind(beta, sd_beta, t_stat, p_val)
   colnames(coefficients) <- c("Estimate", "Std. Error", "t value", "Pr(>|t|)")
 
-  aliased <- rep(FALSE, p)
-  names(aliased) <- rownames(coefficients)
-
   sigma <- sqrt(sigma2)
 
-  df <- c(p, n - p, p)
+  df <- c(p, n - p, length(aliased))
 
 
-  SSE <- drop(yty - t(Xty) %*% solve(XtX) %*% Xty)
-  SST <- (n - 1) * covs[p + 1, p + 1]
+  SSE <- drop(yty - t(Xty) %*% XtX1 %*% Xty)
+  SST <- (n - 1) * varY
   SSR <- SST - SSE
 
   SS <- c(SSR = SSR, SSE = SSE, SST = SST)
@@ -254,7 +278,7 @@ calculate_lm <- function(means, covs, n, add_intercept = FALSE,
 
   fstatistic <- c(value = MSR / MSE, numdf = p - 1, numdf = n - p)
 
-  cov.unscaled <- solve(XtX)
+  cov.unscaled <- XtX1
 
   re <- list(
     call = cl,
