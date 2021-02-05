@@ -19,4 +19,10 @@ test_that("pcsslm aliases coefficients", {
   lmipd  <- summary(lm(y ~ x1 + x2 + x3, data = dat))
   
   expect_equal(coef(lmpcss), coef(lmipd))
+  expect_equal(lmpcss$fstatistic, lmipd$fstatistic)
+  expect_equal(lmpcss$aliased, lmipd$aliased)
+  expect_equal(lmpcss$r.squared, lmipd$r.squared)
+  expect_equal(lmpcss$adj.r.squared, lmipd$adj.r.squared)
+  
+  
 })
