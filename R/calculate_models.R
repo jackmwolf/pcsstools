@@ -230,7 +230,7 @@ calculate_lm <- function(means, covs, n, add_intercept = FALSE,
     
     # Check if XtX can be inverted
     XtX1 <- try(solve(XtX), silent = T)
-    if (class(XtX1) == "try-error") {
+    if ("try-error" %in% class(XtX1)) {
       rankifremoved <- sapply(1:ncol(XtX), function (x) qr(XtX[,-x])$rank)
       # Remove last column with linear dependence
       lind.col <- max(which(rankifremoved == max(rankifremoved)))
