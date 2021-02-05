@@ -32,7 +32,7 @@ an object of class \code{"pcsslm"}.
       corresponding (two-sided) p-value.}
     \item{sigma}{the square root of the estimated variance of the random
       error.}
-    \item{df}{degrees of freedom, a 3-vector \eqn{p, n-p, p^*}, the
+    \item{df}{degrees of freedom, a 3-vector \eqn{p, n-p, p*}, the
       first being the number of non-aliased coefficients, the last being
       the total number of coefficients.}
     \item{fstatistic}{a 3-vector with the value of the F-statistic with its
