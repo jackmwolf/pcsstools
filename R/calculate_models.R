@@ -276,7 +276,7 @@ calculate_lm <- function(means, covs, n, add_intercept = FALSE,
   r.squared <- 1 - (SSE / SST)
   adj.r.squared <- 1 - (1 - r.squared) * (n - 1) / (n - p)
 
-  fstatistic <- c(value = MSR / MSE, numdf = p - 1, numdf = n - p)
+  fstatistic <- c(value = MSR / MSE, numdf = p - 1, dendf = n - p)
 
   cov.unscaled <- XtX1
 
