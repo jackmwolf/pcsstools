@@ -34,7 +34,7 @@ an object of class \code{"pcsslm"}.
       first being the number of non-aliased coefficients, the last being
       the total number of coefficients.}
     \item{fstatistic}{a 3-vector with the value of the F-statistic with its
-      numberator and denominator degrees of freedom.}
+      numerator and denominator degrees of freedom.}
     \item{r.squared}{\eqn{R^2}, the 'fraction of variance explained by the 
       model'.}
     \item{adj.r.squared}{the above \eqn{R^2} statistic \emph{'adjusted'},
