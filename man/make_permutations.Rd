@@ -6,6 +6,9 @@
 \usage{
 make_permutations(m)
 }
+\arguments{
+\item{m}{number of elements to permute}
+}
 \description{
 Lists all permutations of 1,2,...,m unique up to the first two elements
 }
