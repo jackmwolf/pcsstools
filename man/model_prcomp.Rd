@@ -57,14 +57,14 @@ an object of class \code{"pcsslm"}.
   predictors.
 }
 \examples{
-ex_data <- cont_data[c("g", "x", "y1", "y2", "y3")]
+ex_data <- pcsstools_example[c("g1", "x1", "x2", "y1", "y2", "y3")]
 head(ex_data)
 means <- colMeans(ex_data)
 covs <- cov(ex_data)
 n <- nrow(ex_data)
 
 model_prcomp(
-  y1 + y2 + y3 ~ g + x,
+  y1 + y2 + y3 ~ g1 + x1 + x2,
   comp = 1, n = n, means = means, covs = covs
 )
 }

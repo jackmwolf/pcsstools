@@ -22,24 +22,26 @@
 #' @inherit pcsslm return
 #'
 #' @examples
-#' ex_data <- bin_data[c("g", "x", "y1", "y2", "y3")]
+#' ex_data <- pcsstools_example[c("g1", "g2", "g3", "x1", "y4", "y5", "y6")]
 #' head(ex_data)
 #' means <- colMeans(ex_data)
 #' covs <- cov(ex_data)
 #' n <- nrow(ex_data)
 #' predictors <- list(
-#'   g = new_predictor_snp(maf = mean(ex_data$g) / 2),
-#'   x = new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
+#'   g1 = new_predictor_snp(maf = mean(ex_data$g1) / 2),
+#'   g2 = new_predictor_snp(maf = mean(ex_data$g2) / 2),
+#'   g3 = new_predictor_snp(maf = mean(ex_data$g3) / 2),
+#'   x1 = new_predictor_normal(mean = mean(ex_data$x1), sd = sd(ex_data$x1))
 #' )
-#' responses <- lapply(means[3:length(means)], new_predictor_binary)
+#' responses <- lapply(means[c("y4", "y5", "y6")], new_predictor_binary)
 #'
 #' model_product(
-#'   y1 * y2 * y3 ~ g + x,
+#'   y4 * y5 * y6 ~ g1 + g2 + g3 + x1,
 #'   means = means, covs = covs, n = n,
 #'   predictors = predictors, responses = responses, response = "binary"
 #' )
 #'
-#' summary(lm(y1 * y2 * y3 ~ g + x, data = ex_data))
+#' summary(lm(y4 * y5 * y6 ~ g1 + g2 + g3 + x1, data = ex_data))
 #' @export
 #'
 model_product <- function(formula, n, means, covs, predictors, responses = NULL,
@@ -519,6 +521,7 @@ approx_var_continuous <- function(c_prod_mean, c_prod_var, prod_mean, n, f, lb, 
 #' List all permutations of a sequence of integers
 #' 
 #' Lists all permutations of 1,2,...,m unique up to the first two elements
+#' @param m number of elements to permute
 #' @importFrom gtools permutations
 make_permutations <- function(m) {
   # All possible permutations. We only need half of these as the order of the

@@ -87,36 +87,36 @@ an object of class \code{"pcsslm"}.
 }
 \examples{
 ## Principal Component Analysis
-ex_data <- cont_data[c("g", "x", "y1", "y2", "y3")]
+ex_data <- pcsstools_example[c("g1", "x1", "y1", "y2", "y3")]
 pcss <- list(
   means = colMeans(ex_data),
   covs = cov(ex_data),
   n = nrow(ex_data)
 )
 
-pcsslm(y1 + y2 + y3 ~ g + x, pcss = pcss, comp = 1)
+pcsslm(y1 + y2 + y3 ~ g1 + x1, pcss = pcss, comp = 1)
 
 ## Linear combination of variables
-ex_data <- cont_data[c("g", "x", "y1", "y2", "y3")]
+ex_data <- pcsstools_example[c("g1", "g2", "y1", "y2")]
 pcss <- list(
   means = colMeans(ex_data),
   covs = cov(ex_data),
   n = nrow(ex_data)
 )
 
-pcsslm(y1 + y2 ~ g + x, pcss = pcss, phi = c(1, -1))
-summary(lm(y1 - y2 ~ g + x, data = ex_data))
+pcsslm(y1 + y2 ~ g1 + g2, pcss = pcss, phi = c(1, -1))
+summary(lm(y1 - y2 ~ g1 + g2, data = ex_data))
 
 ## Product of variables
-ex_data <- bin_data[c("g", "x", "y1", "y2", "y3")]
+ex_data <- pcsstools_example[c("g1", "x1", "y4", "y5", "y6")]
 
 pcss <- list(
   means = colMeans(ex_data),
   covs = cov(ex_data),
   n = nrow(ex_data),
   predictors = list(
-    g = new_predictor_snp(maf = mean(ex_data$g) / 2),
-    x = new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
+    g1 = new_predictor_snp(maf = mean(ex_data$g1) / 2),
+    x1 = new_predictor_normal(mean = mean(ex_data$x1), sd = sd(ex_data$x1))
   ),
   responses = lapply(
     colMeans(ex_data)[3:length(colMeans(ex_data))], 
@@ -124,23 +124,23 @@ pcss <- list(
   )
 )
 
-pcsslm(y1 * y2 * y3 ~ g + x, pcss = pcss, response = "binary")
-summary(lm(y1 * y2 * y3 ~ g + x, data = ex_data))
+pcsslm(y4 * y5 * y6 ~ g1 + x1, pcss = pcss, response = "binary")
+summary(lm(y4 * y5 * y6 ~ g1 + x1, data = ex_data))
 
 ## Disjunct (OR statement) of variables
-ex_data <- bin_data[c("g", "x", "y1", "y2")]
+ex_data <- pcsstools_example[c("g1", "x1", "y4", "y5")]
 
 pcss <- list(
   means = colMeans(ex_data),
   covs = cov(ex_data),
   n = nrow(ex_data),
   predictors = list(
-    g = new_predictor_snp(maf = mean(ex_data$g) / 2),
-    x = new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
+    g1 = new_predictor_snp(maf = mean(ex_data$g1) / 2),
+    x1 = new_predictor_normal(mean = mean(ex_data$x1), sd = sd(ex_data$x1))
   )
 )
-pcsslm(y1 | y2 ~ g + x, pcss = pcss) 
-summary(lm(y1 | y2 ~ g + x, data = ex_data))
+pcsslm(y4 | y5 ~ g1 + x1, pcss = pcss) 
+summary(lm(y4 | y5 ~ g1 + x1, data = ex_data))
 
 }
 \references{

@@ -51,16 +51,16 @@ an object of class \code{"pcsslm"}.
   phenotype as a function of a set of predictors.
 }
 \examples{
-ex_data <- cont_data[c("g", "x", "y1")]
+ex_data <- pcsstools_example[c("g1", "x1", "y1")]
 means <- colMeans(ex_data)
 covs <- cov(ex_data)
 n <- nrow(ex_data)
 
 model_singular(
-  y1 ~ g + x,
+  y1 ~ g1 + x1,
   n = n, means = means, covs = covs
 )
-summary(lm(y1 ~ g + x, data = ex_data))
+summary(lm(y1 ~ g1 + x1, data = ex_data))
 }
 \references{
 Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and

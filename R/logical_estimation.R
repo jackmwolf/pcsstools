@@ -15,21 +15,21 @@
 #'
 #' @inherit pcsslm return
 #' @examples
-#' ex_data <- bin_data[c("g", "x", "y1", "y2")]
+#' ex_data <- pcsstools_example[c("g1", "x1", "y4", "y5")]
 #' head(ex_data)
 #' means <- colMeans(ex_data)
 #' covs <- cov(ex_data)
 #' n <- nrow(ex_data)
 #' predictors <- list(
-#'   g = new_predictor_snp(maf = mean(ex_data$g) / 2),
-#'   x = new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
+#'   g1 = new_predictor_snp(maf = mean(ex_data$g1) / 2),
+#'   x1 = new_predictor_normal(mean = mean(ex_data$x1), sd = sd(ex_data$x1))
 #' )
 #'
 #' model_and(
-#'   y1 & y2 ~ g + x,
+#'   y4 & y5 ~ g1 + x1,
 #'   means = means, covs = covs, n = n, predictors = predictors
 #' )
-#' summary(lm(y1 & y2 ~ g + x + 1, data = ex_data))
+#' summary(lm(y4 & y5 ~ g1 + x1, data = ex_data))
 #' @export
 #'
 model_and <- function(formula, n, means, covs, predictors, ...) {
@@ -75,21 +75,21 @@ model_and <- function(formula, n, means, covs, predictors, ...) {
 #' 
 #' @inherit pcsslm return
 #' @examples
-#' ex_data <- bin_data[c("g", "x", "y1", "y2")]
+#' ex_data <- pcsstools_example[c("g1", "x1", "y4", "y5")]
 #' head(ex_data)
 #' means <- colMeans(ex_data)
 #' covs <- cov(ex_data)
 #' n <- nrow(ex_data)
 #' predictors <- list(
-#'   g = new_predictor_snp(maf = mean(ex_data$g) / 2),
-#'   x = new_predictor_normal(mean = mean(ex_data$x), sd = sd(ex_data$x))
+#'   g1 = new_predictor_snp(maf = mean(ex_data$g1) / 2),
+#'   x1 = new_predictor_normal(mean = mean(ex_data$x1), sd = sd(ex_data$x1))
 #' )
 #'
 #' model_or(
-#'   y1 | y2 ~ g + x,
+#'   y4 | y5 ~ g1 + x1,
 #'   means = means, covs = covs, n = n, predictors = predictors
 #' )
-#' summary(lm(y1 | y2 ~ g + x + 1, data = ex_data))
+#' summary(lm(y4 | y5 ~ g1 + x1, data = ex_data))
 #' @export
 #'
 model_or <- function(formula, n, means, covs, predictors, ...) {

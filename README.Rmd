@@ -58,10 +58,10 @@ library(pcsstools)
 
 Let's model the first principal component score of three phenotypes using PCSS.
 
-First, we'll load in some data. We have a SNP's minor allele counts (`g`), a continuous covariate (`x`), and three continuous phenotypes (`y1`, `y2`, and `y3`).
+First, we'll load in some data. We have three SNPs; minor allele counts (`g1`, `g2`, and `g3`), a continuous covariate (`x1`), and three continuous phenotypes (`y1`, `y2`, and `y3`).
 
 ```{r}
-dat <- pcsstools::cont_data[c("g", "x", "y1", "y2", "y3")]
+dat <- pcsstools_example[c("g1", "g2", "g3", "x1", "y1", "y2", "y3")]
 head(dat)
 ```
 
@@ -79,7 +79,7 @@ Then, we can calculate the linear model by using `pcsslm()`.
 Our `formula` will list all phenotypes as one sum, joined together by `+` operators and we indicate that we want the first principal component score by setting `comp = 1`.
 
 ```{r}
-model_pcss <- pcsslm(y1 + y2 + y3 ~ g + x, pcss = pcss, comp = 1)
+model_pcss <- pcsslm(y1 + y2 + y3 ~ g1 + g2 + g3 + x1, pcss = pcss, comp = 1)
 model_pcss
 ```
 
@@ -88,21 +88,32 @@ Here's the same model using individual patient data.
 ```{r}
 pc_1 <- prcomp(x = dat[c("y1", "y2", "y3")])$x[, "PC1"]
 
-model_ipd <- lm(pc_1 ~ 1 + g + x, data = dat)
+model_ipd <- lm(pc_1 ~ g1 + g2 + g3 + x1, data = dat)
 summary(model_ipd)
 ```
 
-In this case, our coefficient estimates for `g` and `x` are off by a factor of -1; this is because we picked the opposite vector of principal component weights to `prcomp`.
+In this case, our coefficient estimates for everything but the intercept are off by a factor of -1; this is because we picked the opposite vector of principal component weights to `prcomp`.
 This distinction in sign is arbitrary (see the note in `?prcomp`).
+
+We can also compare this model to a smaller model using `anova` and find the same results when using both PCSS and IPD.
+
+```{r}
+model_pcss_reduced <- update(model_pcss, . ~ . - g1 - g2 - g3)
+anova(model_pcss_reduced, model_pcss)
+
+model_ipd_reduced <-update(model_ipd, . ~ . - g1 - g2 - g3)
+anova(model_ipd_reduced, model_ipd)
+```
+
 
 ### Logical Combination
 
-In this example we will approximate a linear model where our response is the logical combination "$y_1$ or $y_1$" ($y_1\vee y_2$).
+In this example we will approximate a linear model where our response is the logical combination "$y_4$ or $y_5$" ($y_4\vee y_5$).
 
 First we need data with binary phenotypes.
 
 ```{r}
-dat <- pcsstools::bin_data[c("g", "x", "y1", "y2")]
+dat <- pcsstools_example[c("g1", "g2", "x1", "y4", "y5")]
 head(dat)
 ```
 
@@ -117,8 +128,9 @@ pcss <- list(
  covs = cov(dat),
  n = nrow(dat),
  predictors = list(
-   g = new_predictor_snp(maf = mean(dat$g) / 2),
-   x = new_predictor_normal(mean = mean(dat$x), sd = sd(dat$x))
+   g1 = new_predictor_snp(maf = mean(dat$g1) / 2),
+   g2 = new_predictor_snp(maf = mean(dat$g2) / 2),
+   x1 = new_predictor_normal(mean = mean(dat$x1), sd = sd(dat$x1))
  )
 )
 
@@ -128,14 +140,14 @@ class(pcss$predictors[[1]])
 Then we can approximate the linear model using `pcsslm()`.
 
 ```{r}
-model_pcss <- pcsslm(y1 | y2 ~ g + x, pcss = pcss) 
+model_pcss <- pcsslm(y4 | y5 ~ g1 + g2 + x1, pcss = pcss) 
 model_pcss
 ```
 
 And here's the result we would get using IPD:
 
 ```{r}
-model_ipd <- lm(y1 | y2 ~ g + x, data = dat)
+model_ipd <- lm(y4 | y5 ~ g1 + g2 + x1, data = dat)
 summary(model_ipd)
 ```
 

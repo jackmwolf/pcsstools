@@ -76,6 +76,6 @@ pcsstools_data <- function(n = 1000) {
   return(as.data.frame(cbind(G, X, Y)))
 }
 
-set.seed(1004)
+set.seed(1000)
 pcsstools_example <- pcsstools_data(1000)
 save(pcsstools_example, file = "data/pcsstools_example.RData")

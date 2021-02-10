@@ -32,14 +32,14 @@
 #'   Biocomputing}, 24, 391-402.
 #'
 #' @examples
-#' ex_data <- cont_data[c("g", "x", "y1", "y2", "y3")]
+#' ex_data <- pcsstools_example[c("g1", "x1", "x2", "y1", "y2", "y3")]
 #' head(ex_data)
 #' means <- colMeans(ex_data)
 #' covs <- cov(ex_data)
 #' n <- nrow(ex_data)
 #'
 #' model_prcomp(
-#'   y1 + y2 + y3 ~ g + x,
+#'   y1 + y2 + y3 ~ g1 + x1 + x2,
 #'   comp = 1, n = n, means = means, covs = covs
 #' )
 #' @export
@@ -104,7 +104,7 @@ model_prcomp <- function(formula, comp = 1, n, means, covs, ...) {
 #'
 #' @inherit pcsslm return
 #' @examples
-#' ex_data <- cont_data[c("g", "x", "y1", "y2", "y3")]
+#' ex_data <- pcsstools_example[c("g1", "x1", "x2", "x3", "y1", "y2", "y3")]
 #' head(ex_data)
 #' means <- colMeans(ex_data)
 #' covs <- cov(ex_data)
@@ -112,12 +112,11 @@ model_prcomp <- function(formula, comp = 1, n, means, covs, ...) {
 #' phi <- c("y1" = 1, "y2" = -1, "y3" = 0.5)
 #'
 #' model_combo(
-#'   y1 + y2 + y3 ~ g + x,
+#'   y1 + y2 + y3 ~ g1 + x1 + x2 + x3, 
 #'   phi = phi, n = n, means = means, covs = covs
 #' )
 #'
-#'
-#' summary(lm(y1 - y2 + 0.5 * y3 ~ g + x, data = ex_data))
+#' summary(lm(y1 - y2 + 0.5 * y3 ~ g1 + x1 + x2 + x3, data = ex_data))
 #' @export
 model_combo <- function(formula, phi, n, means, covs, ...) {
   
@@ -171,16 +170,16 @@ model_combo <- function(formula, phi, n, means, covs, ...) {
 #'
 #' @export
 #' @examples 
-#' ex_data <- cont_data[c("g", "x", "y1")]
+#' ex_data <- pcsstools_example[c("g1", "x1", "y1")]
 #' means <- colMeans(ex_data)
 #' covs <- cov(ex_data)
 #' n <- nrow(ex_data)
 #'
 #' model_singular(
-#'   y1 ~ g + x,
+#'   y1 ~ g1 + x1,
 #'   n = n, means = means, covs = covs
 #' )
-#' summary(lm(y1 ~ g + x, data = ex_data))
+#' summary(lm(y1 ~ g1 + x1, data = ex_data))
 model_singular <- function(formula, n, means, covs, ...) {
   cl <- match.call()
   terms <- terms(formula)

@@ -58,19 +58,19 @@ using IPD.
 Let’s model the first principal component score of three phenotypes
 using PCSS.
 
-First, we’ll load in some data. We have a SNP’s minor allele counts
-(`g`), a continuous covariate (`x`), and three continuous phenotypes
-(`y1`, `y2`, and `y3`).
+First, we’ll load in some data. We have three SNPs; minor allele counts
+(`g1`, `g2`, and `g3`), a continuous covariate (`x1`), and three
+continuous phenotypes (`y1`, `y2`, and `y3`).
 
-    dat <- pcsstools::cont_data[c("g", "x", "y1", "y2", "y3")]
+    dat <- pcsstools_example[c("g1", "g2", "g3", "x1", "y1", "y2", "y3")]
     head(dat)
-    #>   g           x        y1         y2         y3
-    #> 1 0  0.08613585  1.248199 -2.4208709  0.8490036
-    #> 2 0 -1.19721387  2.277541 -0.8876128 -3.4783177
-    #> 3 0 -0.89131854  2.011928 -2.4584807  0.8973664
-    #> 4 1  1.19449979 -1.535056 -1.2870269  3.1705261
-    #> 5 1  0.22346186  1.431919 -1.9866995  0.5214276
-    #> 6 0  0.55236041 -2.282309 -0.2572408 -0.9526495
+    #>   g1 g2 g3          x1         y1          y2          y3
+    #> 1  0  1  1  0.04239463 -0.1416907  1.19902689 -1.10982855
+    #> 2  1  0  0  1.35306987  0.6822496 -1.19624311 -0.97103574
+    #> 3  0  1  0 -1.01226388  0.8337136  0.75777722 -1.02609693
+    #> 4  0  1  0 -0.35358877 -0.1718187  1.13433957 -0.08290115
+    #> 5  1  1  0  1.20242824  0.5528258 -0.07515538 -2.43725278
+    #> 6  0  1  0  0.20310211 -0.9358902 -0.75434908 -1.59552034
 
 First, we need our assumed summary statistics: means, the full
 covariance matrix, and our sample size.
@@ -86,73 +86,105 @@ Then, we can calculate the linear model by using `pcsslm()`. Our
 operators and we indicate that we want the first principal component
 score by setting `comp = 1`.
 
-    model_pcss <- pcsslm(y1 + y2 + y3 ~ g + x, pcss = pcss, comp = 1)
+    model_pcss <- pcsslm(y1 + y2 + y3 ~ g1 + g2 + g3 + x1, pcss = pcss, comp = 1)
     model_pcss
     #> Model approximated using Pre-Computed Summary Statistics.
     #> 
     #> Call:
-    #> pcsslm(formula = y1 + y2 + y3 ~ g + x, pcss = pcss, comp = 1)
+    #> pcsslm(formula = y1 + y2 + y3 ~ g1 + g2 + g3 + x1, pcss = pcss, 
+    #>     comp = 1)
     #> 
     #> Coefficients:
-    #>             Estimate Std. Error t value Pr(>|t|)    
-    #> (Intercept)  1.04723    0.06925  15.122  < 2e-16 ***
-    #> g            0.57050    0.07806   7.308 5.54e-13 ***
-    #> x           -1.94340    0.04899 -39.669  < 2e-16 ***
+    #>               Estimate Std. Error t value Pr(>|t|)    
+    #> (Intercept)  0.0005988  0.0511896   0.012    0.991    
+    #> g1           0.7689603  0.0463373  16.595  < 2e-16 ***
+    #> g2           0.0078751  0.0404849   0.195    0.846    
+    #> g3          -0.2568899  0.0585875  -4.385 1.28e-05 ***
+    #> x1           1.0370967  0.0282909  36.658  < 2e-16 ***
     #> ---
     #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     #> 
-    #> Residual standard error: 1.578 on 997 degrees of freedom
-    #> Multiple R-squared:  0.6198, Adjusted R-squared:  0.619 
-    #> F-statistic: 812.6 on 2 and 997 DF,  p-value: < 2.2e-16
+    #> Residual standard error: 0.8949 on 995 degrees of freedom
+    #> Multiple R-squared:  0.6187, Adjusted R-squared:  0.6172 
+    #> F-statistic: 403.7 on 4 and 995 DF,  p-value: < 2.2e-16
 
 Here’s the same model using individual patient data.
 
     pc_1 <- prcomp(x = dat[c("y1", "y2", "y3")])$x[, "PC1"]
 
-    model_ipd <- lm(pc_1 ~ 1 + g + x, data = dat)
+    model_ipd <- lm(pc_1 ~ g1 + g2 + g3 + x1, data = dat)
     summary(model_ipd)
     #> 
     #> Call:
-    #> lm(formula = pc_1 ~ 1 + g + x, data = dat)
+    #> lm(formula = pc_1 ~ g1 + g2 + g3 + x1, data = dat)
     #> 
     #> Residuals:
-    #>    Min     1Q Median     3Q    Max 
-    #> -5.117 -1.075 -0.011  1.076  6.439 
+    #>      Min       1Q   Median       3Q      Max 
+    #> -2.65976 -0.55994  0.00792  0.62143  2.72442 
     #> 
     #> Coefficients:
-    #>             Estimate Std. Error t value Pr(>|t|)    
-    #> (Intercept)  0.33001    0.06925   4.765 2.16e-06 ***
-    #> g           -0.57050    0.07806  -7.308 5.54e-13 ***
-    #> x            1.94340    0.04899  39.669  < 2e-16 ***
+    #>              Estimate Std. Error t value Pr(>|t|)    
+    #> (Intercept)  0.345296   0.051190   6.745 2.58e-11 ***
+    #> g1          -0.768960   0.046337 -16.595  < 2e-16 ***
+    #> g2          -0.007875   0.040485  -0.195    0.846    
+    #> g3           0.256890   0.058588   4.385 1.28e-05 ***
+    #> x1          -1.037097   0.028291 -36.658  < 2e-16 ***
     #> ---
     #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     #> 
-    #> Residual standard error: 1.578 on 997 degrees of freedom
-    #> Multiple R-squared:  0.6198, Adjusted R-squared:  0.619 
-    #> F-statistic: 812.6 on 2 and 997 DF,  p-value: < 2.2e-16
+    #> Residual standard error: 0.8949 on 995 degrees of freedom
+    #> Multiple R-squared:  0.6187, Adjusted R-squared:  0.6172 
+    #> F-statistic: 403.7 on 4 and 995 DF,  p-value: < 2.2e-16
 
-In this case, our coefficient estimates for `g` and `x` are off by a
-factor of -1; this is because we picked the opposite vector of principal
-component weights to `prcomp`. This distinction in sign is arbitrary
-(see the note in `?prcomp`).
+In this case, our coefficient estimates for everything but the intercept
+are off by a factor of -1; this is because we picked the opposite vector
+of principal component weights to `prcomp`. This distinction in sign is
+arbitrary (see the note in `?prcomp`).
+
+We can also compare this model to a smaller model using `anova` and find
+the same results when using both PCSS and IPD.
+
+    model_pcss_reduced <- update(model_pcss, . ~ . - g1 - g2 - g3)
+    anova(model_pcss_reduced, model_pcss)
+    #> Analysis of Variance Table
+    #> 
+    #> Model 1: y1 + y2 + y3 ~ x1
+    #> Model 2: y1 + y2 + y3 ~ g1 + g2 + g3 + x1
+    #>   Res.Df     RSS Df Sum of Sq      F    Pr(>F)    
+    #> 1    998 1034.88                                  
+    #> 2    995  796.84  3    238.04 99.077 < 2.2e-16 ***
+    #> ---
+    #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+    model_ipd_reduced <-update(model_ipd, . ~ . - g1 - g2 - g3)
+    anova(model_ipd_reduced, model_ipd)
+    #> Analysis of Variance Table
+    #> 
+    #> Model 1: pc_1 ~ x1
+    #> Model 2: pc_1 ~ g1 + g2 + g3 + x1
+    #>   Res.Df     RSS Df Sum of Sq      F    Pr(>F)    
+    #> 1    998 1034.88                                  
+    #> 2    995  796.84  3    238.04 99.077 < 2.2e-16 ***
+    #> ---
+    #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 ### Logical Combination
 
 In this example we will approximate a linear model where our response is
-the logical combination “*y*<sub>1</sub> or *y*<sub>1</sub>”
-(*y*<sub>1</sub> ∨ *y*<sub>2</sub>).
+the logical combination “*y*<sub>4</sub> or *y*<sub>5</sub>”
+(*y*<sub>4</sub> ∨ *y*<sub>5</sub>).
 
 First we need data with binary phenotypes.
 
-    dat <- pcsstools::bin_data[c("g", "x", "y1", "y2")]
+    dat <- pcsstools_example[c("g1", "g2", "x1", "y4", "y5")]
     head(dat)
-    #>   g          x y1 y2
-    #> 1 0 -0.9161478  1  0
-    #> 2 0  1.2496985  0  1
-    #> 3 1 -1.2708514  0  0
-    #> 4 2  0.0832760  0  1
-    #> 5 0  0.4686342  0  1
-    #> 6 2  0.4620154  0  1
+    #>   g1 g2          x1 y4 y5
+    #> 1  0  1  0.04239463  1  0
+    #> 2  1  0  1.35306987  0  1
+    #> 3  0  1 -1.01226388  1  1
+    #> 4  0  1 -0.35358877  1  0
+    #> 5  1  1  1.20242824  0  0
+    #> 6  0  1  0.20310211  1  1
 
 Once again we will organized our assumed PCSS. In addition to the
 summary statistics we needed for the previous example, we also need to
@@ -166,8 +198,9 @@ which we will use to create a list of `predictor`s.
      covs = cov(dat),
      n = nrow(dat),
      predictors = list(
-       g = new_predictor_snp(maf = mean(dat$g) / 2),
-       x = new_predictor_normal(mean = mean(dat$x), sd = sd(dat$x))
+       g1 = new_predictor_snp(maf = mean(dat$g1) / 2),
+       g2 = new_predictor_snp(maf = mean(dat$g2) / 2),
+       x1 = new_predictor_normal(mean = mean(dat$x1), sd = sd(dat$x1))
      )
     )
 
@@ -176,48 +209,50 @@ which we will use to create a list of `predictor`s.
 
 Then we can approximate the linear model using `pcsslm()`.
 
-    model_pcss <- pcsslm(y1 | y2 ~ g + x, pcss = pcss) 
+    model_pcss <- pcsslm(y4 | y5 ~ g1 + g2 + x1, pcss = pcss) 
     model_pcss
     #> Model approximated using Pre-Computed Summary Statistics.
     #> 
     #> Call:
-    #> pcsslm(formula = y1 | y2 ~ g + x, pcss = pcss)
+    #> pcsslm(formula = y4 | y5 ~ g1 + g2 + x1, pcss = pcss)
     #> 
     #> Coefficients:
     #>             Estimate Std. Error t value Pr(>|t|)    
-    #> (Intercept)  0.66927    0.01878  35.629  < 2e-16 ***
-    #> g           -0.09104    0.02200  -4.137 3.81e-05 ***
-    #> x            0.19003    0.01412  13.455  < 2e-16 ***
+    #> (Intercept)  0.75383    0.01995  37.786  < 2e-16 ***
+    #> g1          -0.05257    0.01904  -2.761  0.00587 ** 
+    #> g2           0.11709    0.01664   7.038 3.62e-12 ***
+    #> x1          -0.08160    0.01163  -7.019 4.14e-12 ***
     #> ---
     #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     #> 
-    #> Residual standard error: 0.4441 on 997 degrees of freedom
-    #> Multiple R-squared:  0.172,  Adjusted R-squared:  0.1703 
-    #> F-statistic: 103.5 on 2 and 997 DF,  p-value: < 2.2e-16
+    #> Residual standard error: 0.3678 on 996 degrees of freedom
+    #> Multiple R-squared:  0.09521,    Adjusted R-squared:  0.09249 
+    #> F-statistic: 34.94 on 3 and 996 DF,  p-value: < 2.2e-16
 
 And here’s the result we would get using IPD:
 
-    model_ipd <- lm(y1 | y2 ~ g + x, data = dat)
+    model_ipd <- lm(y4 | y5 ~ g1 + g2 + x1, data = dat)
     summary(model_ipd)
     #> 
     #> Call:
-    #> lm(formula = y1 | y2 ~ g + x, data = dat)
+    #> lm(formula = y4 | y5 ~ g1 + g2 + x1, data = dat)
     #> 
     #> Residuals:
-    #>     Min      1Q  Median      3Q     Max 
-    #> -1.0857 -0.4393  0.1538  0.3792  0.8597 
+    #>      Min       1Q   Median       3Q      Max 
+    #> -0.97250 -0.02297  0.12654  0.22802  0.54225 
     #> 
     #> Coefficients:
     #>             Estimate Std. Error t value Pr(>|t|)    
-    #> (Intercept)  0.67337    0.01888   35.67  < 2e-16 ***
-    #> g           -0.09862    0.02211   -4.46 9.14e-06 ***
-    #> x            0.18290    0.01419   12.88  < 2e-16 ***
+    #> (Intercept)  0.74555    0.01970  37.849  < 2e-16 ***
+    #> g1          -0.06695    0.01880  -3.561 0.000387 ***
+    #> g2           0.13714    0.01643   8.349 2.28e-16 ***
+    #> x1          -0.08372    0.01148  -7.293 6.16e-13 ***
     #> ---
     #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     #> 
-    #> Residual standard error: 0.4463 on 997 degrees of freedom
-    #> Multiple R-squared:  0.1636, Adjusted R-squared:  0.1619 
-    #> F-statistic:  97.5 on 2 and 997 DF,  p-value: < 2.2e-16
+    #> Residual standard error: 0.3631 on 996 degrees of freedom
+    #> Multiple R-squared:  0.1179, Adjusted R-squared:  0.1153 
+    #> F-statistic: 44.39 on 3 and 996 DF,  p-value: < 2.2e-16
 
 ## Future Work
 
