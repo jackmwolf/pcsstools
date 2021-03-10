@@ -20,16 +20,11 @@
 #' 
 #' @inherit pcsslm return
 #'
-#' @references Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and
-#'   Tintle, N.  (2020). Computationally efficient, exact, covariate-adjusted
-#'   genetic principal component analysis by leveraging individual marker
-#'   summary statistics from large biobanks. \emph{Pacific Symposium on
-#'   Biocomputing}, 25, 719-730.
-#'
-#'   Gasdaska A., Friend D., Chen R., Westra J., Zawistowski M., Lindsey W. and
-#'   Tintle N. (2019) Leveraging summary statistics to make inferences about
-#'   complex phenotypes in large biobanks. \emph{Pacific Symposium on
-#'   Biocomputing}, 24, 391-402.
+#' @references{
+#'   
+#'   \insertRef{wolf_computationally_2020}{pcsstools}
+#'   
+#' }
 #'
 #' @examples
 #' ex_data <- pcsstools_example[c("g1", "x1", "x2", "y1", "y2", "y3")]
@@ -91,16 +86,13 @@ model_prcomp <- function(formula, comp = 1, n, means, covs, ...) {
 #'   responses.
 #' @param ... additional arguments
 #'
-#' @references Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and
-#'   Tintle, N.  (2020). Computationally efficient, exact, covariate-adjusted
-#'   genetic principal component analysis by leveraging individual marker
-#'   summary statistics from large biobanks. \emph{Pacific Symposium on
-#'   Biocomputing}, 25, 719-730.
-#'
-#'   Gasdaska A., Friend D., Chen R., Westra J., Zawistowski M., Lindsey W. and
-#'   Tintle N. (2019) Leveraging summary statistics to make inferences about
-#'   complex phenotypes in large biobanks. \emph{Pacific Symposium on
-#'   Biocomputing}, 24, 391-402.
+#' @references{
+#' 
+#'   \insertRef{wolf_computationally_2020}{pcsstools}
+#'   
+#'   \insertRef{gasdaska_leveraging_2019}{pcsstools}
+#' 
+#' }
 #'
 #' @inherit pcsslm return
 #' @examples
@@ -160,11 +152,11 @@ model_combo <- function(formula, phi, n, means, covs, ...) {
 #'   responses.
 #' @param ... additional arguments
 #'
-#' @references Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and
-#'   Tintle, N.  (2020). Computationally efficient, exact, covariate-adjusted
-#'   genetic principal component analysis by leveraging individual marker
-#'   summary statistics from large biobanks. \emph{Pacific Symposium on
-#'   Biocomputing}, 25, 719-730.
+#' @references{
+#' 
+#'   \insertRef{wolf_computationally_2020}{pcsstools}
+#'   
+#' }
 #'
 #' @inherit pcsslm return
 #'
@@ -225,16 +217,13 @@ model_singular <- function(formula, n, means, covs, ...) {
 #' @param add_intercept logical. If \code{TRUE} adds an intercept to the model.
 #' @param ... additional arguments
 #'
-#' @references Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and
-#'   Tintle, N.  (2020). Computationally efficient, exact, covariate-adjusted
-#'   genetic principal component analysis by leveraging individual marker
-#'   summary statistics from large biobanks. \emph{Pacific Symposium on
-#'   Biocomputing}, 25, 719-730.
-#'
-#'   Gasdaska A., Friend D., Chen R., Westra J., Zawistowski M., Lindsey W. and
-#'   Tintle N. (2019) Leveraging summary statistics to make inferences about
-#'   complex phenotypes in large biobanks. \emph{Pacific Symposium on
-#'   Biocomputing}, 24, 391-402.
+#' @references{
+#' 
+#'   \insertRef{wolf_computationally_2020}{pcsstools}
+#'   
+#'   \insertRef{gasdaska_leveraging_2019}{pcsstools}
+#' 
+#' }
 #'
 calculate_lm_combo <- function(means, covs, n, phi, m = length(phi), add_intercept, ...) {
   p <- length(means) - m

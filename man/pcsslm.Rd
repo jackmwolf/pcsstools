@@ -144,16 +144,15 @@ summary(lm(y4 | y5 ~ g1 + x1, data = ex_data))
 
 }
 \references{
-Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and
-  Tintle, N.  (2020). Computationally efficient, exact, covariate-adjusted
-  genetic principal component analysis by leveraging individual marker
-  summary statistics from large biobanks. \emph{Pacific Symposium on
-  Biocomputing}, 25, 719-730.
+{
 
-  Gasdaska A., Friend D., Chen R., Westra J., Zawistowski M., Lindsey W. and
-  Tintle N. (2019) Leveraging summary statistics to make inferences about
-  complex phenotypes in large biobanks. \emph{Pacific Symposium on
-  Biocomputing}, 24, 391-402.
+  \insertRef{wolf_using_2021}{pcsstools}
+  
+  \insertRef{wolf_computationally_2020}{pcsstools}
+  
+  \insertRef{gasdaska_leveraging_2019}{pcsstools}
+
+}
 }
 \seealso{
 \code{\link{model_combo}}, \code{\link{model_product}}, 

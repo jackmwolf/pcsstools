@@ -43,3 +43,10 @@ to estimate product means and variances.}
 \code{approx_or} approximates the linear model for a disjunction of m
   phenotypes as a function of a set of predictors.
 }
+\references{
+{
+
+  \insertRef{wolf_using_2021}{pcsstools}
+  
+}
+}

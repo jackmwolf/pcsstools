@@ -71,14 +71,11 @@ model_combo(
 summary(lm(y1 - y2 + 0.5 * y3 ~ g1 + x1 + x2 + x3, data = ex_data))
 }
 \references{
-Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and
-  Tintle, N.  (2020). Computationally efficient, exact, covariate-adjusted
-  genetic principal component analysis by leveraging individual marker
-  summary statistics from large biobanks. \emph{Pacific Symposium on
-  Biocomputing}, 25, 719-730.
+{
 
-  Gasdaska A., Friend D., Chen R., Westra J., Zawistowski M., Lindsey W. and
-  Tintle N. (2019) Leveraging summary statistics to make inferences about
-  complex phenotypes in large biobanks. \emph{Pacific Symposium on
-  Biocomputing}, 24, 391-402.
+  \insertRef{wolf_computationally_2020}{pcsstools}
+  
+  \insertRef{gasdaska_leveraging_2019}{pcsstools}
+
+}
 }

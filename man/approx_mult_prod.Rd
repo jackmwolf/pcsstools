@@ -36,3 +36,10 @@ each entry corresponds to one predictor/response variable.}
   set of responses. Estimates are approximated using all unique response
   orderings and aggregated.
 }
+\references{
+{
+
+  \insertRef{wolf_using_2021}{pcsstools}
+  
+}
+}

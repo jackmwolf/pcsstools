@@ -20,6 +20,12 @@
 #' @param ... additional arguments
 #' 
 #' @inherit pcsslm return
+#' 
+#' @references{
+#' 
+#'   \insertRef{wolf_using_2021}{pcsstools}
+#'   
+#' }
 #'
 #' @examples
 #' ex_data <- pcsstools_example[c("g1", "g2", "g3", "x1", "y4", "y5", "y6")]
@@ -96,6 +102,12 @@ model_product <- function(formula, n, means, covs, predictors, responses = NULL,
 #' @param verbose logical.
 #'
 #' @importFrom stats median integrate cov2cor
+#' 
+#' @references{
+#' 
+#'   \insertRef{wolf_using_2021}{pcsstools}
+#'   
+#' }
 #'
 approx_mult_prod <- function(means, covs, n, response, predictors, responses, verbose = FALSE) {
   # Number of responses

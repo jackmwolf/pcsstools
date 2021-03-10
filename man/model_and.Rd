@@ -69,3 +69,10 @@ model_and(
 )
 summary(lm(y4 & y5 ~ g1 + x1, data = ex_data))
 }
+\references{
+{
+
+  \insertRef{wolf_using_2021}{pcsstools}
+  
+}
+}

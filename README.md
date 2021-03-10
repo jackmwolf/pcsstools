@@ -272,6 +272,12 @@ And here’s the result we would get using IPD:
 
 Following are the key references for the functions in this package
 
+-   Wolf, J.M., Westra, J., and Tintle, N. (2021). Using summary
+    statistics to evaluate the genetic architecture of multiplicative
+    combinations of initially analyzed phenotypes with a flexible choice
+    of covariates. *bioRxiv*.
+    <https://doi.org/10.1101/2021.03.08.433979>.
+
 -   Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and
     Tintle, N. (2020). Computationally efficient, exact,
     covariate-adjusted genetic principal component analysis by

@@ -14,6 +14,12 @@
 #' @param ... additional arguments
 #'
 #' @inherit pcsslm return
+#' 
+#' @references{
+#' 
+#'   \insertRef{wolf_using_2021}{pcsstools}
+#'   
+#' }
 #' @examples
 #' ex_data <- pcsstools_example[c("g1", "x1", "y4", "y5")]
 #' head(ex_data)
@@ -74,6 +80,13 @@ model_and <- function(formula, n, means, covs, predictors, ...) {
 #' @param ... additional arguments
 #' 
 #' @inherit pcsslm return
+#'
+#' @references{
+#' 
+#'   \insertRef{wolf_using_2021}{pcsstools}
+#'   
+#' }
+#' 
 #' @examples
 #' ex_data <- pcsstools_example[c("g1", "x1", "y4", "y5")]
 #' head(ex_data)
@@ -140,6 +153,11 @@ model_or <- function(formula, n, means, covs, predictors, ...) {
 #' @param verbose should output be printed to console?
 #' @param ... additional arguments
 #'
+#' @references{
+#' 
+#'   \insertRef{wolf_using_2021}{pcsstools}
+#'   
+#' }
 approx_and <- function(means, covs, n, predictors, add_intercept = TRUE,
                        verbose = FALSE, response_assumption = "binary",
                        ...) {
@@ -185,6 +203,12 @@ approx_and <- function(means, covs, n, predictors, add_intercept = TRUE,
 #' @param verbose should output be printed to console?
 #' @param ... additional arguments
 #'
+#' @references{
+#' 
+#'   \insertRef{wolf_using_2021}{pcsstools}
+#'   
+#' }
+#' 
 approx_or <- function(means, covs, n, predictors, add_intercept = TRUE,
                       verbose = FALSE, response_assumption = "binary", ...) {
   # Model "y1 or y2 or ..." via "not(not y1 and not y2 and ...)"

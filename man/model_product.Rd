@@ -91,3 +91,10 @@ model_product(
 
 summary(lm(y4 * y5 * y6 ~ g1 + g2 + g3 + x1, data = ex_data))
 }
+\references{
+{
+
+  \insertRef{wolf_using_2021}{pcsstools}
+  
+}
+}
