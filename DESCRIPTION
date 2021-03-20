@@ -25,6 +25,7 @@ Description: Defines functions to describe regression models using only
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
+Depends: R (>= 3.5.0)
 Imports:
     gtools,
     Rdpack,
