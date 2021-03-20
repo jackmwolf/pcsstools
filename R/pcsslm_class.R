@@ -211,7 +211,8 @@
 #' @importFrom stats naprint pf printCoefmat symnum
 #'
 #' @export
-#'
+#' @inherit pcsslm return
+#' 
 print.pcsslm <- function(x, digits = max(3L, getOption("digits") - 3L),
                          symbolic.cor = x$symbolic.cor, signif.stars = getOption("show.signif.stars"),
                          ...) {

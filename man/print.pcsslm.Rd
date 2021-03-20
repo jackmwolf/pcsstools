@@ -25,6 +25,32 @@ for each coefficient.}
 
 \item{...}{further arguments passed to or from other methods.}
 }
+\value{
+an object of class \code{"pcsslm"}.
+
+  An object of class \code{"pcsslm"} is a list containing at least the 
+  following components:
+    \item{call}{the matched call}
+    \item{terms}{the \code{terms} object used}
+    \item{coefficients}{a \eqn{p x 4} matrix with columns for the 
+      estimated coefficient, its standard error, t-statistic and
+      corresponding (two-sided) p-value.}
+    \item{sigma}{the square root of the estimated variance of the random
+      error.}
+    \item{df}{degrees of freedom, a 3-vector \eqn{p, n-p, p*}, the
+      first being the number of non-aliased coefficients, the last being
+      the total number of coefficients.}
+    \item{fstatistic}{a 3-vector with the value of the F-statistic with its
+      numerator and denominator degrees of freedom.}
+    \item{r.squared}{\eqn{R^2}, the 'fraction of variance explained by the 
+      model'.}
+    \item{adj.r.squared}{the above \eqn{R^2} statistic \emph{'adjusted'},
+      penalizing for higher \eqn{p}.}
+    \item{cov.unscaled}{a \eqn{p x p} matrix of (unscaled) covariances of the
+      \eqn{coef[j], j=1,...p}.}
+    \item{Sum Sq}{a 3-vector with the model's Sum of Squares Regression 
+      (SSR), Sum of Squares Error (SSE), and Sum of Squares Total (SST).}
+}
 \description{
 Prints a linear model fit through pre-computed summary statistics
 }
