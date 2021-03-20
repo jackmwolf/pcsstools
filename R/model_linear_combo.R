@@ -16,6 +16,10 @@
 #' @param means named vector of predictor and response means.
 #' @param covs named matrix of the covariance of all model predictors and the
 #'   responses.
+#' @param center logical. Should the dependent variables be centered before
+#'   principal components are calculated?
+#' @param standardize logical. Should the dependent variables be standardized 
+#'   before principal components are calculated? 
 #' @param ... additional arguments
 #' 
 #' @inherit pcsslm return
@@ -38,7 +42,8 @@
 #'   comp = 1, n = n, means = means, covs = covs
 #' )
 #' @export
-model_prcomp <- function(formula, comp = 1, n, means, covs, ...) {
+model_prcomp <- function(formula, comp = 1, n, means, covs, 
+                         center = FALSE, standardize = FALSE, ...) {
   cl <- match.call()
   terms <- terms(formula)
 
@@ -51,6 +56,17 @@ model_prcomp <- function(formula, comp = 1, n, means, covs, ...) {
   means0 <- means[c(xterms$predictors, yterms)]
   covs0 <- covs[c(xterms$predictors, yterms), c(xterms$predictors, yterms)]
   add_intercept <- xterms$add_intercept
+  
+  # Adjust pcss if response is centered, standardized
+  if (center) {
+    means0[yterms] <- 0
+  }
+  if (standardize) {
+    var0 <-  c(rep(1, length(xterms$predictors)), diag(covs0)[yterms])
+    
+    covs0 <- (1 / sqrt(var0)) * t((1 / sqrt(var0)) *  covs0)
+
+  }
 
   # Calculate weights for PCA
   ysigma <- covs0[yterms, yterms]

@@ -84,33 +84,36 @@ covariance matrix, and our sample size.
 Then, we can calculate the linear model by using `pcsslm()`. Our
 `formula` will list all phenotypes as one sum, joined together by `+`
 operators and we indicate that we want the first principal component
-score by setting `comp = 1`.
+score by setting `comp = 1`. We also want to center and standardize
+`y1`, `y2`, and `y3` before computing principal component scores; we
+will do so by setting `center = TRUE` and `standardize = TRUE`.
 
-    model_pcss <- pcsslm(y1 + y2 + y3 ~ g1 + g2 + g3 + x1, pcss = pcss, comp = 1)
+    model_pcss <- pcsslm(y1 + y2 + y3 ~ g1 + g2 + g3 + x1, pcss = pcss, comp = 1,
+                         center = TRUE, standardize = TRUE)
     model_pcss
     #> Model approximated using Pre-Computed Summary Statistics.
     #> 
     #> Call:
     #> pcsslm(formula = y1 + y2 + y3 ~ g1 + g2 + g3 + x1, pcss = pcss, 
-    #>     comp = 1)
+    #>     comp = 1, center = TRUE, standardize = TRUE)
     #> 
     #> Coefficients:
-    #>               Estimate Std. Error t value Pr(>|t|)    
-    #> (Intercept)  0.0005988  0.0511896   0.012    0.991    
-    #> g1           0.7689603  0.0463373  16.595  < 2e-16 ***
-    #> g2           0.0078751  0.0404849   0.195    0.846    
-    #> g3          -0.2568899  0.0585875  -4.385 1.28e-05 ***
-    #> x1           1.0370967  0.0282909  36.658  < 2e-16 ***
+    #>             Estimate Std. Error t value Pr(>|t|)    
+    #> (Intercept) -0.03166    0.04710  -0.672 0.501581    
+    #> g1           0.30333    0.04264   7.115 2.14e-12 ***
+    #> g2          -0.10125    0.03725  -2.718 0.006681 ** 
+    #> g3          -0.20014    0.05391  -3.713 0.000216 ***
+    #> x1           0.96190    0.02603  36.953  < 2e-16 ***
     #> ---
     #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     #> 
-    #> Residual standard error: 0.8949 on 995 degrees of freedom
-    #> Multiple R-squared:  0.6187, Adjusted R-squared:  0.6172 
-    #> F-statistic: 403.7 on 4 and 995 DF,  p-value: < 2.2e-16
+    #> Residual standard error: 0.8234 on 995 degrees of freedom
+    #> Multiple R-squared:  0.5891, Adjusted R-squared:  0.5874 
+    #> F-statistic: 356.6 on 4 and 995 DF,  p-value: < 2.2e-16
 
 Here’s the same model using individual patient data.
 
-    pc_1 <- prcomp(x = dat[c("y1", "y2", "y3")])$x[, "PC1"]
+    pc_1 <- prcomp(x = dat[c("y1", "y2", "y3")], center = TRUE, scale. = TRUE)$x[, "PC1"]
 
     model_ipd <- lm(pc_1 ~ g1 + g2 + g3 + x1, data = dat)
     summary(model_ipd)
@@ -120,26 +123,26 @@ Here’s the same model using individual patient data.
     #> 
     #> Residuals:
     #>      Min       1Q   Median       3Q      Max 
-    #> -2.65976 -0.55994  0.00792  0.62143  2.72442 
+    #> -2.48100 -0.55738 -0.00702  0.56556  2.42936 
     #> 
     #> Coefficients:
-    #>              Estimate Std. Error t value Pr(>|t|)    
-    #> (Intercept)  0.345296   0.051190   6.745 2.58e-11 ***
-    #> g1          -0.768960   0.046337 -16.595  < 2e-16 ***
-    #> g2          -0.007875   0.040485  -0.195    0.846    
-    #> g3           0.256890   0.058588   4.385 1.28e-05 ***
-    #> x1          -1.037097   0.028291 -36.658  < 2e-16 ***
+    #>             Estimate Std. Error t value Pr(>|t|)    
+    #> (Intercept)  0.03166    0.04710   0.672 0.501581    
+    #> g1          -0.30333    0.04264  -7.115 2.14e-12 ***
+    #> g2           0.10125    0.03725   2.718 0.006681 ** 
+    #> g3           0.20014    0.05391   3.713 0.000216 ***
+    #> x1          -0.96190    0.02603 -36.953  < 2e-16 ***
     #> ---
     #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     #> 
-    #> Residual standard error: 0.8949 on 995 degrees of freedom
-    #> Multiple R-squared:  0.6187, Adjusted R-squared:  0.6172 
-    #> F-statistic: 403.7 on 4 and 995 DF,  p-value: < 2.2e-16
+    #> Residual standard error: 0.8234 on 995 degrees of freedom
+    #> Multiple R-squared:  0.5891, Adjusted R-squared:  0.5874 
+    #> F-statistic: 356.6 on 4 and 995 DF,  p-value: < 2.2e-16
 
-In this case, our coefficient estimates for everything but the intercept
-are off by a factor of -1; this is because we picked the opposite vector
-of principal component weights to `prcomp`. This distinction in sign is
-arbitrary (see the note in `?prcomp`).
+In this case, our coefficient estimates are off by a factor of -1; this
+is because we picked the opposite vector of principal component weights
+to `prcomp`. This distinction in sign is arbitrary (see the note in
+`?prcomp`).
 
 We can also compare this model to a smaller model using `anova` and find
 the same results when using both PCSS and IPD.
@@ -150,9 +153,9 @@ the same results when using both PCSS and IPD.
     #> 
     #> Model 1: y1 + y2 + y3 ~ x1
     #> Model 2: y1 + y2 + y3 ~ g1 + g2 + g3 + x1
-    #>   Res.Df     RSS Df Sum of Sq      F    Pr(>F)    
-    #> 1    998 1034.88                                  
-    #> 2    995  796.84  3    238.04 99.077 < 2.2e-16 ***
+    #>   Res.Df    RSS Df Sum of Sq      F    Pr(>F)    
+    #> 1    998 723.16                                  
+    #> 2    995 674.60  3    48.564 23.877 6.322e-15 ***
     #> ---
     #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -162,9 +165,9 @@ the same results when using both PCSS and IPD.
     #> 
     #> Model 1: pc_1 ~ x1
     #> Model 2: pc_1 ~ g1 + g2 + g3 + x1
-    #>   Res.Df     RSS Df Sum of Sq      F    Pr(>F)    
-    #> 1    998 1034.88                                  
-    #> 2    995  796.84  3    238.04 99.077 < 2.2e-16 ***
+    #>   Res.Df    RSS Df Sum of Sq      F    Pr(>F)    
+    #> 1    998 723.16                                  
+    #> 2    995 674.60  3    48.564 23.877 6.322e-15 ***
     #> ---
     #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -255,9 +258,6 @@ And here’s the result we would get using IPD:
     #> F-statistic: 44.39 on 3 and 996 DF,  p-value: < 2.2e-16
 
 ## Future Work
-
--   Add arguments to center and standardize responses in
-    `model_prcomp()`.
 
 -   Support function notation for linear combinations of phenotypes
     (e.g. `y1 - y2 + 0.5 * y3 ~ 1 + g + x`) instead of requiring a

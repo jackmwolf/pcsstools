@@ -4,7 +4,16 @@
 \alias{model_prcomp}
 \title{Model the principal component score of a set of phenotypes using PCSS}
 \usage{
-model_prcomp(formula, comp = 1, n, means, covs, ...)
+model_prcomp(
+  formula,
+  comp = 1,
+  n,
+  means,
+  covs,
+  center = FALSE,
+  standardize = FALSE,
+  ...
+)
 }
 \arguments{
 \item{formula}{an object of class \code{formula} whose dependent variable is
@@ -22,6 +31,12 @@ Must be less than or equal to the total number of phenotypes.}
 
 \item{covs}{named matrix of the covariance of all model predictors and the
 responses.}
+
+\item{center}{logical. Should the dependent variables be centered before
+principal components are calculated?}
+
+\item{standardize}{logical. Should the dependent variables be standardized 
+before principal components are calculated?}
 
 \item{...}{additional arguments}
 }

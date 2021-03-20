@@ -77,22 +77,24 @@ pcss <- list(
 
 Then, we can calculate the linear model by using `pcsslm()`.
 Our `formula` will list all phenotypes as one sum, joined together by `+` operators and we indicate that we want the first principal component score by setting `comp = 1`.
+We also want to center and standardize `y1`, `y2`, and `y3` before computing principal component scores; we will do so by setting `center = TRUE` and `standardize = TRUE`.
 
 ```{r}
-model_pcss <- pcsslm(y1 + y2 + y3 ~ g1 + g2 + g3 + x1, pcss = pcss, comp = 1)
+model_pcss <- pcsslm(y1 + y2 + y3 ~ g1 + g2 + g3 + x1, pcss = pcss, comp = 1,
+                     center = TRUE, standardize = TRUE)
 model_pcss
 ```
 
 Here's the same model using individual patient data. 
 
 ```{r}
-pc_1 <- prcomp(x = dat[c("y1", "y2", "y3")])$x[, "PC1"]
+pc_1 <- prcomp(x = dat[c("y1", "y2", "y3")], center = TRUE, scale. = TRUE)$x[, "PC1"]
 
 model_ipd <- lm(pc_1 ~ g1 + g2 + g3 + x1, data = dat)
 summary(model_ipd)
 ```
 
-In this case, our coefficient estimates for everything but the intercept are off by a factor of -1; this is because we picked the opposite vector of principal component weights to `prcomp`.
+In this case, our coefficient estimates are off by a factor of -1; this is because we picked the opposite vector of principal component weights to `prcomp`.
 This distinction in sign is arbitrary (see the note in `?prcomp`).
 
 We can also compare this model to a smaller model using `anova` and find the same results when using both PCSS and IPD.
@@ -152,8 +154,6 @@ summary(model_ipd)
 ```
 
 ## Future Work
-
-* Add arguments to center and standardize responses in  `model_prcomp()`. 
 
 * Support function notation for linear combinations of phenotypes (e.g. `y1 - y2 + 0.5 * y3 ~ 1 + g + x`)  instead of requiring a separate vector of weights
 
