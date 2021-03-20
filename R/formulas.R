@@ -81,12 +81,4 @@ parse_sum <- function(response = character(), ...) {
   return(terms0)
 }
 
-# parse_linear_combo <- function(response = character(), ...) {
-#   # Replace "-" with "+ -1 *"
-#
-#   gsub("^-", "-1 * ", response)
-#
-#   gsub("[{- }{y%}]", "-1 *", response)
-#   terms0 <- parse_sum(response)
-# }
 
