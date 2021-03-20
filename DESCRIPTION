@@ -1,7 +1,7 @@
 Package: pcsstools
 Type: Package
 Title: Tools for Regression Using Pre-Computed Summary Statistics
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: c(
     person(
       "Jack", "Wolf", email = "jackwolf910@gmail.com", 
@@ -37,5 +37,4 @@ Suggests:
     rmarkdown,
     spelling
 BugReports: https://github.com/jackmwolf/pcsstools/issues
-VignetteBuilder: knitr
 Language: en-US
