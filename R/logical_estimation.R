@@ -235,7 +235,8 @@ approx_or <- function(means, covs, n, predictors, add_intercept = TRUE,
   out_means <- approx_not_and$means * tau + c(rep(0, p), 1)
 
   model <- calculate_lm(
-    means = out_means, covs = out_covs, n = n, add_intercept = add_intercept, ...
+    means = out_means, covs = out_covs, n = n, 
+    add_intercept = add_intercept, ...
   )
   return(model)
 }

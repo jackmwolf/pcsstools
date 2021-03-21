@@ -9,7 +9,8 @@ test_that("anova.pcsslmlist matches anova.lmlist", {
     n = nrow(ex_data)
   )
   
-  pcss_mod_full <- pcsslm(y1 + y2 ~ g1 + x1 + x2 + x3, pcss = pcss, phi = c(1, 1))
+  pcss_mod_full <- 
+    pcsslm(y1 + y2 ~ g1 + x1 + x2 + x3, pcss = pcss, phi = c(1, 1))
   pcss_mod_reduced <- update(pcss_mod_full, . ~ . - x1 - x2 - x3)
   
   pcss_anova <- anova(pcss_mod_reduced, pcss_mod_full)

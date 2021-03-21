@@ -214,7 +214,8 @@
 #' @inherit pcsslm return
 #' 
 print.pcsslm <- function(x, digits = max(3L, getOption("digits") - 3L),
-                         symbolic.cor = x$symbolic.cor, signif.stars = getOption("show.signif.stars"),
+                         symbolic.cor = x$symbolic.cor, 
+                         signif.stars = getOption("show.signif.stars"),
                          ...) {
   cat("Model approximated using Pre-Computed Summary Statistics.\n")
   cat("\nCall:\n", paste(deparse(x$call),
@@ -229,8 +230,9 @@ print.pcsslm <- function(x, digits = max(3L, getOption("digits") - 3L),
   }
   else {
     if (nsingular <- df[3L] - df[1L]) {
-      cat("\nCoefficients: (", nsingular, " not defined because of singularities)\n",
-        sep = ""
+      cat("\nCoefficients: (", nsingular, 
+          " not defined because of singularities)\n",
+          sep = ""
       )
     } else {
       cat("\nCoefficients:\n")

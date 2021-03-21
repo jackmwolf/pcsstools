@@ -58,7 +58,8 @@ model_product <- function(formula, n, means, covs, predictors, responses = NULL,
   xterms <- extract_predictors(formula)
   yterms <- parse_product(extract_response(formula))
   
-  check_terms_product(xterms$predictors, yterms, means, covs, predictors, responses)
+  check_terms_product(xterms$predictors, yterms, means, covs, predictors, 
+                      responses)
 
   # Re-arrange means, covs, and predictors to match given formula
   means0 <- means[c(xterms$predictors, yterms)]
@@ -109,7 +110,8 @@ model_product <- function(formula, n, means, covs, predictors, responses = NULL,
 #'   
 #' }
 #'
-approx_mult_prod <- function(means, covs, n, response, predictors, responses, verbose = FALSE) {
+approx_mult_prod <- function(means, covs, n, response, predictors, responses, 
+                             verbose = FALSE) {
   # Number of responses
   m <- length(means) - length(predictors)
   p <- length(means) - m
@@ -131,10 +133,12 @@ approx_mult_prod <- function(means, covs, n, response, predictors, responses, ve
         resp_names <- names(means0)[(p + 1):(p + m)]
         if (any(is.null(resp_names)) | "" %in% resp_names) {
           order_chr <- paste(rev(order0), collapse = " * ")
-          message(paste("Approximating with response columns order: "), order_chr, "\n")
+          message(paste("Approximating with response columns order: ", 
+                        order_chr, "\n"))
         } else {
           y_names <- paste(rev(resp_names), collapse = " * ")
-          message(paste("Approximating with responses ordered as: ", y_names, "\n"))
+          message(paste("Approximating with responses ordered as: ", 
+                        y_names, "\n"))
         }
       }
 
@@ -171,7 +175,8 @@ approx_mult_prod <- function(means, covs, n, response, predictors, responses, ve
 
 
 # Recursively approximate covariances with a product of responses
-approx_prod_recursive <- function(means, covs, n, response, predictors, responses) {
+approx_prod_recursive <- function(means, covs, n, response, predictors, 
+                                  responses) {
   # Number of responses and predictors
   m <- length(means) - length(predictors)
   p <- length(means) - m
@@ -286,16 +291,16 @@ approx_response_cov_recursive <- function(ids, r_covs, r_means, n, responses,
     # Approx cov of 1st id and product of 3rd to END
     ids0 <- c(ids[1], ids[3:length(ids)])
     approx_13 <- approx_response_cov_recursive(
-      ids = ids0, r_covs = r_covs, r_means = r_means, n = n, responses = responses,
-      response = response, verbose = verbose
+      ids = ids0, r_covs = r_covs, r_means = r_means, n = n, 
+      responses = responses, response = response, verbose = verbose
     )
     cov_13 <- approx_13[["cov"]]
     # Approx cov of 2nd id and product of 3rd to END and mean of product of 3rd
     # to END
     ids0 <- c(ids[2], ids[3:length(ids)])
     approx_23 <- approx_response_cov_recursive(
-      ids = ids0, r_covs = r_covs, r_means = r_means, n = n, responses = responses,
-      response = response, verbose = verbose
+      ids = ids0, r_covs = r_covs, r_means = r_means, n = n, 
+      responses = responses, response = response, verbose = verbose
     )
     cov_23 <- approx_23[["cov"]]
 
@@ -414,7 +419,8 @@ approx_conditional <- function(means, covs, response, n) {
 #' Approximate the partial correlation of Y and Z given X
 #' @param covs Covariance matrix of X, Y, and Z.
 #' @param cors Correlation matrix of X, Y, and Z.
-#' @return Approximated partial correlation of the later two terms given the first
+#' @return Approximated partial correlation of the later two terms given the 
+#'   first
 get_pcor <- function(covs, cors = cov2cor(covs)) {
   if (isTRUE(all.equal(cors[1, 2], 1)) | isTRUE(all.equal(cors[1, 3], 1))) {
     rho <- 0
@@ -425,7 +431,8 @@ get_pcor <- function(covs, cors = cov2cor(covs)) {
   return(rho)
 }
 
-# Approximate the covariance of X and Y*Z as well as the mean and variance of Y * Z
+# Approximate the covariance of X and Y*Z as well as the mean and variance of 
+# Y * Z
 approx_cov <- function(means, covs, predictor_type, response, n, f, ...) {
   # MEAN ##
   pred_mean <- get_mean(means = means[2:3], covs = covs[2:3, 2:3], n = n)
@@ -447,7 +454,8 @@ approx_cov <- function(means, covs, predictor_type, response, n, f, ...) {
 
   # Predicted product conditional mean
   c_prod_mean <- function(x0) {
-    c_1$c_mu(x0) * c_2$c_mu(x0) + rho * sqrt(c_1$c_var(x0) * c_2$c_var(x0)) * (n - 1) / n
+    c_1$c_mu(x0) * c_2$c_mu(x0) + rho * sqrt(c_1$c_var(x0) * c_2$c_var(x0)) * 
+      (n - 1) / n
   }
 
   if (predictor_type == "discrete") {
@@ -474,7 +482,8 @@ approx_cov <- function(means, covs, predictor_type, response, n, f, ...) {
     # Estimate the conditional variance
     c_prod_var <- function(x0) {
       (c_1$c_mu(x0)^2 / c_1$c_var(x0) + c_2$c_mu(x0)^2 / c_2$c_var(x0) +
-        2 * rho * c_1$c_mu(x0) * c_2$c_mu(x0) / sqrt(c_1$c_var(x0) * c_2$c_var(x0)) +
+        2 * rho * c_1$c_mu(x0) * c_2$c_mu(x0) / 
+         sqrt(c_1$c_var(x0) * c_2$c_var(x0)) +
         1 + rho^2) * c_1$c_var(x0) * c_2$c_var(x0)
     }
 
@@ -491,7 +500,9 @@ approx_cov <- function(means, covs, predictor_type, response, n, f, ...) {
       )
     }
   }
-  return(c(cov = unname(pred_cov), mean = unname(pred_mean), var = unname(pred_var)))
+  return(c(cov = unname(pred_cov), 
+           mean = unname(pred_mean), 
+           var = unname(pred_var)))
 }
 
 approx_cov_discrete <- function(c_prod_mean, predictor_mean, f, support) {
@@ -512,20 +523,25 @@ get_mean <- function(means, covs, n) {
   return(prod_mean)
 }
 
-approx_var_discrete <- function(c_prod_mean, c_prod_var, prod_mean, n, f, support) {
+approx_var_discrete <- function(c_prod_mean, c_prod_var, prod_mean, n, f, 
+                                support) {
   g <- function(x0) {
-    (n * f(x0) - 1) * c_prod_var(x0) + n * f(x0) * (c_prod_mean(x0) - prod_mean)^2
+    (n * f(x0) - 1) * c_prod_var(x0) + n * f(x0) * 
+      (c_prod_mean(x0) - prod_mean)^2
   }
   pred_var <- sum(g(support)) / (n - 1)
   return(pred_var)
 }
 
-approx_var_continuous <- function(c_prod_mean, c_prod_var, prod_mean, n, f, lb, ub) {
+approx_var_continuous <- function(c_prod_mean, c_prod_var, prod_mean, n, f, 
+                                  lb, ub) {
   g <- function(x0) {
     # f(x0) * c_prod_var(x0) + f(x0) * c_prod_mean(x0) - prod_mean^2
-    (n * f(x0) - 1) * c_prod_var(x0) + n * f(x0) * (c_prod_mean(x0) - prod_mean)^2
+    (n * f(x0) - 1) * c_prod_var(x0) + n * f(x0) * 
+      (c_prod_mean(x0) - prod_mean)^2
   }
-  pred_var <- integrate(g, lower = lb, upper = ub, stop.on.error = FALSE)$value / (n - 1)
+  pred_var <- integrate(g, lower = lb, upper = ub, 
+                        stop.on.error = FALSE)$value / (n - 1)
   return(pred_var)
 }
 

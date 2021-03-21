@@ -12,7 +12,8 @@ get_pcor(covs, cors = cov2cor(covs))
 \item{cors}{Correlation matrix of X, Y, and Z.}
 }
 \value{
-Approximated partial correlation of the later two terms given the first
+Approximated partial correlation of the later two terms given the 
+  first
 }
 \description{
 Approximate the partial correlation of Y and Z given X

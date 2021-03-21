@@ -2,12 +2,12 @@
 #'
 #' @param f a function that gives the probability mass/distribution function of
 #'   a random variable.
-#' @param predictor_type a character describing the random variable. Either "discrete"
-#'   or "continuous".
+#' @param predictor_type a character describing the random variable. Either 
+#'   "discrete" or "continuous".
 #' @param lb,ub if \code{predictor_type == "continuous"} double giving the
 #'   lower/upper bound of the pdf \code{f}.
-#' @param support if \code{predictor_type == "discrete"} vector of the support of
-#'   the pmf for \code{f}.
+#' @param support if \code{predictor_type == "discrete"} vector of the support 
+#'   of the pmf for \code{f}.
 #'
 #' @return an object of class \code{"predictor"}.
 #' @examples
@@ -20,7 +20,8 @@
 #'
 #'
 #' @export
-new_predictor <- function(f = function() {}, predictor_type = character(), lb, ub, support) {
+new_predictor <- function(f = function() {}, predictor_type = character(), 
+                          lb, ub, support) {
   x <- list(f = f, predictor_type = predictor_type)
 
   if (!missing(lb) & !missing(ub)) {
@@ -43,7 +44,9 @@ validate_predictor <- function(x) {
   } else if (x$predictor_type == "continuous") {
     stopifnot(is.double(x$lb), is.double(x$ub))
   } else {
-    stop('Invalid argument to predictor_type (Currently supports "discrete" and "continuous"')
+    stop(
+      'Invalid argument to predictor_type (Currently supports "discrete" and "continuous"'
+      )
   }
 }
 

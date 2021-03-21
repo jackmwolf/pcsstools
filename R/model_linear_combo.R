@@ -73,8 +73,8 @@ model_prcomp <- function(formula, comp = 1, n, means, covs,
   phi <- eigen(ysigma)$vectors[, comp]
 
   re <- calculate_lm_combo(
-    means = means0, covs = covs0, n = n, phi = phi, add_intercept = add_intercept,
-    terms = terms, ...
+    means = means0, covs = covs0, n = n, phi = phi, 
+    add_intercept = add_intercept, terms = terms, ...
   )
   re$call <- cl
   class(re) <- "pcsslm"
@@ -144,8 +144,8 @@ model_combo <- function(formula, phi, n, means, covs, ...) {
   phi0 <- phi[yterms]
 
   re <- calculate_lm_combo(
-    means = means0, covs = covs0, n = n, phi = phi, add_intercept = add_intercept, 
-    terms = terms, ...
+    means = means0, covs = covs0, n = n, phi = phi, 
+    add_intercept = add_intercept, terms = terms, ...
   )
   re$call <- cl
   class(re) <- "pcsslm"
@@ -241,7 +241,8 @@ model_singular <- function(formula, n, means, covs, ...) {
 #' 
 #' }
 #'
-calculate_lm_combo <- function(means, covs, n, phi, m = length(phi), add_intercept, ...) {
+calculate_lm_combo <- function(means, covs, n, phi, m = length(phi), 
+                               add_intercept, ...) {
   p <- length(means) - m
 
   # Covariances with linear combo and variance/mean of the linear combo
@@ -255,5 +256,6 @@ calculate_lm_combo <- function(means, covs, n, phi, m = length(phi), add_interce
   colnames(covs0) <- c(names(means)[1:p], NA)
   rownames(covs0) <- c(names(means)[1:p], NA)
 
-  calculate_lm(means = means0, covs = covs0, n = n, add_intercept = add_intercept, ...)
+  calculate_lm(means = means0, covs = covs0, n = n, 
+               add_intercept = add_intercept, ...)
 }
