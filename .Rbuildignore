@@ -8,3 +8,4 @@
 ^LICENSE\.md$
 ^man/figures/make_hex\.R$
 ^cran-comments\.md$
+^CRAN-RELEASE$
