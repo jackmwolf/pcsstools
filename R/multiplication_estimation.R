@@ -109,7 +109,12 @@ model_product <- function(formula, n, means, covs, predictors, responses = NULL,
 #'   \insertRef{wolf_using_2021}{pcsstools}
 #'   
 #' }
-#'
+#' @return A list containing the following elements:
+#'     \item{means}{a vector of the (approximated) means of all predictors 
+#'       and the product of responses}
+#'     \item{covs}{a matrix of (approximated) covariances between all predictors
+#'       and the product of responses}
+#'  
 approx_mult_prod <- function(means, covs, n, response, predictors, responses, 
                              verbose = FALSE) {
   # Number of responses

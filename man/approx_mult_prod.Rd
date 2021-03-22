@@ -31,6 +31,13 @@ each entry corresponds to one predictor/response variable.}
 
 \item{verbose}{logical.}
 }
+\value{
+A list containing the following elements:
+    \item{means}{a vector of the (approximated) means of all predictors 
+      and the product of responses}
+    \item{covs}{a matrix of (approximated) covariances between all predictors
+      and the product of responses}
+}
 \description{
 \code{approx_mult_prod} recursively estimates the covariances and means of a
   set of responses. Estimates are approximated using all unique response

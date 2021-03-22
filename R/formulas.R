@@ -19,6 +19,7 @@ extract_predictors <- function(formula = formula()) {
 #' Extract dependent variables from a formula as a string
 #' @param formula an object of class \code{formula}.
 #' @importFrom stats terms
+#' @return a character vector of all responses
 extract_response <- function(formula = formula()) {
   terms0 <- terms(formula)
   response <- as.character(attributes(terms0)$variables)[[2]]

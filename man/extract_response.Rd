@@ -9,6 +9,9 @@ extract_response(formula = formula())
 \arguments{
 \item{formula}{an object of class \code{formula}.}
 }
+\value{
+a character vector of all responses
+}
 \description{
 Extract dependent variables from a formula as a string
 }
