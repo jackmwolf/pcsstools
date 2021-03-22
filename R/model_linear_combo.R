@@ -240,7 +240,7 @@ model_singular <- function(formula, n, means, covs, ...) {
 #'   \insertRef{gasdaska_leveraging_2019}{pcsstools}
 #' 
 #' }
-#'
+#' @inherit pcsslm return
 calculate_lm_combo <- function(means, covs, n, phi, m = length(phi), 
                                add_intercept, ...) {
   p <- length(means) - m

@@ -9,6 +9,9 @@ make_permutations(m)
 \arguments{
 \item{m}{number of elements to permute}
 }
+\value{
+A list of vectors of permutations of 1,2,...,m.
+}
 \description{
 Lists all permutations of 1,2,...,m unique up to the first two elements
 }

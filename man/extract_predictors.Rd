@@ -9,6 +9,10 @@ extract_predictors(formula = formula())
 \arguments{
 \item{formula}{an object of class \code{formula}.}
 }
+\value{
+A list with a character vector of all predictors and a logical
+  value indicating whether the model includes an intercept term.
+}
 \description{
 Extract independent variables from a formula
 }

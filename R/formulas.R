@@ -1,6 +1,8 @@
 #' Extract independent variables from a formula
 #' @param formula an object of class \code{formula}.
 #' @importFrom stats terms
+#' @return A list with a character vector of all predictors and a logical
+#'   value indicating whether the model includes an intercept term.
 extract_predictors <- function(formula = formula()) {
   terms0 <- terms(formula)
 
@@ -31,6 +33,9 @@ extract_response <- function(formula = formula()) {
 #' \code{model_} function to model the appropriate response using PCSS.
 #' 
 #' @param response character. Output of \code{extract_response}.
+#' @return A character. Either \code{"model_combo"}, \code{"model_product"}, 
+#'   \code{"model_or}", \code{"model_and"}, or \code{"model_singular"}.
+#'   
 guess_response <- function(response = character()) {
   
   seps <- c("\\+", "\\*", "\\|", "\\&")

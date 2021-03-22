@@ -9,6 +9,10 @@ guess_response(response = character())
 \arguments{
 \item{response}{character. Output of \code{extract_response}.}
 }
+\value{
+A character. Either \code{"model_combo"}, \code{"model_product"}, 
+  \code{"model_or}", \code{"model_and"}, or \code{"model_singular"}.
+}
 \description{
 \code{guess_response} takes a character vector of the dependent variable
 from a \code{formula} object and identifies which function separates the

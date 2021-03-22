@@ -551,6 +551,7 @@ approx_var_continuous <- function(c_prod_mean, c_prod_var, prod_mean, n, f,
 #' Lists all permutations of 1,2,...,m unique up to the first two elements
 #' @param m number of elements to permute
 #' @importFrom gtools permutations
+#' @return A list of vectors of permutations of 1,2,...,m.
 make_permutations <- function(m) {
   # All possible permutations. We only need half of these as the order of the
   # first two columns does not matter.

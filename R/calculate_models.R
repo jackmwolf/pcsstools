@@ -195,7 +195,7 @@ pcsslm <- function(formula, pcss = list(), ...) {
 #'   \insertRef{gasdaska_leveraging_2019}{pcsstools}
 #' 
 #' }
-#'
+#'@inherit pcsslm return
 calculate_lm <- function(means, covs, n, add_intercept = FALSE, 
                          keep_pcss = FALSE, terms = NULL) {
   cl <- match.call()

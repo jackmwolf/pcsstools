@@ -19,6 +19,10 @@ zero this will be estimated from the largest model considered.}
 be one of \code{"F"}, \code{"Chisq"} or \code{"Cp"}, with partial matching 
 allowed, or \code{NULL} for no test.}
 }
+\value{
+An object of class \code{"anova"} inheriting from class 
+  \code{"data.frame"}.
+}
 \description{
 Compute an analysis of variance table for one or more linear model fitted
 using PCSS.

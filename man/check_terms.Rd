@@ -16,6 +16,9 @@ variables combined to the dependent variable}
 \code{"means"}, \code{"covs"}, \code{"predictors"}, or
 \code{"responses"}.}
 }
+\value{
+No return value, called for side effects
+}
 \description{
 Check that independent and dependent variables are accounted for through PCSS
 }

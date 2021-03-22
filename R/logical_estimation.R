@@ -158,6 +158,7 @@ model_or <- function(formula, n, means, covs, predictors, ...) {
 #'   \insertRef{wolf_using_2021}{pcsstools}
 #'   
 #' }
+#' @inherit pcsslm return
 approx_and <- function(means, covs, n, predictors, add_intercept = TRUE,
                        verbose = FALSE, response_assumption = "binary",
                        ...) {
@@ -208,7 +209,7 @@ approx_and <- function(means, covs, n, predictors, add_intercept = TRUE,
 #'   \insertRef{wolf_using_2021}{pcsstools}
 #'   
 #' }
-#' 
+#' @inherit pcsslm return
 approx_or <- function(means, covs, n, predictors, add_intercept = TRUE,
                       verbose = FALSE, response_assumption = "binary", ...) {
   # Model "y1 or y2 or ..." via "not(not y1 and not y2 and ...)"

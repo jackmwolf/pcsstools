@@ -5,7 +5,7 @@
 #' @param pcsstype character describing the PCSS being checked. Either
 #'   \code{"means"}, \code{"covs"}, \code{"predictors"}, or
 #'   \code{"responses"}.
-#'    
+#' @return No return value, called for side effects
 check_terms <- function(xterms, yterms, pcssterms, pcsstype) {
   
   if (pcsstype %in% c("means", "covs")) {

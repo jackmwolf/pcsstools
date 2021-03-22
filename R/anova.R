@@ -209,6 +209,9 @@
 #' 
 #' @importFrom stats formula stat.anova
 #' 
+#' @return An object of class \code{"anova"} inheriting from class 
+#'   \code{"data.frame"}.
+#' 
 #' @export
 anova.pcsslm <- function(object, ...) {
   if (length(list(object, ...)) > 1L) {
