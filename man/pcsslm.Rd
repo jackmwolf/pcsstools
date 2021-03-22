@@ -75,7 +75,9 @@ an object of class \code{"pcsslm"}.
   
   If modeling a principal component score of a set of variables, include 
   the argument \code{comp} where \code{comp} is an integer indicating which 
-  principal component score to analyze.
+  principal component score to analyze. Optional logical arguments 
+  \code{center} and \code{standardize} determine if responses should be
+  centered and standardized before principal components are calculated. 
   
   If modeling a linear combination, include the argument \code{phi}, a named
   vector of linear weights for each variable in the dependent variable in 
