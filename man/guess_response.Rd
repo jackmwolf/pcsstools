@@ -11,11 +11,11 @@ guess_response(response = character())
 }
 \value{
 A character. Either \code{"model_combo"}, \code{"model_product"}, 
-  \code{"model_or}", \code{"model_and"}, or \code{"model_singular"}.
+\code{"model_or"}, \code{"model_and"}, or \code{"model_singular"}.
 }
 \description{
 \code{guess_response} takes a character vector of the dependent variable
 from a \code{formula} object and identifies which function separates the
 individual variables that make up the response. It then returns the
-\code{model_} function to model the appropriate response using PCSS.
+\code{model_*} function to model the appropriate response using PCSS.
 }

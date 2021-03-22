@@ -31,11 +31,12 @@ extract_response <- function(formula = formula()) {
 #' \code{guess_response} takes a character vector of the dependent variable
 #' from a \code{formula} object and identifies which function separates the
 #' individual variables that make up the response. It then returns the
-#' \code{model_} function to model the appropriate response using PCSS.
+#' \code{model_*} function to model the appropriate response using PCSS.
 #' 
 #' @param response character. Output of \code{extract_response}.
+#' 
 #' @return A character. Either \code{"model_combo"}, \code{"model_product"}, 
-#'   \code{"model_or}", \code{"model_and"}, or \code{"model_singular"}.
+#' \code{"model_or"}, \code{"model_and"}, or \code{"model_singular"}.
 #'   
 guess_response <- function(response = character()) {
   
