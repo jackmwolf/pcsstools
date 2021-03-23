@@ -5,10 +5,11 @@
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://travis-ci.com/jackmwolf/pcsstools.svg?branch=master)](https://travis-ci.com/jackmwolf/pcsstools)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/pcsstools)](https://CRAN.R-project.org/package=pcsstools)
+[![R-CMD-check](https://github.com/jackmwolf/pcsstools/workflows/R-CMD-check/badge.svg)](https://github.com/jackmwolf/pcsstools/actions)
+[![Travis build
+status](https://travis-ci.com/jackmwolf/pcsstools.svg?branch=master)](https://travis-ci.com/jackmwolf/pcsstools)
 <!-- badges: end -->
 
 ## Overview
