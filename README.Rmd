@@ -16,10 +16,11 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.com/jackmwolf/pcsstools.svg?branch=master)](https://travis-ci.com/jackmwolf/pcsstools)
+[![CRAN status](https://www.r-pkg.org/badges/version/pcsstools)](https://CRAN.R-project.org/package=pcsstools)
 <!-- badges: end -->
 
 ## Overview 
-pcsstools is an in-development R package to describe various regression models using only pre-computed summary statistics (PCSS) from genome-wide association studies (GWASs) and PCSS repositories such as [GeneAtlas](http://geneatlas.roslin.ed.ac.uk/).
+pcsstools is an R package to describe various regression models using only pre-computed summary statistics (PCSS) from genome-wide association studies (GWASs) and PCSS repositories such as [GeneAtlas](http://geneatlas.roslin.ed.ac.uk/).
 This eliminates the logistic, privacy, and access concerns that accompany the use of individual patient-level data (IPD).
 
 
@@ -37,9 +38,16 @@ Supported functions include:
 
 ## Installation
 
-pcsstools is not currently available on CRAN.
+You can install pcsstools from CRAN with
 
-You can install the in-development version of pcsstools from [GitHub](https://github.com/) with:
+``` r
+install.packages("pcsstools")
+```
+
+
+
+### Development Version
+You can install the in-development version of pcsstools from [GitHub](https://github.com/) with
 
 ``` r
 # install.packages("devtools")
