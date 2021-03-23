@@ -1,3 +1,6 @@
+# pcsstools 0.1.1
+This version includes minor changes implemented for CRAN approval. Namely, return values were added to several functions which did not have a documented value in the initial submission.
+
 # pcsstools 0.1.0
 
 This is a new package that defines functions to describe regression models using only pre-computed summary statistics (PCSS) (i.e. means, variances, and covariances) in place of individual participant data.
