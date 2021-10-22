@@ -7,6 +7,8 @@
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/pcsstools)](https://CRAN.R-project.org/package=pcsstools)
+![CRAN
+Downloads](https://cranlogs.r-pkg.org/badges/grand-total/pcsstools)
 [![R-CMD-check](https://github.com/jackmwolf/pcsstools/workflows/R-CMD-check/badge.svg)](https://github.com/jackmwolf/pcsstools/actions)
 <!-- badges: end -->
 
@@ -278,10 +280,9 @@ And here’s the result we would get using IPD:
 Following are the key references for the functions in this package
 
 -   Wolf, J.M., Westra, J., and Tintle, N. (2021). Using summary
-    statistics to evaluate the genetic architecture of multiplicative
-    combinations of initially analyzed phenotypes with a flexible choice
-    of covariates. *bioRxiv*.
-    <https://doi.org/10.1101/2021.03.08.433979>.
+    statistics to model multiplicative combinations of initially
+    analyzed phenotypes with a flexible choice of covariates. *Frontiers
+    in Genetics*, 25, 1962. <https://doi.org/10.3389/fgene.2021.745901>.
 
 -   Wolf, J.M., Barnard, M., Xueting, X., Ryder, N., Westra, J., and
     Tintle, N. (2020). Computationally efficient, exact,
