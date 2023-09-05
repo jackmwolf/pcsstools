@@ -5,7 +5,8 @@
 \title{Create an object of class "predictor"}
 \usage{
 new_predictor(
-  f = function() { },
+  f = function() {
+ },
   predictor_type = character(),
   lb,
   ub,

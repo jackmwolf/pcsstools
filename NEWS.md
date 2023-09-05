@@ -1,3 +1,5 @@
+# pcsstools (development version)
+
 # pcsstools 0.1.1
 This version includes minor changes implemented for CRAN approval. Namely, return values were added to several functions which did not have a documented value in the initial submission.
 

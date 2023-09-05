@@ -79,6 +79,7 @@
 #'     \item{Sum Sq}{a 3-vector with the model's Sum of Squares Regression 
 #'       (SSR), Sum of Squares Error (SSE), and Sum of Squares Total (SST).}
 #'   
+#' @importFrom Rdpack reprompt
 #' 
 #' @examples 
 #' ## Principal Component Analysis
