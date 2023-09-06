@@ -1,4 +1,4 @@
-# pcsstools (development version)
+# pcsstools 0.1.2
 This bug-fix updates the package documentation in response to a new
 [roxygen2 bug](https://github.com/r-lib/roxygen2/issues/1491).
 
