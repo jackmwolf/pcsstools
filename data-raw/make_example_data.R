@@ -28,7 +28,17 @@ pcsstools_data <- function(n = 1000) {
   Y <- cbind(Y_con, Y_bin)
   colnames(Y) <- paste0("y", 1:ncol(Y))
   
-  return(as.data.frame(cbind(G, X, Y)))
+  Source <- ifelse(
+    X[, 1] + rnorm(1) < -0.5, 
+    1,
+    ifelse(
+      X[, 1] + rnorm(1) < 0.5,
+      2,
+      3
+    )
+  )
+  
+  return(as.data.frame(cbind(G, X, Y, Source)))
 }
 
 set.seed(1000)

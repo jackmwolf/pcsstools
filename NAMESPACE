@@ -2,6 +2,7 @@
 
 S3method(anova,pcsslm)
 S3method(print,pcsslm)
+export(meta_pcsslm)
 export(model_and)
 export(model_combo)
 export(model_or)

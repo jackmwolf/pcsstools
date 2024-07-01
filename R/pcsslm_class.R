@@ -1,7 +1,7 @@
 # The original source for much of this came from R Core Team and contributors 
-# worldwide's `stats`` package.
+# worldwide's `stats` package.
 #
-# Below is the original license statement for R, which liscenses the stats
+# Below is the original license statement for R, which licenses the stats
 # package.
 #
 # This software is distributed under the terms of the GNU General

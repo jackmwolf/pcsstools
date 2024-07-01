@@ -1,7 +1,7 @@
 Package: pcsstools
 Type: Package
 Title: Tools for Regression Using Pre-Computed Summary Statistics
-Version: 0.1.2
+Version: 0.1.2.9000
 Authors@R: c(
     person(
       "Jack", "Wolf", email = "jackwolf910@gmail.com", 
@@ -31,7 +31,7 @@ Imports:
     Rdpack,
     stats
 RdMacros: Rdpack
-RoxygenNote: 7.2.1
+RoxygenNote: 7.3.1
 Suggests: 
     testthat,
     knitr,
